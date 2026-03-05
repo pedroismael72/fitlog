@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)file:///Users/pedroatencio/Downloads/gym-tracker_3.html -->
+<html lang="es" data-theme="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitLog — Tu Progreso</title>
+<link href="./FitLog — Tu Progreso_files/css2" rel="stylesheet">
+<script src="./FitLog — Tu Progreso_files/cb=gapi.loaded_0" async=""></script><script src="./FitLog — Tu Progreso_files/chart.umd.min.js"></script>
+<style>
+[data-theme="dark"]{
+  --bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#2a2a3e;
+  --accent:#c8f04c;--accent2:#4cf0c8;--danger:#f04c4c;
+  --text:#e8e8f0;--text2:#b0b0c8;--muted:#6a6a88;
+  --hbg:rgba(10,10,15,0.93);--shadow:0 4px 28px rgba(0,0,0,0.5);--glow:rgba(200,240,76,0.04);
+}
+[data-theme="light"]{
+  --bg:#eeeef5;--surface:#ffffff;--surface2:#f4f4fb;--border:#d4d4e8;
+  --accent:#5aaa00;--accent2:#009977;--danger:#cc2222;
+  --text:#1a1a2e;--text2:#4a4a6a;--muted:#8888aa;
+  --hbg:rgba(238,238,245,0.93);--shadow:0 4px 20px rgba(0,0,0,0.07);--glow:rgba(90,170,0,0.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;}
+
+/* HEADER */
+header{display:flex;align-items:center;justify-content:space-between;padding:15px 36px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--hbg);backdrop-filter:blur(14px);z-index:100;transition:background .3s,border-color .3s;gap:12px;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--accent);cursor:pointer;user-select:none;flex-shrink:0;}
+.logo span{color:var(--text);}
+.hdr-mid{display:flex;gap:22px;align-items:center;flex:1;justify-content:center;}
+.hpill{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.hpill .hl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.hpill .hv{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px;}
+.hv.dn{color:var(--accent);}.hv.up{color:var(--danger);}.hv.n{color:var(--text);}
+.hdr-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+
+/* Theme toggle */
+.ttoggle{background:var(--surface2);border:1px solid var(--border);border-radius:30px;padding:3px;display:flex;gap:2px;transition:background .3s,border-color .3s;}
+.tbtn{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;border:none;background:transparent;transition:background .2s;}
+.tbtn.on{background:var(--accent);}
+
+/* User chip */
+.user-chip{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px 5px 5px;cursor:default;}
+.user-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;}
+.user-name{font-size:.8rem;font-weight:600;color:var(--text2);}
+.sync-indicator{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s;}
+.sync-indicator.synced{background:var(--accent);}
+.sync-indicator.syncing{background:#f0a04c;animation:pulse 1s infinite;}
+.sync-indicator.error{background:var(--danger);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+
+/* VIEWS */
+.view{display:none;}.view.active{display:block;}
+
+/* LOGIN VIEW */
+.login-view{min-height:calc(100vh - 65px);display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:52px 48px;max-width:440px;width:100%;box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;animation:fadeUp .4s ease;}
+.login-box::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:240px;height:240px;background:radial-gradient(circle,rgba(200,240,76,.08) 0%,transparent 70%);pointer-events:none;}
+.login-icon{font-size:3.5rem;margin-bottom:16px;}
+.login-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:8px;}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:2px;line-height:1.05;margin-bottom:10px;}
+.login-sub{color:var(--muted);font-size:.9rem;line-height:1.6;margin-bottom:36px;}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 24px;cursor:pointer;width:100%;transition:all .2s;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;color:var(--text);}
+.google-btn:hover{border-color:var(--accent);box-shadow:0 4px 20px rgba(200,240,76,.15);transform:translateY(-1px);}
+.google-logo{width:20px;height:20px;flex-shrink:0;}
+.login-note{margin-top:16px;font-size:.78rem;color:var(--muted);line-height:1.5;}
+
+/* SETUP VIEW */
+.setup-view{min-height:calc(100vh - 65px);display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+.setup-box{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:48px;max-width:500px;width:100%;box-shadow:var(--shadow);position:relative;overflow:hidden;animation:fadeUp .4s ease;transition:background .3s,border-color .3s;}
+.setup-box::after{content:'';position:absolute;top:-80px;right:-80px;width:220px;height:220px;background:radial-gradient(circle,rgba(200,240,76,.09) 0%,transparent 70%);pointer-events:none;}
+.s-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px;}
+.s-title{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:2px;line-height:1.05;margin-bottom:8px;}
+.s-sub{color:var(--muted);font-size:.9rem;line-height:1.55;margin-bottom:34px;}
+.s-fields{display:flex;flex-direction:column;gap:18px;margin-bottom:26px;}
+.field{display:flex;flex-direction:column;gap:7px;}
+.field label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;}
+.field input{background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1.05rem;padding:13px 16px;outline:none;width:100%;transition:border-color .2s,box-shadow .2s,background .3s;}
+.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,240,76,.12);}
+.field input::placeholder{color:var(--muted);}
+.s-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* BUTTONS */
+.btn{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:1rem;padding:12px 26px;border-radius:10px;border:none;cursor:pointer;transition:all .2s;}
+.btn-primary{background:var(--accent);color:#0a0a0f;width:100%;font-size:1.1rem;}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 8px 24px rgba(200,240,76,.22);}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn-mini-danger{background:transparent;color:var(--danger);border:1px solid rgba(240,76,76,.25);font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.78rem;padding:5px 11px;border-radius:7px;cursor:pointer;transition:all .2s;}
+.btn-mini-danger:hover{background:rgba(240,76,76,.1);}
+.btn-edit{font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.82rem;padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;}
+.btn-edit:hover{border-color:var(--accent);color:var(--accent);}
+
+/* DASHBOARD */
+.dash main{max-width:1200px;margin:0 auto;padding:30px 30px;display:grid;gap:22px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px;position:relative;overflow:hidden;box-shadow:var(--shadow);transition:background .3s,border-color .3s;}
+.card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--glow) 0%,transparent 60%);pointer-events:none;}
+.ctitle{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:2px;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;}
+.ctitle-l{display:flex;align-items:center;gap:8px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.two-col{display:grid;grid-template-columns:2fr 1fr;gap:22px;}
+.chart-wrap{position:relative;height:255px;}
+.slist{display:flex;flex-direction:column;}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);}
+.srow:last-child{border:none;}
+.srow .sn{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.srow .sv{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px;color:var(--accent);}
+.sv.n2{color:var(--text2);}
+.goal-bar-wrap{background:var(--surface2);border-radius:20px;height:6px;overflow:hidden;margin-top:3px;}
+.goal-bar{height:100%;border-radius:20px;background:var(--accent);transition:width .6s cubic-bezier(.4,0,.2,1);}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:10px;}
+.mblock{background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s,background .3s;animation:fadeUp .25s ease;}
+.mblock:hover{border-color:rgba(200,240,76,.2);}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;cursor:pointer;user-select:none;transition:background .15s;}
+.mhead:hover{background:rgba(128,128,128,.04);}
+.mname{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:2px;display:flex;align-items:center;gap:10px;}
+.mbadge{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;}
+.bd{background:rgba(200,240,76,.15);color:var(--accent);}
+.bu{background:rgba(240,76,76,.15);color:var(--danger);}
+.bn{background:rgba(128,128,136,.15);color:var(--muted);}
+.marrow{color:var(--muted);transition:transform .28s;font-size:1.1rem;line-height:1;}
+.marrow.open{transform:rotate(180deg);}
+.wcont{display:none;padding:4px 16px 16px;}
+.wcont.open{display:block;}
+.wtable{width:100%;border-collapse:separate;border-spacing:0 7px;}
+.wtable thead th{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 12px 2px;text-align:left;}
+.wrow td{background:var(--surface);padding:9px 12px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);transition:background .15s;}
+.wrow td:first-child{border-left:1px solid var(--border);border-radius:8px 0 0 8px;width:100px;}
+.wrow td:last-child{border-right:1px solid var(--border);border-radius:0 8px 8px 0;}
+.wrow:hover td{background:var(--surface2);}
+.wlabel{font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.92rem;color:var(--text2);}
+.winput-wrap{position:relative;max-width:110px;}
+.winput-wrap input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;padding:8px 32px 8px 11px;outline:none;width:100%;transition:border-color .2s,box-shadow .2s,background .3s;}
+.winput-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,240,76,.1);}
+.winput-wrap::after{content:'kg';position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:.72rem;color:var(--muted);pointer-events:none;}
+.wcell{display:flex;align-items:center;gap:10px;}
+.wdelta{font-size:12px;font-weight:600;min-width:70px;display:flex;align-items:center;gap:3px;}
+.dd{color:var(--accent);}.du{color:var(--danger);}.dn2{color:var(--muted);}
+.ninput{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;padding:8px 10px;outline:none;resize:none;width:100%;height:37px;transition:border-color .2s,height .2s,background .3s;}
+.ninput:focus{border-color:var(--accent);height:58px;}
+.ninput::placeholder{color:var(--muted);}
+.add-month{border:2px dashed var(--border);border-radius:12px;padding:15px;text-align:center;cursor:pointer;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;transition:all .2s;background:transparent;width:100%;}
+.add-month:hover{border-color:var(--accent);color:var(--accent);background:rgba(200,240,76,.03);}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);}
+.empty .ei{font-size:2.4rem;margin-bottom:10px;}
+.empty p{font-size:.9rem;line-height:1.6;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--accent);color:#0a0a0f;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:.9rem;padding:11px 20px;border-radius:10px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .26s cubic-bezier(.4,0,.2,1);pointer-events:none;}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* LOADING OVERLAY */
+.loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;gap:16px;transition:opacity .3s;}
+.loading.hide{opacity:0;pointer-events:none;}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading p{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:1rem;color:var(--muted);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:900px){.two-col{grid-template-columns:1fr;}.dash main{padding:16px;} header{padding:12px 16px;} .hdr-mid{gap:14px;} .wtable thead th:nth-child(3),.wrow td:nth-child(3){display:none;}}
+@media(max-width:600px){.hdr-mid{display:none;} .setup-box{padding:30px 22px;} .s-row{grid-template-columns:1fr;} .login-box{padding:36px 24px;}}
+</style>
+<script src="./FitLog — Tu Progreso_files/api.js" gapi_processed="true"></script><script src="./FitLog — Tu Progreso_files/client"></script><style id="googleidentityservice_button_styles">.qJTHM{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;color:#202124;direction:ltr;-webkit-touch-callout:none;font-family:"Roboto-Regular",arial,sans-serif;-webkit-font-smoothing:antialiased;font-weight:400;margin:0;overflow:hidden;-webkit-text-size-adjust:100%}.ynRLnc{left:-9999px;position:absolute;top:-9999px}.L6cTce{display:none}.bltWBb{overflow-wrap:break-word;word-break:break-word}.hSRGPd{color:#1a73e8;cursor:pointer;font-weight:500;text-decoration:none}.Bz112c-W3lGp{height:16px;width:16px}.Bz112c-E3DyYd{height:20px;width:20px}.Bz112c-r9oPif{height:24px;width:24px}.Bz112c-u2z5K{height:36px;width:36px}.Bz112c-uaxL4e{border-radius:10px}.LgbsSe-Bz112c{display:block}.S9gUrf-YoZ4jf{border:none;margin:0;padding:0}.S9gUrf-YoZ4jf *{border:none;margin:0;padding:0}.fFW7wc-ibnC6b>.aZ2wEe>div{border-color:#4285f4}.P1ekSe-ZMv3u{-webkit-transition:height linear .2s;transition:height linear .2s}.P1ekSe-ZMv3u>div:nth-child(1){background-color:#1a73e8!important;-webkit-transition:width linear .3s;transition:width linear .3s}.P1ekSe-ZMv3u>div:nth-child(2){background-image:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.7)),to(rgba(255,255,255,.7))),-webkit-gradient(linear,left top,right top,from(#1a73e8),to(#1a73e8))!important;background-image:-webkit-linear-gradient(left,rgba(255,255,255,.7),rgba(255,255,255,.7)),-webkit-linear-gradient(left,#1a73e8,#1a73e8)!important;background-image:linear-gradient(to right,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(to right,#1a73e8,#1a73e8)!important}.P1ekSe-ZMv3u>div:nth-child(3){background-image:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.7)),to(rgba(255,255,255,.7))),-webkit-gradient(linear,left top,right top,from(#1a73e8),to(#1a73e8))!important;background-image:-webkit-linear-gradient(left,rgba(255,255,255,.7),rgba(255,255,255,.7)),-webkit-linear-gradient(left,#1a73e8,#1a73e8)!important;background-image:linear-gradient(to right,rgba(255,255,255,.7),rgba(255,255,255,.7)),linear-gradient(to right,#1a73e8,#1a73e8)!important}.haAclf{display:inline-block}.nsm7Bb-HzV7m-LgbsSe{border-radius:4px;box-sizing:border-box;-webkit-transition:background-color .218s,border-color .218s;transition:background-color .218s,border-color .218s;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;-webkit-appearance:none;background-color:#fff;background-image:none;border:1px solid #dadce0;color:#3c4043;cursor:pointer;font-family:"Google Sans",arial,sans-serif;font-size:14px;height:40px;letter-spacing:.25px;outline:none;overflow:hidden;padding:0 12px;position:relative;text-align:center;vertical-align:middle;white-space:nowrap;width:auto}@media screen and (-ms-high-contrast:active){.nsm7Bb-HzV7m-LgbsSe{border:2px solid windowText;color:windowText}}@media screen and (preferes-contrast:more){.nsm7Bb-HzV7m-LgbsSe{color:#000}}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe{font-size:14px;height:32px;letter-spacing:.25px;padding:0 10px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe{font-size:11px;height:20px;letter-spacing:.3px;padding:0 8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe{padding:0;width:40px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe{width:32px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe{width:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK{border-radius:20px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.pSzOP-SxQuSe{border-radius:16px}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK.purZT-SxQuSe{border-radius:10px}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc{border:none;color:#fff}.nsm7Bb-HzV7m-LgbsSe.MFS4be-v3pZbf-Ia7Qfc{background-color:#1a73e8}.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{background-color:#202124;color:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.MFS4be-JaPV2b-Ia7Qfc{color:#fff}}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:18px;margin-right:8px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:14px;min-width:14px;width:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{height:10px;min-width:10px;width:10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin-left:8px;margin-right:-4px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:10px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:8px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c{padding:4px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:3px;border-bottom-left-radius:3px;display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;-webkit-box-align:center;-webkit-align-items:center;align-items:center;background-color:#fff;height:36px;margin-left:-10px;margin-right:12px;min-width:36px;width:36px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c,.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf .nsm7Bb-HzV7m-LgbsSe-Bz112c{margin:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:28px;margin-left:-8px;margin-right:10px;min-width:28px;width:28px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{height:16px;margin-left:-6px;margin-right:8px;min-width:16px;width:16px}.nsm7Bb-HzV7m-LgbsSe.Bz112c-LgbsSe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:3px;margin-left:2px;margin-right:0;padding:0}.nsm7Bb-HzV7m-LgbsSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.nsm7Bb-HzV7m-LgbsSe.pSzOP-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:14px}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:8px}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-bN97Pc-sM5MNb{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;-webkit-box-align:center;align-items:center;-webkit-flex-direction:row;-webkit-box-orient:horizontal;-webkit-box-direction:normal;flex-direction:row;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;-webkit-flex-wrap:nowrap;flex-wrap:nowrap;height:100%;position:relative;width:100%}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX{-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:1;-webkit-box-flex:1;flex-grow:1;font-family:"Google Sans",arial,sans-serif;font-weight:500;overflow:hidden;text-overflow:ellipsis;vertical-align:top}.nsm7Bb-HzV7m-LgbsSe.purZT-SxQuSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-weight:300}.nsm7Bb-HzV7m-LgbsSe .oXtfBe-l4eHX .nsm7Bb-HzV7m-LgbsSe-BPrWId{-webkit-flex-grow:0;-webkit-box-flex:0;flex-grow:0}.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-MJoBVe{-webkit-transition:background-color .218s;transition:background-color .218s;bottom:0;left:0;position:absolute;right:0;top:0}.nsm7Bb-HzV7m-LgbsSe:hover,.nsm7Bb-HzV7m-LgbsSe:focus{box-shadow:none;border-color:rgb(210,227,252);outline:none}.nsm7Bb-HzV7m-LgbsSe:focus-within{outline:2px solid #00639b;border-color:transparent}.nsm7Bb-HzV7m-LgbsSe:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.08)}.nsm7Bb-HzV7m-LgbsSe:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(66,133,244,.1)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:hover .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.24)}.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:active .nsm7Bb-HzV7m-LgbsSe-MJoBVe,.nsm7Bb-HzV7m-LgbsSe.MFS4be-Ia7Qfc:focus .nsm7Bb-HzV7m-LgbsSe-MJoBVe{background:rgba(255,255,255,.32)}.nsm7Bb-HzV7m-LgbsSe .n1UuX-DkfjY{border-radius:50%;display:-webkit-box;display:-webkit-flex;display:flex;height:20px;margin-left:-4px;margin-right:8px;min-width:20px;width:20px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId{font-family:"Roboto";font-size:12px;text-align:left}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .ssJRIf,.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .fmcmS{overflow:hidden;text-overflow:ellipsis}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-align-items:center;-webkit-box-align:center;align-items:center;color:#5f6368;fill:#5f6368;font-size:11px;font-weight:400}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#e8eaed;fill:#e8eaed}@media screen and (prefers-contrast:more){.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff,.nsm7Bb-HzV7m-LgbsSe.jVeSEe.MFS4be-Ia7Qfc .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff{color:#000;fill:#000}}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-BPrWId .K4efff .Bz112c{height:18px;margin:-3px -3px -3px 2px;min-width:18px;width:18px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-top-left-radius:0;border-bottom-left-radius:0;border-top-right-radius:3px;border-bottom-right-radius:3px;margin-left:12px;margin-right:-10px}.nsm7Bb-HzV7m-LgbsSe.jVeSEe.JGcpL-RbRzK .nsm7Bb-HzV7m-LgbsSe-Bz112c-haAclf{border-radius:18px}.L5Fo6c-sM5MNb{border:0;display:block;left:0;position:relative;top:0}.L5Fo6c-bF1uUb{border-radius:4px;bottom:0;cursor:pointer;left:0;position:absolute;right:0;top:0}.L5Fo6c-bF1uUb:focus{border:none;outline:none}sentinel{}</style></head>
+<body>
+
+<!-- Loading -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <p>CARGANDO...</p>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo" onclick="goSetup()">FIT<span>LOG</span></div>
+  <div class="hdr-mid" id="hdr-mid" style="display:none">
+    <div class="hpill"><span class="hl">Inicial</span><span class="hv n" id="h-start">—</span></div>
+    <div class="hpill"><span class="hl">Actual</span><span class="hv n" id="h-cur">—</span></div>
+    <div class="hpill"><span class="hl">Cambio</span><span class="hv n" id="h-delta">—</span></div>
+    <div class="hpill"><span class="hl">Meta</span><span class="hv n" id="h-goal">—</span></div>
+  </div>
+  <div class="hdr-right">
+    <div id="user-chip" style="display:none" class="user-chip">
+      <img class="user-avatar" id="u-avatar" src="file:///Users/pedroatencio/Downloads/gym-tracker_3.html" alt="">
+      <span class="user-name" id="u-name"></span>
+      <div class="sync-indicator synced" id="sync-dot" title="Sincronizado con Google Drive"></div>
+    </div>
+    <div class="ttoggle">
+      <button class="tbtn on" id="tb-dark" onclick="setTheme(&#39;dark&#39;)">🌙</button>
+      <button class="tbtn" id="tb-light" onclick="setTheme(&#39;light&#39;)">☀️</button>
+    </div>
+    <button class="btn-edit" id="btn-logout" style="display:none" onclick="signOut()">SALIR</button>
+  </div>
+</header>
+
+<!-- VIEW: LOGIN -->
+<div id="v-login" class="view active">
+  <div class="login-view">
+    <div class="login-box">
+      <div class="login-icon">🏋️</div>
+      <div class="login-eyebrow">BIENVENIDO</div>
+      <div class="login-title">FITLOG</div>
+      <div class="login-sub">Tu registro de peso y gimnasio.<br>Iniciá sesión para guardar tu progreso en la nube.</div>
+      <button class="google-btn" onclick="signIn()">
+        <svg class="google-logo" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"></path>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path>
+        </svg>
+        Continuar con Google
+      </button>
+      <p class="login-note">Tus datos se guardan en tu propio Google Drive.<br>Accedé desde cualquier dispositivo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW: SETUP -->
+<div id="v-setup" class="view">
+  <div class="setup-view">
+    <div class="setup-box">
+      <div class="s-eyebrow" id="s-eyebrow">CONFIGURACIÓN INICIAL</div>
+      <div class="s-title" id="s-title">TU PERFIL</div>
+      <div class="s-sub" id="s-sub">Completá tus datos para comenzar a registrar tu progreso.</div>
+      <div class="s-fields">
+        <div class="field">
+          <label>Tu nombre</label>
+          <input type="text" id="inp-name" placeholder="ej: Matías" autocomplete="off">
+        </div>
+        <div class="s-row">
+          <div class="field">
+            <label>Peso inicial (kg)</label>
+            <input type="text" inputmode="decimal" id="inp-start" placeholder="ej: 85.0">
+          </div>
+          <div class="field">
+            <label>Peso objetivo (kg)</label>
+            <input type="text" inputmode="decimal" id="inp-goal" placeholder="ej: 75.0">
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="saveSetup()">GUARDAR Y CONTINUAR →</button>
+      <div id="s-reset" style="margin-top:13px;display:none;text-align:center;">
+        <button class="btn btn-ghost" style="font-size:.8rem;padding:8px 18px;" onclick="clearAll()">BORRAR TODOS LOS DATOS</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW: DASHBOARD -->
+<div id="v-dash" class="view dash">
+  <main>
+    <div class="two-col">
+      <div class="card">
+        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>PROGRESO DE PESO</div></div>
+        <div class="chart-wrap"><canvas id="wChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>ESTADÍSTICAS</div></div>
+        <div class="slist">
+          <div class="srow"><span class="sn">Progreso a meta</span><span class="sv" id="s-pct">—</span></div>
+          <div style="padding:2px 0 8px;"><div class="goal-bar-wrap"><div class="goal-bar" id="s-bar" style="width:0%"></div></div></div>
+          <div class="srow"><span class="sn">Semanas con datos</span><span class="sv n2" id="s-wcount">0</span></div>
+          <div class="srow"><span class="sn">Mejor semana</span><span class="sv" id="s-best" style="font-size:1rem">—</span></div>
+          <div class="srow"><span class="sn">Falta para meta</span><span class="sv" id="s-rem">—</span></div>
+          <div class="srow" style="border:none;padding-top:14px;gap:10px;">
+            <button class="btn-edit" onclick="goSetup()">✏ EDITAR PERFIL</button>
+            <button class="btn-mini-danger" onclick="clearAll()">RESETEAR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">
+        <div class="ctitle-l"><div class="dot"></div>REGISTRO MENSUAL</div>
+        <button class="btn" style="background:var(--accent);color:#0a0a0f;font-size:.85rem;padding:8px 18px;" onclick="addMonth()">+ AGREGAR MES</button>
+      </div>
+      <div class="timeline" id="timeline">
+        <div class="empty" id="empty">
+          <div class="ei">📅</div>
+          <p>No hay meses todavía.<br>Hacé clic en <strong>+ AGREGAR MES</strong> para empezar.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// =====================================================
+// CONFIG
+// =====================================================
+const CLIENT_ID   = '672338504407-gchhq2tr4ua43f7fo61moh78q4spma9b.apps.googleusercontent.com';
+const SCOPES      = 'https://www.googleapis.com/auth/drive.appdata';
+const FILE_NAME   = 'fitlog_data.json';
+const DISCOVERY   = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
+const LS_THEME    = 'fitlog_theme';
+const LS_CACHE    = 'fitlog_cache'; // local cache for offline resilience
+
+// =====================================================
+// STATE
+// =====================================================
+let data        = { setup: null, months: [] };
+let fileId      = null;   // Google Drive file ID
+let myChart     = null;
+let saveTimer   = null;
+let gapiReady   = false;
+let tokenClient = null;
+
+// =====================================================
+// THEME
+// =====================================================
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('tb-dark').classList.toggle('on', t==='dark');
+  document.getElementById('tb-light').classList.toggle('on', t==='light');
+  localStorage.setItem(LS_THEME, t);
+  if (myChart) updateStats();
+}
+
+// =====================================================
+// VIEWS
+// =====================================================
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('v-'+id).classList.add('active');
+}
+
+function hideLoading() {
+  document.getElementById('loading').classList.add('hide');
+}
+
+function setSyncStatus(s) {
+  // s: 'syncing' | 'synced' | 'error'
+  const dot = document.getElementById('sync-dot');
+  dot.className = 'sync-indicator ' + s;
+  dot.title = s === 'synced'  ? 'Sincronizado con Google Drive'
+            : s === 'syncing' ? 'Guardando...'
+            : 'Error al guardar';
+}
+
+// =====================================================
+// GOOGLE IDENTITY / GAPI
+// =====================================================
+function loadGapi() {
+  return new Promise(res => {
+    if (window.gapi) { res(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://apis.google.com/js/api.js';
+    s.onload = res; document.head.appendChild(s);
+  });
+}
+
+function loadGis() {
+  return new Promise(res => {
+    if (window.google?.accounts) { res(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client';
+    s.onload = res; document.head.appendChild(s);
+  });
+}
+
+async function initGoogle() {
+  await Promise.all([loadGapi(), loadGis()]);
+
+  await new Promise(res => gapi.load('client', res));
+  await gapi.client.init({ discoveryDocs: [DISCOVERY] });
+  gapiReady = true;
+
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPES,
+    callback: handleTokenResponse,
+  });
+
+  // Check if we have a stored token
+  const cached = loadCache();
+  if (cached && cached._token) {
+    gapi.client.setToken({ access_token: cached._token });
+    // Try to silently verify by fetching file list
+    try {
+      await loadFromDrive(true);
+      showUserChip(cached._profile || {});
+      renderAfterLoad();
+    } catch(e) {
+      // Token expired → show login
+      clearToken();
+      hideLoading();
+      showView('login');
+    }
+  } else {
+    hideLoading();
+    showView('login');
+  }
+}
+
+function handleTokenResponse(resp) {
+  if (resp.error) {
+    hideLoading();
+    showToast('⚠ ERROR AL INICIAR SESIÓN');
+    showView('login');
+    return;
+  }
+  // Get user info
+  fetchUserInfo();
+}
+
+async function fetchUserInfo() {
+  try {
+    const r = await gapi.client.request({ path: 'https://www.googleapis.com/oauth2/v3/userinfo' });
+    const p = r.result;
+    const profile = { name: p.given_name || p.name || 'Usuario', picture: p.picture || '' };
+    // Store token + profile in cache
+    const c = loadCache() || {};
+    c._token   = gapi.client.getToken()?.access_token;
+    c._profile = profile;
+    saveCache(c);
+    showUserChip(profile);
+    await loadFromDrive(false);
+    renderAfterLoad();
+  } catch(e) {
+    hideLoading();
+    showToast('⚠ ERROR DE AUTENTICACIÓN');
+    showView('login');
+  }
+}
+
+function showUserChip(profile) {
+  document.getElementById('user-chip').style.display = 'flex';
+  document.getElementById('btn-logout').style.display = 'block';
+  const av = document.getElementById('u-avatar');
+  if (profile.picture) { av.src = profile.picture; av.style.display='block'; }
+  else av.style.display = 'none';
+  document.getElementById('u-name').textContent = profile.name || '';
+}
+
+function signIn() {
+  if (!gapiReady) { showToast('CARGANDO, ESPERÁ...'); return; }
+  tokenClient.requestAccessToken({ prompt: 'consent' });
+}
+
+function signOut() {
+  if (!confirm('¿Cerrar sesión?')) return;
+  const token = gapi.client.getToken();
+  if (token) google.accounts.oauth2.revoke(token.access_token, ()=>{});
+  gapi.client.setToken(null);
+  clearToken();
+  data = { setup: null, months: [] };
+  fileId = null;
+  document.getElementById('user-chip').style.display = 'none';
+  document.getElementById('btn-logout').style.display = 'none';
+  document.getElementById('hdr-mid').style.display = 'none';
+  showView('login');
+  showToast('SESIÓN CERRADA');
+}
+
+function clearToken() {
+  const c = loadCache() || {};
+  delete c._token; delete c._profile;
+  saveCache(c);
+}
+
+// =====================================================
+// GOOGLE DRIVE STORAGE
+// =====================================================
+async function loadFromDrive(silent) {
+  if (!silent) setSyncStatus('syncing');
+  try {
+    // Find file in appDataFolder
+    const list = await gapi.client.drive.files.list({
+      spaces: 'appDataFolder',
+      fields: 'files(id,name)',
+      q: `name='${FILE_NAME}'`
+    });
+    const files = list.result.files;
+
+    if (files && files.length > 0) {
+      fileId = files[0].id;
+      const res = await gapi.client.drive.files.get({
+        fileId, alt: 'media'
+      });
+      const remote = typeof res.result === 'string' ? JSON.parse(res.result) : res.result;
+      data = remote;
+      saveCache({ ...loadCache(), ...{ setup: data.setup, months: data.months } });
+    } else {
+      // No file yet — load from local cache if available
+      const c = loadCache();
+      if (c?.setup) { data = { setup: c.setup, months: c.months || [] }; }
+      fileId = null;
+    }
+    if (!silent) setSyncStatus('synced');
+  } catch(e) {
+    if (!silent) setSyncStatus('error');
+    // Fallback to cache
+    const c = loadCache();
+    if (c?.setup) data = { setup: c.setup, months: c.months || [] };
+    throw e;
+  }
+}
+
+async function saveToDrive() {
+  setSyncStatus('syncing');
+  try {
+    const body = JSON.stringify({ setup: data.setup, months: data.months });
+    if (fileId) {
+      // Update existing
+      await gapi.client.request({
+        path: `/upload/drive/v3/files/${fileId}`,
+        method: 'PATCH',
+        params: { uploadType: 'media' },
+        headers: { 'Content-Type': 'application/json' },
+        body
+      });
+    } else {
+      // Create new in appDataFolder
+      const meta = { name: FILE_NAME, parents: ['appDataFolder'] };
+      const boundary = '-------fitlogboundary';
+      const delimiter = `\r\n--${boundary}\r\n`;
+      const close_delim = `\r\n--${boundary}--`;
+      const multipart =
+        delimiter + 'Content-Type: application/json\r\n\r\n' + JSON.stringify(meta) +
+        delimiter + 'Content-Type: application/json\r\n\r\n' + body + close_delim;
+
+      const res = await gapi.client.request({
+        path: '/upload/drive/v3/files',
+        method: 'POST',
+        params: { uploadType: 'multipart' },
+        headers: { 'Content-Type': `multipart/related; boundary="${boundary}"` },
+        body: multipart
+      });
+      fileId = res.result.id;
+    }
+    // Also save to local cache
+    saveCache({ ...(loadCache()||{}), setup: data.setup, months: data.months });
+    setSyncStatus('synced');
+  } catch(e) {
+    setSyncStatus('error');
+    showToast('⚠ ERROR AL GUARDAR EN DRIVE');
+    console.error(e);
+  }
+}
+
+// Debounced save — waits 1.5s after last change
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  setSyncStatus('syncing');
+  saveTimer = setTimeout(() => saveToDrive(), 1500);
+}
+
+// =====================================================
+// LOCAL CACHE (fallback / perf)
+// =====================================================
+function loadCache() {
+  try { return JSON.parse(localStorage.getItem(LS_CACHE)); } catch { return null; }
+}
+function saveCache(obj) {
+  try { localStorage.setItem(LS_CACHE, JSON.stringify(obj)); } catch {}
+}
+
+// =====================================================
+// AFTER LOAD — decide which view to show
+// =====================================================
+function renderAfterLoad() {
+  hideLoading();
+  if (data.setup) {
+    document.getElementById('inp-name').value  = data.setup.name || '';
+    document.getElementById('inp-start').value = data.setup.startWeight || '';
+    document.getElementById('inp-goal').value  = data.setup.goalWeight || '';
+    document.getElementById('s-reset').style.display = 'block';
+    renderDash();
+    showView('dash');
+  } else {
+    showView('setup');
+  }
+}
+
+// =====================================================
+// SETUP
+// =====================================================
+function goSetup() {
+  if (!data.setup) return;
+  document.getElementById('s-eyebrow').textContent  = 'EDITAR PERFIL';
+  document.getElementById('s-title').textContent    = 'TU PERFIL';
+  document.getElementById('s-sub').textContent      = 'Modificá tus datos y guardá los cambios.';
+  document.getElementById('s-reset').style.display  = 'block';
+  showView('setup');
+}
+
+function saveSetup() {
+  const name = document.getElementById('inp-name').value.trim();
+  const sw   = parseFloat(document.getElementById('inp-start').value.replace(',','.'));
+  const gw   = parseFloat(document.getElementById('inp-goal').value.replace(',','.'));
+  if (!sw || sw <= 0) { showToast('⚠ INGRESÁ UN PESO VÁLIDO'); return; }
+  data.setup = { name: name||'Atleta', startWeight: sw, goalWeight: gw>0 ? gw : null };
+  scheduleSave();
+  renderDash();
+  showView('dash');
+  showToast('✓ PERFIL GUARDADO');
+}
+
+async function clearAll() {
+  if (!confirm('¿Borrar todos los datos? No se puede deshacer.')) return;
+  data = { setup: null, months: [] };
+  // Delete drive file
+  if (fileId) {
+    try { await gapi.client.drive.files.delete({ fileId }); } catch {}
+    fileId = null;
+  }
+  saveCache({...(loadCache()||{})});
+  ['inp-name','inp-start','inp-goal'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('s-reset').style.display='none';
+  document.getElementById('hdr-mid').style.display='none';
+  document.getElementById('s-eyebrow').textContent = 'CONFIGURACIÓN INICIAL';
+  document.getElementById('s-title').textContent   = 'TU PERFIL';
+  document.getElementById('s-sub').textContent     = 'Completá tus datos para comenzar a registrar tu progreso.';
+  showView('setup');
+  showToast('DATOS BORRADOS');
+}
+
+// =====================================================
+// MONTHS
+// =====================================================
+const MNAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+function addMonth() {
+  const now = new Date();
+  let yr = now.getFullYear(), mo = now.getMonth();
+  if (data.months.length > 0) {
+    const last = data.months[data.months.length-1];
+    mo = last.month+1; yr = last.year;
+    if (mo > 11) { mo=0; yr++; }
+  }
+  const id = 'm'+Date.now();
+  data.months.push({ id, month:mo, year:yr,
+    weeks: [1,2,3,4].map(n => ({ id:'w'+n+'_'+id, label:'Semana '+n, weight:null, notes:'' }))
+  });
+  scheduleSave();
+  renderTimeline(); updateStats();
+  showToast('✓ MES AGREGADO');
+  setTimeout(() => {
+    const wc = document.querySelector(`[data-mid="${id}"] .wcont`);
+    const ar = document.querySelector(`[data-mid="${id}"] .marrow`);
+    if (wc) { wc.classList.add('open'); ar.classList.add('open'); }
+    wc?.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 60);
+}
+
+function removeMonth(id) {
+  if (!confirm('¿Eliminar este mes?')) return;
+  data.months = data.months.filter(m => m.id!==id);
+  scheduleSave();
+  renderTimeline(); updateStats();
+  showToast('MES ELIMINADO');
+}
+
+function toggleMonth(id) {
+  document.querySelector(`[data-mid="${id}"] .wcont`)?.classList.toggle('open');
+  document.querySelector(`[data-mid="${id}"] .marrow`)?.classList.toggle('open');
+}
+
+function commitWeight(mid, wid, val) {
+  const month = data.months.find(m => m.id===mid);
+  const week  = month?.weeks.find(w => w.id===wid);
+  if (!week) return;
+  const clean  = val.trim().replace(',','.');
+  const parsed = clean==='' ? null : parseFloat(clean);
+  week.weight  = (parsed!=null && !isNaN(parsed) && parsed>0) ? parsed : null;
+  scheduleSave();
+  renderTimeline(); updateStats();
+}
+
+function saveNotes(mid, wid, val) {
+  const month = data.months.find(m => m.id===mid);
+  const week  = month?.weeks.find(w => w.id===wid);
+  if (!week) return;
+  week.notes = val;
+  scheduleSave();
+}
+
+// =====================================================
+// RENDER
+// =====================================================
+function renderDash() { updateHeader(); renderTimeline(); updateStats(); }
+
+function updateHeader() {
+  const s = data.setup;
+  if (!s) return;
+  document.getElementById('hdr-mid').style.display = 'flex';
+  document.getElementById('h-start').textContent   = s.startWeight+' kg';
+  document.getElementById('h-goal').textContent    = s.goalWeight ? s.goalWeight+' kg' : '—';
+  const cw = latestWeight();
+  document.getElementById('h-cur').textContent = (cw ?? s.startWeight)+' kg';
+  if (cw !== null) {
+    const d  = (cw - s.startWeight).toFixed(1);
+    const el = document.getElementById('h-delta');
+    el.textContent = (d>0?'+':'')+d+' kg';
+    el.className   = 'hv '+(d<0?'dn':d>0?'up':'n');
+  } else {
+    document.getElementById('h-delta').textContent = '—';
+    document.getElementById('h-delta').className   = 'hv n';
+  }
+}
+
+function latestWeight() {
+  for (let i=data.months.length-1; i>=0; i--) {
+    const m = data.months[i];
+    for (let j=m.weeks.length-1; j>=0; j--) {
+      if (m.weeks[j].weight!=null) return m.weeks[j].weight;
+    }
+  }
+  return null;
+}
+
+function allPoints() {
+  const pts = [];
+  if (data.setup?.startWeight) pts.push({ label:'Inicio', w:data.setup.startWeight });
+  data.months.forEach(m => m.weeks.forEach(wk => {
+    if (wk.weight!=null) pts.push({ label:MNAMES[m.month].slice(0,3)+' '+wk.label.replace('Semana','S'), w:wk.weight });
+  }));
+  return pts;
+}
+
+function renderTimeline() {
+  const tl   = document.getElementById('timeline');
+  const empt = document.getElementById('empty');
+  const open = new Set();
+  tl.querySelectorAll('[data-mid]').forEach(el => {
+    if (el.querySelector('.wcont.open')) open.add(el.dataset.mid);
+  });
+  tl.querySelectorAll('.mblock').forEach(e => e.remove());
+  if (!data.months.length) { empt.style.display='block'; return; }
+  empt.style.display = 'none';
+
+  data.months.forEach((month, mi) => {
+    const ws = month.weeks.filter(w => w.weight!=null).map(w => w.weight);
+    let badge='', bc='bn';
+    if (ws.length>=2) {
+      const diff = (ws[ws.length-1]-ws[0]).toFixed(1);
+      badge = diff<0 ? `▼ ${Math.abs(diff)} kg` : `▲ +${diff} kg`;
+      bc    = diff<0 ? 'bd' : 'bu';
+    } else if (ws.length===1) { badge=ws[0]+' kg'; }
+
+    let prevMW = null;
+    if (mi>0) {
+      const pm = data.months[mi-1];
+      for (let j=pm.weeks.length-1; j>=0; j--) { if (pm.weeks[j].weight!=null){prevMW=pm.weeks[j].weight;break;} }
+    } else if (data.setup?.startWeight) { prevMW = data.setup.startWeight; }
+
+    const isOpen = open.has(month.id);
+    const block  = document.createElement('div');
+    block.className = 'mblock'; block.dataset.mid = month.id;
+
+    const rows = month.weeks.map((wk, wi) => {
+      let prevW = null;
+      if (wi>0) { for(let j=wi-1;j>=0;j--){ if(month.weeks[j].weight!=null){prevW=month.weeks[j].weight;break;} } }
+      else { prevW = prevMW; }
+      const delta  = (wk.weight!=null && prevW!=null) ? (wk.weight - prevW) : null;
+      const dStr   = delta===null ? '' : (delta>0?'+':'')+delta.toFixed(1)+' kg';
+      const dClass = delta===null ? 'dn2' : delta<0 ? 'dd' : delta>0 ? 'du' : 'dn2';
+      const arrow  = delta===null ? '—' : delta<0 ? '↓' : delta>0 ? '↑' : '→';
+      return `<tr class="wrow">
+        <td><span class="wlabel">${wk.label.toUpperCase()}</span></td>
+        <td><div class="wcell">
+          <div class="winput-wrap">
+            <input type="text" inputmode="decimal"
+              value="${wk.weight!=null ? wk.weight : ''}" placeholder="0.0"
+              onblur="commitWeight('${month.id}','${wk.id}',this.value)"
+              onkeydown="if(event.key==='Enter')this.blur()">
+          </div>
+          <span class="wdelta ${dClass}">${arrow} ${dStr}</span>
+        </div></td>
+        <td><textarea class="ninput" placeholder="Notas..."
+          onblur="saveNotes('${month.id}','${wk.id}',this.value)"
+        >${wk.notes||''}</textarea></td>
+      </tr>`;
+    }).join('');
+
+    block.innerHTML = `
+      <div class="mhead" onclick="toggleMonth('${month.id}')">
+        <div class="mname">${MNAMES[month.month]} ${month.year}
+          ${badge ? `<span class="mbadge ${bc}">${badge}</span>` : ''}</div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="btn-mini-danger" onclick="event.stopPropagation();removeMonth('${month.id}')">ELIMINAR</button>
+          <span class="marrow ${isOpen?'open':''}">▾</span>
+        </div>
+      </div>
+      <div class="wcont ${isOpen?'open':''}">
+        <table class="wtable">
+          <thead><tr><th>SEMANA</th><th>PESO</th><th>NOTAS</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+    tl.appendChild(block);
+  });
+}
+
+function updateStats() {
+  updateHeader();
+  const pts    = allPoints();
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.getElementById('s-wcount').textContent = Math.max(0, pts.length - (data.setup?.startWeight ? 1 : 0));
+
+  if (pts.length >= 2) {
+    const deltas = pts.slice(1).map((p,i) => ({ d:p.w-pts[i].w, lbl:p.label }));
+    const best   = deltas.reduce((a,b) => b.d < a.d ? b : a);
+    document.getElementById('s-best').textContent = best.d < 0 ? best.d.toFixed(1)+' kg ('+best.lbl+')' : '—';
+  }
+
+  if (data.setup?.startWeight && data.setup?.goalWeight) {
+    const {startWeight:start, goalWeight:goal} = data.setup;
+    const cur  = latestWeight() ?? start;
+    const pct  = Math.abs(goal-start)>0 ? Math.min(100, Math.round(Math.abs(cur-start)/Math.abs(goal-start)*100)) : 0;
+    document.getElementById('s-pct').textContent = pct+'%';
+    document.getElementById('s-bar').style.width = pct+'%';
+    document.getElementById('s-rem').textContent = Math.abs(cur-goal).toFixed(1)+' kg';
+  }
+
+  if (myChart) { myChart.destroy(); myChart=null; }
+  const ctx    = document.getElementById('wChart').getContext('2d');
+  const accent = isDark ? '#c8f04c' : '#5aaa00';
+  const grid   = isDark ? 'rgba(42,42,62,.7)' : 'rgba(200,200,220,.55)';
+  const tick   = isDark ? '#6a6a88' : '#8888aa';
+  const ttBg   = isDark ? '#1a1a26' : '#fff';
+  const ttBrd  = isDark ? '#2a2a3e' : '#d4d4e8';
+  const ttTxt  = isDark ? '#e8e8f0' : '#1a1a2e';
+
+  if (pts.length < 2) {
+    myChart = new Chart(ctx, { type:'line',
+      data:{ labels:['Inicio'], datasets:[{ data:[data.setup?.startWeight||0], borderColor:accent+'55', backgroundColor:accent+'11', tension:.4, pointRadius:5 }] },
+      options: cOpts(grid,tick,ttBg,ttBrd,ttTxt,accent) });
+    return;
+  }
+
+  const pc  = pts.map((p,i) => i===0 ? tick : p.w<=pts[i-1].w ? accent : (isDark?'#f04c4c':'#cc2222'));
+  const ds  = [{ label:'Peso (kg)', data:pts.map(p=>p.w), borderColor:accent,
+    backgroundColor:(c)=>{ const g=c.chart.ctx.createLinearGradient(0,0,0,255); g.addColorStop(0,accent+'44'); g.addColorStop(1,accent+'05'); return g; },
+    fill:true, tension:.35, pointBackgroundColor:pc, pointBorderColor:pc, pointRadius:6, pointHoverRadius:9, borderWidth:2.5 }];
+  if (data.setup?.goalWeight) ds.push({ label:'Meta', data:pts.map(()=>data.setup.goalWeight),
+    borderColor:isDark?'rgba(76,240,200,.45)':'rgba(0,153,119,.4)', borderDash:[6,4], borderWidth:1.5, pointRadius:0, fill:false });
+
+  myChart = new Chart(ctx, { type:'line', data:{ labels:pts.map(p=>p.label), datasets:ds }, options:cOpts(grid,tick,ttBg,ttBrd,ttTxt,accent) });
+}
+
+function cOpts(grid,tick,ttBg,ttBrd,ttTxt,accent) {
+  return { responsive:true, maintainAspectRatio:false, interaction:{ mode:'index', intersect:false },
+    plugins:{ legend:{ display:false },
+      tooltip:{ backgroundColor:ttBg, borderColor:ttBrd, borderWidth:1, titleColor:accent, bodyColor:ttTxt,
+        titleFont:{ family:'Bebas Neue', size:14 }, bodyFont:{ family:'DM Sans', size:13 }, padding:12,
+        callbacks:{ label:c=>` ${c.dataset.label}: ${c.parsed.y} kg` } } },
+    scales:{ x:{ grid:{color:grid}, ticks:{color:tick,font:{family:'DM Sans',size:11}} },
+             y:{ grid:{color:grid}, ticks:{color:tick,font:{family:'DM Sans',size:11},callback:v=>v+' kg'} } } };
+}
+
+// =====================================================
+// TOAST
+// =====================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// =====================================================
+// INIT
+// =====================================================
+setTheme(localStorage.getItem(LS_THEME) || 'dark');
+initGoogle().catch(e => {
+  console.error('Google init error:', e);
+  hideLoading();
+  showView('login');
+});
+</script>
+
+
+<iframe id="apiproxyd2a44f7090ee4471cb8f1a434524c7ab58e9e46c0.2848142797" name="apiproxyd2a44f7090ee4471cb8f1a434524c7ab58e9e46c0.2848142797" src="./FitLog — Tu Progreso_files/proxy.html" tabindex="-1" aria-hidden="true" style="width: 1px; height: 1px; position: absolute; top: -100px; display: none;"></iframe></body></html>
