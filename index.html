@@ -363,7 +363,6 @@ function loadGis() {
 
 async function initGoogle() {
   await Promise.all([loadGapi(), loadGis()]);
-
   await new Promise(res => gapi.load('client', res));
   await gapi.client.init({ discoveryDocs: [DISCOVERY] });
   gapiReady = true;
@@ -371,20 +370,57 @@ async function initGoogle() {
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
     scope: SCOPES,
-    callback: handleTokenResponse,
+    callback: async (resp) => {
+      if (resp.error) {
+        console.error('Token error:', resp);
+        hideLoading();
+        showToast('⚠ ERROR: ' + (resp.error_description || resp.error));
+        showView('login');
+        return;
+      }
+      // Token received — fetch user info and load data
+      try {
+        const accessToken = resp.access_token;
+        gapi.client.setToken({ access_token: accessToken });
+
+        // Fetch user profile
+        const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        const profile = await profileRes.json();
+
+        const userProfile = {
+          name: profile.given_name || profile.name || 'Usuario',
+          picture: profile.picture || ''
+        };
+
+        // Cache token and profile
+        const c = loadCache() || {};
+        c._token = accessToken;
+        c._profile = userProfile;
+        saveCache(c);
+
+        showUserChip(userProfile);
+        await loadFromDrive(false);
+        renderAfterLoad();
+      } catch(e) {
+        console.error('Auth error:', e);
+        hideLoading();
+        showToast('⚠ ERROR DE AUTENTICACIÓN');
+        showView('login');
+      }
+    }
   });
 
-  // Check if we have a stored token
+  // Check cached token
   const cached = loadCache();
   if (cached && cached._token) {
     gapi.client.setToken({ access_token: cached._token });
-    // Try to silently verify by fetching file list
     try {
       await loadFromDrive(true);
-      showUserChip(cached._profile || {});
+      showUserChip(cached._profile || { name: 'Usuario', picture: '' });
       renderAfterLoad();
     } catch(e) {
-      // Token expired → show login
       clearToken();
       hideLoading();
       showView('login');
@@ -395,52 +431,18 @@ async function initGoogle() {
   }
 }
 
-function handleTokenResponse(resp) {
-  if (resp.error) {
-    hideLoading();
-    showToast('⚠ ERROR AL INICIAR SESIÓN');
-    showView('login');
-    return;
-  }
-  // Get user info
-  fetchUserInfo();
-}
-
-async function fetchUserInfo() {
-  try {
-    const token = gapi.client.getToken();
-    const r = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", { headers: { Authorization: "Bearer " + token.access_token } });
-    const data_r = await r.json();
-    const r2 = { result: data_r };
-    const p = r2.result;
-    const profile = { name: p.given_name || p.name || 'Usuario', picture: p.picture || '' };
-    // Store token + profile in cache
-    const c = loadCache() || {};
-    c._token   = gapi.client.getToken()?.access_token;
-    c._profile = profile;
-    saveCache(c);
-    showUserChip(profile);
-    await loadFromDrive(false);
-    renderAfterLoad();
-  } catch(e) {
-    hideLoading();
-    showToast('⚠ ERROR DE AUTENTICACIÓN');
-    showView('login');
-  }
-}
-
 function showUserChip(profile) {
   document.getElementById('user-chip').style.display = 'flex';
   document.getElementById('btn-logout').style.display = 'block';
   const av = document.getElementById('u-avatar');
-  if (profile.picture) { av.src = profile.picture; av.style.display='block'; }
+  if (profile.picture) { av.src = profile.picture; av.style.display = 'block'; }
   else av.style.display = 'none';
   document.getElementById('u-name').textContent = profile.name || '';
 }
 
 function signIn() {
   if (!gapiReady) { showToast('CARGANDO, ESPERÁ...'); return; }
-  tokenClient.requestAccessToken({ prompt: 'consent' });
+  tokenClient.requestAccessToken({ prompt: 'select_account' });
 }
 
 function signOut() {
