@@ -292,7 +292,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:15p
 // CONFIG
 // =====================================================
 const CLIENT_ID   = '7598314266-c5k6g302077l8fb3v3748563h7khav69.apps.googleusercontent.com';
-const SCOPES      = 'https://www.googleapis.com/auth/drive.appdata';
+const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
 const FILE_NAME   = 'fitlog_data.json';
 const DISCOVERY   = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
 const LS_THEME    = 'fitlog_theme';
@@ -408,8 +408,11 @@ function handleTokenResponse(resp) {
 
 async function fetchUserInfo() {
   try {
-    const r = await gapi.client.request({ path: 'https://www.googleapis.com/oauth2/v3/userinfo' });
-    const p = r.result;
+    const token = gapi.client.getToken();
+    const r = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", { headers: { Authorization: "Bearer " + token.access_token } });
+    const data_r = await r.json();
+    const r2 = { result: data_r };
+    const p = r2.result;
     const profile = { name: p.given_name || p.name || 'Usuario', picture: p.picture || '' };
     // Store token + profile in cache
     const c = loadCache() || {};
