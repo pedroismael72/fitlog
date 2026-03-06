@@ -350,7 +350,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
     <div class="dash-main">
       <div class="two-col">
         <div class="card">
-          <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>PROGRESO DE PESO</div></div>
+          <div class="ctitle">
+            <div class="ctitle-l"><div class="dot"></div>PROGRESO DE PESO</div>
+            <button class="btn" style="background:var(--accent);color:#0a0a0f;font-size:.78rem;padding:6px 14px;" onclick="quickAddWeight()">+ NUEVO PESO</button>
+          </div>
           <div class="chart-wrap"><canvas id="wChart"></canvas></div>
         </div>
         <div class="card">
@@ -1714,6 +1717,70 @@ function showToast(msg) {
 setTheme('dark');
 initGoogle().catch(e => { console.error(e); hideLoading(); showView('login'); });
 
+
+// ═══════════════════════════════════════════════════
+// QUICK ADD WEIGHT
+// ═══════════════════════════════════════════════════
+function quickAddWeight() {
+  const MNAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const sel = document.getElementById('qw-week');
+  sel.innerHTML = '';
+
+  // Populate all weeks from all months
+  data.months.forEach(m => {
+    m.weeks.forEach(w => {
+      const opt = document.createElement('option');
+      opt.value = m.id + '|' + w.id;
+      opt.textContent = MNAMES[m.month] + ' ' + m.year + ' — ' + w.label + (w.weight ? ' (' + w.weight + ' kg)' : '');
+      sel.appendChild(opt);
+    });
+  });
+
+  // Add option to create new month
+  const opt = document.createElement('option');
+  opt.value = '__new__';
+  opt.textContent = '+ Agregar mes nuevo';
+  sel.appendChild(opt);
+
+  // Default to most recent week
+  if (sel.options.length > 1) sel.selectedIndex = sel.options.length - 2;
+
+  document.getElementById('qw-weight').value = '';
+  const d = new Date();
+  document.getElementById('qw-date').textContent = d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('qw-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('qw-weight').focus(), 100);
+}
+
+function confirmQW() {
+  const val  = parseFloat(document.getElementById('qw-weight').value.replace(',','.'));
+  const sel  = document.getElementById('qw-week').value;
+  if (!val || val <= 0) { showToast('⚠ INGRESÁ UN PESO VÁLIDO'); return; }
+
+  if (sel === '__new__') {
+    // Create new month then assign
+    addMonth();
+    const lastM = data.months[data.months.length-1];
+    lastM.weeks[0].weight = val;
+  } else {
+    const [mid, wid] = sel.split('|');
+    const month = data.months.find(m => m.id === mid);
+    const week  = month?.weeks.find(w => w.id === wid);
+    if (!week) { showToast('⚠ ERROR: SEMANA NO ENCONTRADA'); return; }
+    week.weight = val;
+  }
+
+  scheduleSave(); renderDash();
+  closeQWModal();
+  showToast('✓ PESO GUARDADO');
+}
+
+function closeQWModal(e) {
+  if (e && e.target !== document.getElementById('qw-modal')) return;
+  document.getElementById('qw-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
 // Register Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -1723,5 +1790,30 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+
+<!-- QUICK WEIGHT MODAL -->
+<div class="modal-overlay" id="qw-modal" onclick="closeQWModal(event)" style="z-index:600;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:320px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.5);">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:3px;">AÑADIR PESO</div>
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:20px;" id="qw-date"></div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">PESO (kg)</div>
+        <input type="text" inputmode="decimal" id="qw-weight" placeholder="ej: 79.5"
+          style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1.2rem;font-weight:600;padding:10px 14px;outline:none;transition:border-color .2s;"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"
+          onkeydown="if(event.key==='Enter')confirmQW()">
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">MES Y SEMANA</div>
+        <select id="qw-week" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;padding:10px 12px;outline:none;-webkit-appearance:none;"></select>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="closeQWModal()" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.85rem;padding:10px;cursor:pointer;">CANCELAR</button>
+      <button onclick="confirmQW()" style="flex:2;background:var(--accent);color:#0a0a0f;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.85rem;padding:10px;cursor:pointer;">GUARDAR</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
