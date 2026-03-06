@@ -251,12 +251,11 @@ header {
 .weather-pill .w-icon { font-size:1.1rem; line-height:1; }
 .weather-pill .w-temp { font-family:'Bebas Neue',sans-serif; font-size:.95rem; letter-spacing:1px; }
 .weather-pill .w-tooltip {
-  display:none; position:fixed; width:240px;
+  display:none; position:fixed; width:230px;
   background:var(--s1); border:1px solid var(--border); border-radius:10px;
   padding:10px 13px; font-size:.76rem; color:var(--text2); line-height:1.6;
   z-index:9999; text-align:left; font-family:'DM Sans',sans-serif;
   box-shadow:0 8px 24px rgba(0,0,0,.6); pointer-events:none;
-  top:66px; right:20px;
 }
 .weather-pill:hover .w-tooltip,
 .weather-pill.touch-open .w-tooltip { display:block; }
@@ -632,6 +631,9 @@ header {
           <div style="font-size:.8rem;color:var(--text2);line-height:1.5" class="reminder-msg"></div>
         </div>
         <button class="btn" style="font-size:.72rem;padding:7px 16px;white-space:nowrap;flex-shrink:0" onclick="openWeightModal()">REGISTRAR</button>
+        <button onclick="document.getElementById('weight-reminder').style.display='none'"
+          style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px;flex-shrink:0;line-height:1;transition:color .15s"
+          onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">✕</button>
       </div>
     </div>
 
@@ -1908,6 +1910,16 @@ async function loadWeather() {
       else                         tip = `🌤 Clima aceptable. Revisá si hay lluvia más tarde antes de salir.`;
 
       document.getElementById('w-tooltip').textContent = tip;
+
+      // Position tooltip dynamically under the pill
+      const tooltip = document.getElementById('w-tooltip');
+      function positionTooltip() {
+        const rect = pill.getBoundingClientRect();
+        tooltip.style.top  = (rect.bottom + 8) + 'px';
+        tooltip.style.right = (window.innerWidth - rect.right) + 'px';
+      }
+      pill.addEventListener('mouseenter', positionTooltip);
+      pill.addEventListener('click', positionTooltip);
 
       // Touch support
       pill.addEventListener('click', () => pill.classList.toggle('touch-open'));
