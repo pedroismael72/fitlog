@@ -174,6 +174,33 @@ header{display:flex;align-items:center;gap:16px;padding:0 28px;height:60px;backg
 .nav-tab{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:.8rem;padding:7px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;}
 .nav-tab.active,.nav-tab:hover{background:rgba(200,240,76,.1);border-color:rgba(200,240,76,.3);color:var(--accent);}
 
+/* ── HEADER RIGHT ── */
+.hdr-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.ttoggle{display:flex;gap:4px;}
+.tbtn{background:transparent;border:1px solid var(--border);border-radius:6px;padding:4px 8px;color:var(--muted);cursor:pointer;font-size:.8rem;transition:all .2s;}
+.tbtn.on,.tbtn:hover{border-color:var(--accent);color:var(--accent);}
+.user-avatar{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);object-fit:cover;}
+.user-name{font-size:.8rem;font-weight:600;color:var(--text2);}
+.synced{background:var(--accent);}
+
+/* ── TWO COL ── */
+.two-col{display:grid;grid-template-columns:2fr 1fr;gap:16px;}
+
+/* ── STATS LIST ── */
+.slist{display:flex;flex-direction:column;gap:2px;}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:8px;border-bottom:1px solid var(--border);transition:background .2s;}
+.srow:last-child{border-bottom:none;}
+.srow:hover{background:var(--surface2);}
+.sn{font-size:.75rem;color:var(--muted);}
+.sv{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;color:var(--accent);}
+.sv.n2{color:var(--text2);}
+.goal-bar-wrap{height:5px;background:var(--surface3);border-radius:20px;overflow:hidden;margin:0 10px;}
+.goal-bar{height:100%;border-radius:20px;background:var(--accent);transition:width .6s;}
+
+/* ── DANGER BTN MINI ── */
+.btn-mini-danger{font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.78rem;padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;}
+.btn-mini-danger:hover{border-color:var(--danger);color:var(--danger);}
+
 /* ── MISC ── */
 input[type=text],input[type=number],input[type=email],select{background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:12px 15px;outline:none;width:100%;transition:border-color .2s;}
 input:focus,select:focus{border-color:var(--accent);}
@@ -187,29 +214,21 @@ input:focus,select:focus{border-color:var(--accent);}
 <!-- HEADER -->
 <header>
   <div class="logo" onclick="goSetup()">FIT<span>LOG</span></div>
-
-  <div class="nav-tabs" id="nav-tabs" style="display:none">
-    <button class="nav-tab active" onclick="switchTab('peso')"  id="tab-peso">⚖ PESO</button>
-    <button class="nav-tab"        onclick="switchTab('rutina')" id="tab-rutina">🏋 RUTINA</button>
+  <div class="hdr-stats" id="hdr-stats" style="display:none">
+    <div class="hpill"><span class="hl">Inicial</span><span class="hv n" id="h-start">—</span></div>
+    <div class="hpill"><span class="hl">Actual</span><span class="hv n" id="h-cur">—</span></div>
+    <div class="hpill"><span class="hl">Cambio</span><span class="hv n" id="h-delta">—</span></div>
+    <div class="hpill"><span class="hl">Meta</span><span class="hv n" id="h-goal">—</span></div>
   </div>
-
   <div class="hdr-right">
-    <div class="hdr-stats" id="hdr-stats" style="display:none">
-      <div class="hpill"><span class="hl">Inicial</span><span class="hv n" id="h-start">—</span></div>
-      <div class="hpill"><span class="hl">Actual</span><span class="hv n" id="h-cur">—</span></div>
-      <div class="hpill"><span class="hl">Cambio</span><span class="hv n" id="h-delta">—</span></div>
-      <div class="hpill"><span class="hl">Meta</span><span class="hv n" id="h-goal">—</span></div>
-    </div>
     <div class="user-chip" id="user-chip" style="display:none">
-      <img class="user-avatar" id="u-avatar" src="" alt="">
-      <span class="user-name" id="u-name"></span>
-      <div class="sync-dot synced" id="sync-dot"></div>
+      <img class="u-avatar" id="u-avatar" src="" alt="" style="display:none;">
+      <span id="u-name"></span>
+      <div class="sync-dot" id="sync-dot"></div>
     </div>
-    <div class="ttoggle">
-      <button class="tbtn on" id="tb-dark"  onclick="setTheme('dark')">🌙</button>
-      <button class="tbtn"    id="tb-light" onclick="setTheme('light')">☀️</button>
-    </div>
-    <button class="btn-signout" id="btn-signout" style="display:none" onclick="signOut()">SALIR</button>
+    <button class="btn-signout" id="btn-signout" style="display:none" onclick="signOut()" title="Cerrar sesión">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </button>
   </div>
 </header>
 
@@ -261,11 +280,12 @@ input:focus,select:focus{border-color:var(--accent);}
 <div id="v-dash" class="view">
 
   <!-- TAB: PESO -->
+  <div class="dash-wrap">
   <div id="tab-content-peso">
     <div class="dash-main">
       <div class="two-col">
         <div class="card">
-          <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>PROGRESO DE PESO</div></div>
+          <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>PROGRESO DE PESO</div><button class="btn" style="font-size:.75rem;padding:6px 16px;" onclick="quickAddWeight()">+ NUEVO PESO</button></div>
           <div class="chart-wrap"><canvas id="wChart"></canvas></div>
         </div>
         <div class="card">
@@ -406,6 +426,107 @@ input:focus,select:focus{border-color:var(--accent);}
 
     </div>
   </div>
+
+    <!-- BMI Card -->
+    <div class="card" id="bmi-card" style="display:none;padding:16px 20px;">
+      <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>
+        <span id="imc-val" style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px;">—</span>
+        <span id="imc-state" style="font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px;margin-left:6px;">—</span>
+        <button onclick="document.getElementById('imc-tooltip').style.display=document.getElementById('imc-tooltip').style.display==='block'?'none':'block'" style="background:transparent;border:1px solid var(--border);border-radius:50%;width:18px;height:18px;font-size:.65rem;color:var(--muted);cursor:pointer;margin-left:4px;flex-shrink:0;">i</button>
+        <div id="imc-tooltip" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;font-size:.78rem;color:var(--text2);line-height:1.6;z-index:9000;width:240px;box-shadow:var(--shadow);text-align:left;pointer-events:none;">
+          <strong>Índice de Masa Corporal</strong><br>
+          &lt;18.5 Bajo peso<br>18.5–24.9 Normal<br>25–29.9 Sobrepeso<br>≥30 Obesidad
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;margin-top:4px;justify-content:flex-end;">
+        <div id="bmi-alert" style="display:none;align-items:center;gap:7px;font-size:.75rem;color:var(--warn);">⚠️ <span></span></div>
+        <div id="bmi-ok"    style="display:none;align-items:center;gap:7px;font-size:.75rem;color:var(--accent);">✅ <span></span></div>
+      </div>
+      <div style="position:relative;height:8px;border-radius:20px;overflow:hidden;margin:8px 0 4px;background:linear-gradient(to right,#4cc8f0 0%,#4cc8f0 17.3%,#c8f04c 17.3%,#c8f04c 42.3%,#f0a84c 42.3%,#f0a84c 61.5%,#f04c4c 61.5%,#f04c4c 100%);">
+        <div id="bmi-bar-unlit" style="position:absolute;right:0;top:0;bottom:0;background:rgba(10,10,15,0.6);"></div>
+        <div id="bmi-bar-excess" style="position:absolute;top:0;bottom:0;display:none;"></div>
+        <div id="bmi-marker" style="position:absolute;top:-3px;bottom:-3px;width:4px;border-radius:2px;background:#fff;transform:translateX(-50%);box-shadow:0 0 4px rgba(0,0,0,.5);"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--muted);padding:0 2px;">
+        <div><div style="color:#4cc8f0;font-weight:700;">BAJO</div><div>14</div></div>
+        <div style="text-align:center;"><div>18.5</div></div>
+        <div style="text-align:center;"><div>NORMAL</div><div>25</div></div>
+        <div style="text-align:center;"><div>SOBREPESO</div><div>30</div></div>
+        <div style="text-align:right;"><div style="color:#f04c4c;font-weight:700;">OBESIDAD</div><div>40</div></div>
+      </div>
+      <span id="bmi-maxnormal" style="display:none;"></span>
+    </div>
+
+    <!-- Google Fit Steps -->
+    <div class="card" style="padding:14px 20px;">
+      <div class="ctitle" style="margin-bottom:6px;">
+        <div class="ctitle-l"><div class="dot"></div>PASOS HOY <span id="fit-steps-total-hdr" style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;margin-left:6px;color:var(--accent);"></span></div>
+        <button class="btn-edit" onclick="loadFitSteps()">↻ ACTUALIZAR</button>
+      </div>
+      <div id="fit-loading" style="font-size:.75rem;color:var(--muted);display:none;">Cargando...</div>
+      <div id="fit-error"   style="font-size:.75rem;color:var(--danger);display:none;"></div>
+      <div id="fit-content" style="display:none;"></div>
+      <div id="fit-empty"   style="font-size:.75rem;color:var(--muted);display:none;">Sin datos aún.</div>
+    </div>
+
+    <!-- Weekly Summary -->
+    <div class="card" id="weekly-card">
+      <div class="ctitle">
+        <div class="ctitle-l"><div class="dot"></div>RESUMEN SEMANAL</div>
+        <span id="weekly-range" style="font-size:.75rem;color:var(--muted);"></span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">PESO</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;" id="ws-weight">—</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:2px;" id="ws-weight-sub"></div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">PASOS HOY</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;color:var(--accent);" id="ws-steps">—</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:2px;" id="ws-steps-sub"></div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">ACTIVIDADES</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;color:var(--accent);" id="ws-workouts">—</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:2px;">esta semana</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:14px;">
+        <span class="wdot-lbl">LUN→DOM</span>
+        <div id="workout-dots" style="display:flex;gap:5px;flex:1;"></div>
+        <button onclick="logWorkout()" class="btn" style="flex-shrink:0;font-size:.75rem;padding:6px 14px;">+ AGREGAR</button>
+      </div>
+      <div id="ws-activity-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+    </div>
+
+    <!-- Two col: Rate + Month -->
+    <div class="two-col">
+      <div class="card">
+        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>VELOCIDAD DE PÉRDIDA</div></div>
+        <div style="height:180px;"><canvas id="rateChart"></canvas></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">PROMEDIO/SEMANA</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--accent);" id="rate-avg">—</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">ÚLTIMA SEMANA</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--accent);" id="rate-last">—</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">META ESTIMADA</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:var(--accent);" id="rate-eta">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>COMPARATIVA MENSUAL</div></div>
+        <div id="month-compare"></div>
+      </div>
+    </div>
+
+  </div><!-- fin dash-wrap -->
 </div><!-- fin v-dash -->
 
 <!-- MODAL -->
@@ -610,17 +731,18 @@ async function loadFromDrive(silent) {
       fileId = files[0].id;
       const res = await gapi.client.drive.files.get({ fileId, alt:'media' });
       data = typeof res.result === 'string' ? JSON.parse(res.result) : res.result;
-      saveCache({ ...loadCache(), setup: data.setup, months: data.months });
+      if (!data.workouts) data.workouts = [];
+      saveCache({ ...loadCache(), setup: data.setup, months: data.months, workouts: data.workouts });
     } else {
       const c = loadCache();
-      if (c?.setup) data = { setup: c.setup, months: c.months || [] };
+      if (c?.setup) data = { setup: c.setup, months: c.months || [], workouts: c.workouts || [] };
       fileId = null;
     }
     if (!silent) setSyncStatus('synced');
   } catch(e) {
     if (!silent) setSyncStatus('error');
     const c = loadCache();
-    if (c?.setup) data = { setup: c.setup, months: c.months || [] };
+    if (c?.setup) data = { setup: c.setup, months: c.months || [], workouts: c.workouts || [] };
     throw e;
   }
 }
@@ -637,7 +759,8 @@ async function saveToDrive() {
       const res = await gapi.client.request({ path:'/upload/drive/v3/files', method:'POST', params:{uploadType:'multipart'}, headers:{'Content-Type':`multipart/related; boundary="${boundary}"`}, body:mp });
       fileId = res.result.id;
     }
-    saveCache({ ...loadCache(), setup: data.setup, months: data.months });
+    if (!data.workouts) data.workouts = [];
+      saveCache({ ...loadCache(), setup: data.setup, months: data.months, workouts: data.workouts });
     setSyncStatus('synced');
   } catch(e) {
     setSyncStatus('error');
@@ -1418,5 +1541,85 @@ function closeQWModal(e) {
 setTheme(localStorage.getItem(LS_THEME) || 'dark');
 initGoogle().catch(e => { console.error(e); hideLoading(); showView('login'); });
 </script>
+
+<!-- WORKOUT MODAL -->
+<div class="modal-overlay" id="workout-modal" onclick="closeWorkoutModal(event)" style="z-index:600;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:380px;width:100%;padding:28px;box-shadow:var(--shadow);">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:3px;">REGISTRAR ACTIVIDAD</div>
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:20px;" id="workout-modal-date"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;">
+      <button class="split-btn" onclick="selectActivity('bici')" id="act-bici"><div class="split-day">🚴 BICI / CARDIO</div><div class="split-desc">Tiempo + velocidad</div></button>
+      <button class="split-btn" onclick="selectActivity('gym')"  id="act-gym"><div class="split-day">🏋️ GIMNASIO</div><div class="split-desc">Duración total</div></button>
+    </div>
+    <div id="fields-bici" style="display:none;flex-direction:column;gap:12px;margin-bottom:18px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">DURACIÓN (min)</div>
+          <input type="number" id="bici-min" min="1" max="300" placeholder="ej: 30" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:9px 12px;outline:none;" oninput="calcBiciCals()">
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">VELOCIDAD (km/h)</div>
+          <input type="number" id="bici-kmh" min="1" max="60" placeholder="ej: 20" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:9px 12px;outline:none;" oninput="calcBiciCals()">
+        </div>
+      </div>
+      <div id="bici-cal-preview" style="background:rgba(200,240,76,.08);border:1px solid rgba(200,240,76,.2);border-radius:10px;padding:10px 14px;font-size:.82rem;color:var(--muted);display:none;">
+        Calorías estimadas: <strong style="color:var(--accent);" id="bici-cal-val">—</strong>
+        <span style="font-size:.7rem;display:block;margin-top:2px;">Basado en tu peso · intensidad según velocidad</span>
+      </div>
+    </div>
+    <div id="fields-gym" style="display:none;flex-direction:column;gap:12px;margin-bottom:18px;">
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">DURACIÓN (min)</div>
+        <input type="number" id="gym-min" min="1" max="300" placeholder="ej: 60" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:9px 12px;outline:none;">
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">NOTA (opcional)</div>
+        <input type="text" id="gym-note" placeholder="ej: Pecho y espalda" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;padding:9px 12px;outline:none;">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="closeWorkoutModal()" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.85rem;padding:10px;cursor:pointer;">CANCELAR</button>
+      <button onclick="confirmWorkout()" id="btn-confirm-workout" style="flex:2;background:var(--accent);color:#0a0a0f;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.85rem;padding:10px;cursor:pointer;opacity:.4;pointer-events:none;transition:opacity .2s;">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK WEIGHT MODAL -->
+<div class="modal-overlay" id="qw-modal" onclick="closeQWModal(event)" style="z-index:600;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:320px;width:100%;padding:28px;box-shadow:var(--shadow);">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:3px;">AÑADIR PESO</div>
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:20px;" id="qw-date"></div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">PESO (kg)</div>
+        <input type="text" inputmode="decimal" id="qw-weight" placeholder="ej: 79.5" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1.2rem;font-weight:600;padding:10px 14px;outline:none;" onkeydown="if(event.key==='Enter')confirmQW()">
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">MES Y SEMANA</div>
+        <select id="qw-week" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;padding:10px 12px;outline:none;-webkit-appearance:none;"></select>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="closeQWModal()" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.85rem;padding:10px;cursor:pointer;">CANCELAR</button>
+      <button onclick="confirmQW()" style="flex:2;background:var(--accent);color:#0a0a0f;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.85rem;padding:10px;cursor:pointer;">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.split-btn{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 15px;cursor:pointer;text-align:left;transition:all .18s;width:100%;}
+.split-btn:hover{border-color:rgba(200,240,76,.3);}
+.split-btn.selected{border-color:var(--accent);background:rgba(200,240,76,.08);}
+.split-day{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:1.5px;color:var(--text);margin-bottom:2px;}
+.split-btn.selected .split-day{color:var(--accent);}
+.split-desc{font-size:.7rem;color:var(--muted);}
+.act-row{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;cursor:pointer;transition:border-color .18s;}
+.act-row:hover{border-color:rgba(200,240,76,.25);}
+.wdot-lbl{font-size:.68rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-right:3px;}
+.wdot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;border:1px solid var(--border);color:var(--muted);}
+.wdot.active{background:var(--accent);color:#0a0a0f;border-color:var(--accent);}
+.wdot.today{border-color:rgba(200,240,76,.4);color:rgba(200,240,76,.7);}
+</style>
+
 </body>
 </html>
