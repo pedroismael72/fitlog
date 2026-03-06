@@ -767,6 +767,20 @@ header {
   </div>
 </div>
 
+<!-- MODAL: CONFIRMAR ACCIÓN -->
+<div class="modal-bg" id="m-confirm">
+  <div class="modal-box" style="max-width:340px">
+    <div class="modal-hdr">
+      <div class="modal-title" id="mc-title">¿ESTÁS SEGURO?</div>
+    </div>
+    <div class="modal-sub" id="mc-msg" style="margin-bottom:24px"></div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeConfirm()">CANCELAR</button>
+      <button class="btn-del" id="mc-ok" style="padding:10px 20px">CONFIRMAR</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -844,11 +858,13 @@ function signIn() {
   });
 }
 function signOut() {
-  const c = getCache(); if (c) { delete c._token; setCache(c); }
-  document.getElementById('hdr-mid').style.display  = 'none';
-  document.getElementById('u-chip').style.display   = 'none';
-  document.getElementById('btn-exit').style.display = 'none';
-  show('login');
+  showConfirm('CERRAR SESIÓN', '¿Querés salir de FitLog?', () => {
+    const c = getCache(); if (c) { delete c._token; setCache(c); }
+    document.getElementById('hdr-mid').style.display  = 'none';
+    document.getElementById('u-chip').style.display   = 'none';
+    document.getElementById('btn-exit').style.display = 'none';
+    show('login');
+  });
 }
 
 // ═══════════════════════════════════════════
@@ -1022,12 +1038,16 @@ function saveSetup() {
 }
 
 function clearAll() {
-  if (!confirm('¿Borrar todos los datos? No se puede deshacer.')) return;
-  APP = { setup:null, entries:[], workouts:[] };
-  driveFileId = null;
-  signOut();
-  localStorage.removeItem(LS_KEY);
-  show('login');
+  showConfirm('BORRAR TODO', 'Se eliminarán todos tus datos. Esta acción no se puede deshacer.', () => {
+    APP = { setup:null, entries:[], workouts:[] };
+    driveFileId = null;
+    const c = getCache(); if (c) { delete c._token; setCache(c); }
+    localStorage.removeItem(LS_KEY);
+    document.getElementById('hdr-mid').style.display  = 'none';
+    document.getElementById('u-chip').style.display   = 'none';
+    document.getElementById('btn-exit').style.display = 'none';
+    show('login');
+  });
 }
 
 // ═══════════════════════════════════════════
@@ -1201,9 +1221,10 @@ function editWeight(idx) {
 
 function deleteWeight(idx) {
   const e = APP.entries[idx];
-  if (!confirm(`¿Eliminar el registro del ${fmtShort(e.date)} (${e.weight} kg)?`)) return;
-  APP.entries.splice(idx, 1);
-  scheduleSave(); renderAll(); toast('✓ REGISTRO ELIMINADO');
+  showConfirm('ELIMINAR PESO', `Registro del ${fmtShort(e.date)} — ${e.weight} kg`, () => {
+    APP.entries.splice(idx, 1);
+    scheduleSave(); renderAll(); toast('✓ REGISTRO ELIMINADO');
+  });
 }
 
 // ═══════════════════════════════════════════
@@ -1495,6 +1516,7 @@ function openWeightModal() {
   const t  = today();
   const ex = APP.entries.find(e => e.date === t);
   document.getElementById('mw-date').value = t;
+  document.getElementById('mw-date').max   = t;
   document.getElementById('mw-val').value  = ex ? ex.weight : (latestW() || '');
   document.getElementById('mw-note').value = ex?.note || '';
   selMood = ex?.mood || null;
@@ -1510,6 +1532,7 @@ function saveWeight() {
   const d    = document.getElementById('mw-date').value || today();
   const note = document.getElementById('mw-note').value.trim() || null;
   if (isNaN(v) || v < 20 || v > 300) { toast('⚠ Peso inválido'); return; }
+  if (d > today()) { toast('⚠ No podés registrar un peso futuro'); return; }
 
   const entry = { date:d, weight:v };
   if (note)    entry.note = note;
@@ -1548,6 +1571,7 @@ function openWorkoutModal(idx = null) {
     const w = APP.workouts[idx];
     document.getElementById('mwk-title').textContent = 'EDITAR ACTIVIDAD';
     document.getElementById('mwk-date').value = w.date;
+    document.getElementById('mwk-date').max   = today();
     pickType(w.type);
     if (w.type === 'bici') {
       document.getElementById('f-bici-min').value = w.min || '';
@@ -1560,6 +1584,7 @@ function openWorkoutModal(idx = null) {
   } else {
     document.getElementById('mwk-title').textContent = 'REGISTRAR ACTIVIDAD';
     document.getElementById('mwk-date').value = today();
+    document.getElementById('mwk-date').max   = today();
   }
   openModal('m-workout');
 }
@@ -1592,6 +1617,7 @@ document.getElementById('f-bici-kmh').addEventListener('input', updateCalBox);
 function saveWorkout() {
   if (!selType) { toast('⚠ Elegí el tipo de actividad'); return; }
   const d = document.getElementById('mwk-date').value || today();
+  if (d > today()) { toast('⚠ No podés registrar una actividad futura'); return; }
   let wk;
   if (selType === 'bici') {
     const min = parseFloat(document.getElementById('f-bici-min').value);
@@ -1611,9 +1637,12 @@ function saveWorkout() {
 }
 
 function delWorkout(idx) {
-  if (!confirm('¿Eliminar esta actividad?')) return;
-  APP.workouts.splice(idx, 1);
-  scheduleSave(); renderWeekly(); toast('✓ ELIMINADO');
+  const w = APP.workouts[idx];
+  const label = w.type === 'bici' ? 'Bici / Cardio' : 'Gimnasio';
+  showConfirm('ELIMINAR ACTIVIDAD', `${label} del ${fmtShort(w.date)} — ${w.min} min`, () => {
+    APP.workouts.splice(idx, 1);
+    scheduleSave(); renderWeekly(); toast('✓ ELIMINADO');
+  });
 }
 
 // ═══════════════════════════════════════════
@@ -1622,6 +1651,23 @@ function delWorkout(idx) {
 function openModal(id)  { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 function bgClose(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+
+// Confirm modal
+let _confirmCb = null;
+function showConfirm(title, msg, cb) {
+  document.getElementById('mc-title').textContent = title;
+  document.getElementById('mc-msg').textContent   = msg;
+  _confirmCb = cb;
+  document.getElementById('m-confirm').classList.add('open');
+}
+function closeConfirm() {
+  _confirmCb = null;
+  document.getElementById('m-confirm').classList.remove('open');
+}
+document.getElementById('mc-ok').onclick = () => {
+  if (_confirmCb) _confirmCb();
+  closeConfirm();
+};
 
 // ═══════════════════════════════════════════
 // GO
