@@ -416,7 +416,7 @@ header {
 <div id="v-dash" class="view">
   <div class="dash">
 
-    <!-- Gráfico + Stats -->
+    <!-- Gráfico + IMC -->
     <div class="two-col">
       <div class="card">
         <div class="ctitle">
@@ -426,17 +426,32 @@ header {
         <div class="chart-wrap"><canvas id="wChart"></canvas></div>
       </div>
 
-      <div class="card">
-        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>ESTADÍSTICAS</div></div>
-        <div class="srow"><span class="sn">Progreso a meta</span><span class="sv" id="s-pct">—</span></div>
-        <div class="goal-track"><div class="goal-fill" id="s-bar" style="width:0%"></div></div>
-        <div class="srow"><span class="sn">Semanas registradas</span><span class="sv" id="s-weeks">0</span></div>
-        <div class="srow"><span class="sn">Mejor semana</span><span class="sv" id="s-best" style="font-size:.95rem">—</span></div>
-        <div class="srow"><span class="sn">Falta para meta</span><span class="sv" id="s-rem">—</span></div>
-        <div class="srow" style="border:none;padding-top:14px;gap:8px;flex-wrap:wrap;">
-          <button class="btn-ghost" onclick="goSetup()">✏ EDITAR PERFIL</button>
-          <button class="btn-del" onclick="clearAll()">RESETEAR</button>
+      <div class="card" id="bmi-card" style="display:none">
+        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>MASA CORPORAL</div></div>
+        <div class="bmi-top">
+          <div class="bmi-num" id="bmi-n">—</div>
+          <div class="bmi-tag" id="bmi-tag"></div>
+          <div class="bmi-alert" id="bmi-alert" style="display:none"></div>
         </div>
+        <div class="bmi-bar-wrap">
+          <div class="bmi-unlit"  id="bmi-unlit"></div>
+          <div class="bmi-cursor" id="bmi-cursor"></div>
+        </div>
+        <div class="bmi-scale"><span>14</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div>
+        <div class="bmi-legend">
+          <span>🔵 Bajo &lt;18.5</span>
+          <span>🟢 Normal 18.5–25</span>
+          <span>🟡 Sobrepeso 25–30</span>
+          <span>🔴 Obesidad &gt;30</span>
+        </div>
+      </div>
+
+      <!-- Fallback stats card when BMI not available -->
+      <div class="card" id="stats-fallback" style="display:none">
+        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>ESTADÍSTICAS</div></div>
+        <div class="srow"><span class="sn">Progreso a meta</span><span class="sv" id="s-pct2">—</span></div>
+        <div class="goal-track"><div class="goal-fill" id="s-bar2" style="width:0%"></div></div>
+        <div class="srow"><span class="sn">Falta para meta</span><span class="sv" id="s-rem2">—</span></div>
       </div>
     </div>
 
@@ -474,7 +489,7 @@ header {
       <div class="act-list" id="act-list"></div>
     </div>
 
-    <!-- Pasos + IMC -->
+    <!-- Pasos + Estadísticas -->
     <div class="two-col">
       <div class="card">
         <div class="ctitle">
@@ -487,23 +502,16 @@ header {
         <div class="steps-msg"  id="steps-msg"></div>
       </div>
 
-      <div class="card" id="bmi-card" style="display:none">
-        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>MASA CORPORAL</div></div>
-        <div class="bmi-top">
-          <div class="bmi-num" id="bmi-n">—</div>
-          <div class="bmi-tag" id="bmi-tag"></div>
-          <div class="bmi-alert" id="bmi-alert" style="display:none"></div>
-        </div>
-        <div class="bmi-bar-wrap">
-          <div class="bmi-unlit"  id="bmi-unlit"></div>
-          <div class="bmi-cursor" id="bmi-cursor"></div>
-        </div>
-        <div class="bmi-scale"><span>14</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div>
-        <div class="bmi-legend">
-          <span>🔵 Bajo &lt;18.5</span>
-          <span>🟢 Normal 18.5–25</span>
-          <span>🟡 Sobrepeso 25–30</span>
-          <span>🔴 Obesidad &gt;30</span>
+      <div class="card">
+        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>ESTADÍSTICAS</div></div>
+        <div class="srow"><span class="sn">Progreso a meta</span><span class="sv" id="s-pct">—</span></div>
+        <div class="goal-track"><div class="goal-fill" id="s-bar" style="width:0%"></div></div>
+        <div class="srow"><span class="sn">Semanas registradas</span><span class="sv" id="s-weeks">0</span></div>
+        <div class="srow"><span class="sn">Mejor semana</span><span class="sv" id="s-best" style="font-size:.95rem">—</span></div>
+        <div class="srow"><span class="sn">Falta para meta</span><span class="sv" id="s-rem">—</span></div>
+        <div class="srow" style="border:none;padding-top:14px;gap:8px;flex-wrap:wrap;">
+          <button class="btn-ghost" onclick="goSetup()">✏ EDITAR PERFIL</button>
+          <button class="btn-del" onclick="clearAll()">RESETEAR</button>
         </div>
       </div>
     </div>
@@ -875,6 +883,21 @@ function renderChart() {
   const yMin   = Math.min(...vals, goal ?? Infinity) - 2;
   const yMax   = Math.max(...vals) + 2;
 
+  // Color: interpolate red→green based on progress (0%=red, 100%=green)
+  const ini  = s?.startWeight ?? vals[0] ?? 80;
+  const cur  = vals[vals.length - 1] ?? ini;
+  const totalLoss = ini - (goal ?? ini);
+  const done      = ini - cur;
+  const progress  = totalLoss > 0 ? Math.max(0, Math.min(1, done / totalLoss)) : 0;
+
+  // progress=0 → red (#f04c4c), progress=1 → accent green (#c8f04c)
+  const r = Math.round(240 + (200 - 240) * progress);
+  const g = Math.round(76  + (240 - 76)  * progress);
+  const b = Math.round(76  + (76  - 76)  * progress); // stays 76
+  const lineColor  = `rgb(${r},${g},${b})`;
+  const fillColor  = `rgba(${r},${g},${b},.12)`;
+  const pointColor = lineColor;
+
   if (chart) chart.destroy();
   chart = new Chart(document.getElementById('wChart').getContext('2d'), {
     type: 'line',
@@ -883,9 +906,10 @@ function renderChart() {
       datasets: [
         {
           label:'Peso (kg)', data:vals,
-          borderColor:'#c8f04c', backgroundColor:'rgba(200,240,76,.12)',
+          borderColor: lineColor,
+          backgroundColor: fillColor,
           borderWidth:2.5, fill:true, tension:0.3,
-          pointBackgroundColor:'#c8f04c',
+          pointBackgroundColor: pointColor,
           pointRadius: pts.map((_,i) => i===0||i===pts.length-1 ? 5 : 3)
         },
         ...(goal ? [{
@@ -1042,7 +1066,13 @@ function renderBMI() {
   const h = APP.setup?.height;
   const w = latestW() ?? APP.setup?.startWeight;
   const card = document.getElementById('bmi-card');
-  if (!h || !w) { card.style.display = 'none'; return; }
+  const fallback = document.getElementById('stats-fallback');
+  if (!h || !w) {
+    card.style.display = 'none';
+    if (fallback) fallback.style.display = 'block';
+    return;
+  }
+  if (fallback) fallback.style.display = 'none';
 
   const bmi  = w / ((h/100)**2);
   const bmiR = Math.round(bmi*10)/10;
