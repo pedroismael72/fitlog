@@ -563,23 +563,58 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 
 <!-- WORKOUT MODAL -->
 <div class="modal-overlay" id="workout-modal" onclick="closeWorkoutModal(event)" style="z-index:600;">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:340px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:scale(.95);transition:transform .25s;" id="workout-modal-inner">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;margin-bottom:4px;">¿QUÉ ENTRENASTE?</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:380px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.5);" id="workout-modal-inner">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:3px;">REGISTRAR ACTIVIDAD</div>
     <div style="font-size:.8rem;color:var(--muted);margin-bottom:20px;" id="workout-modal-date"></div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px;">
-      <button class="split-btn" onclick="selectSplit('A')" id="split-A" data-split="A">
-        <div class="split-day">LUNES</div>
-        <div class="split-desc">Pecho · Espalda · Hombros · Piernas</div>
+
+    <!-- Activity type selector -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;">
+      <button class="split-btn" onclick="selectActivity('bici')" id="act-bici">
+        <div class="split-day">🚴 BICI / CARDIO</div>
+        <div class="split-desc">Tiempo + velocidad</div>
       </button>
-      <button class="split-btn" onclick="selectSplit('B')" id="split-B" data-split="B">
-        <div class="split-day">MIÉRCOLES</div>
-        <div class="split-desc">Bíceps · Tríceps · Hombros · Piernas</div>
-      </button>
-      <button class="split-btn" onclick="selectSplit('C')" id="split-C" data-split="C">
-        <div class="split-day">VIERNES</div>
-        <div class="split-desc">Full Body · Cardio · Core</div>
+      <button class="split-btn" onclick="selectActivity('gym')" id="act-gym">
+        <div class="split-day">🏋️ GIMNASIO</div>
+        <div class="split-desc">Duración total</div>
       </button>
     </div>
+
+    <!-- BICI fields -->
+    <div id="fields-bici" style="display:none;flex-direction:column;gap:12px;margin-bottom:18px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">DURACIÓN (min)</div>
+          <input type="number" id="bici-min" min="1" max="300" placeholder="ej: 30"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:9px 12px;outline:none;"
+            oninput="calcBiciCals()">
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">VELOCIDAD (km/h)</div>
+          <input type="number" id="bici-kmh" min="1" max="60" placeholder="ej: 20"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:9px 12px;outline:none;"
+            oninput="calcBiciCals()">
+        </div>
+      </div>
+      <div id="bici-cal-preview" style="background:rgba(200,240,76,.08);border:1px solid rgba(200,240,76,.2);border-radius:10px;padding:10px 14px;font-size:.82rem;color:var(--muted);display:none;">
+        Calorías estimadas: <strong style="color:var(--accent);" id="bici-cal-val">—</strong>
+        <span style="font-size:.7rem;display:block;margin-top:2px;color:var(--muted);">Basado en tu peso · intensidad moderada</span>
+      </div>
+    </div>
+
+    <!-- GYM fields -->
+    <div id="fields-gym" style="display:none;flex-direction:column;gap:12px;margin-bottom:18px;">
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">DURACIÓN (min)</div>
+        <input type="number" id="gym-min" min="1" max="300" placeholder="ej: 60"
+          style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:9px 12px;outline:none;">
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">NOTA (opcional)</div>
+        <input type="text" id="gym-note" placeholder="ej: Pecho y espalda"
+          style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;padding:9px 12px;outline:none;">
+      </div>
+    </div>
+
     <div style="display:flex;gap:8px;">
       <button onclick="closeWorkoutModal()" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.85rem;padding:10px;cursor:pointer;">CANCELAR</button>
       <button onclick="confirmWorkout()" id="btn-confirm-workout" style="flex:2;background:var(--accent);color:#0a0a0f;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.85rem;padding:10px;cursor:pointer;opacity:.4;pointer-events:none;transition:opacity .2s;">GUARDAR</button>
@@ -591,9 +626,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 .split-btn{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 15px;cursor:pointer;text-align:left;transition:all .18s;width:100%;}
 .split-btn:hover{border-color:rgba(200,240,76,.3);}
 .split-btn.selected{border-color:var(--accent);background:rgba(200,240,76,.08);}
-.split-day{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--text);margin-bottom:2px;}
+.split-day{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:1.5px;color:var(--text);margin-bottom:2px;}
 .split-btn.selected .split-day{color:var(--accent);}
-.split-desc{font-size:.72rem;color:var(--muted);}
+.split-desc{font-size:.7rem;color:var(--muted);}
 </style>
 
 <script>
@@ -1037,7 +1072,11 @@ function getWeekBounds() {
   return { mon, sun };
 }
 
-function isoDate(d) { return d.toISOString().slice(0,10); }
+function isoDate(d) {
+  // Argentina = UTC-3, always
+  const ar = new Date(d.getTime() - 3 * 60 * 60 * 1000);
+  return ar.toISOString().slice(0,10);
+}
 
 function renderWeeklySummary() {
   const { mon, sun } = getWeekBounds();
@@ -1071,6 +1110,27 @@ function renderWeeklySummary() {
   const sunStr = isoDate(sun);
   const ww = (data.workouts||[]).filter(w => { const d = w.date||w; return d >= monStr && d <= sunStr; });
   document.getElementById('ws-workouts').textContent = ww.length;
+  // Show activity breakdown below count
+  const gymCount  = ww.filter(w=>w.type==='gym').length;
+  const biciCount = ww.filter(w=>w.type==='bici').length;
+  const totalCals = ww.filter(w=>w.cal).reduce((s,w)=>s+(w.cal||0),0);
+  const totalMin  = ww.filter(w=>w.min).reduce((s,w)=>s+(w.min||0),0);
+  let sub = [];
+  if (gymCount)  sub.push('🏋️ ×' + gymCount);
+  if (biciCount) sub.push('🚴 ×' + biciCount);
+  document.getElementById('ws-workouts').title = sub.join('  ');
+  // Extra stats row
+  let extraEl = document.getElementById('ws-extra');
+  if (!extraEl) {
+    extraEl = document.createElement('div');
+    extraEl.id = 'ws-extra';
+    extraEl.style.cssText = 'font-size:.72rem;color:var(--muted);margin-top:8px;display:flex;gap:14px;flex-wrap:wrap;';
+    document.getElementById('workout-dots').parentElement.after(extraEl);
+  }
+  let extras = sub;
+  if (totalMin)  extras.push('⏱ ' + totalMin + ' min');
+  if (totalCals) extras.push('🔥 ~' + totalCals + ' kcal');
+  extraEl.textContent = extras.join('  ·  ');
 
   // Workout dots Mon-Sun
   const dots = document.getElementById('workout-dots');
@@ -1090,15 +1150,16 @@ function renderWeeklySummary() {
       background:${trained?'var(--accent)':isToday?'var(--surface3)':'var(--surface2)'};
       color:${trained?'#0a0a0f':'var(--muted)'};
       border:${isToday?'1px solid var(--accent)':'1px solid var(--border)'};`;
+    const icon = wo?.type==='bici' ? '🚴' : wo?.type==='gym' ? '🏋️' : '';
     dot.innerHTML = trained
-      ? '<span style="font-size:.55rem;font-weight:900;letter-spacing:.5px;">' + splitLabel + '</span>'
+      ? '<span style="font-size:.75rem;">' + icon + '</span>'
       : '<span style="font-size:.6rem;">' + days[i] + '</span>';
     dots.appendChild(dot);
   }
 
   // Update button
   const today = isoDate(new Date());
-  const alreadyLogged = !!(data.workouts||[]).find(w => (w.date||w) === today);
+  const alreadyLogged = (data.workouts||[]).filter(w => (w.date||w) === today).length > 0;
   const btn = document.getElementById('btn-workout');
   btn.textContent    = alreadyLogged ? '✓ ENTRENADO' : '+ ENTRENÉ HOY';
   btn.style.background = alreadyLogged ? 'var(--surface3)' : 'var(--accent)';
@@ -1106,48 +1167,84 @@ function renderWeeklySummary() {
   btn.style.border     = alreadyLogged ? '1px solid var(--border)' : 'none';
 }
 
-let selectedSplit = null;
+let selectedActivity = null;
 
 function logWorkout() {
   const today = isoDate(new Date());
   if (!data.workouts) data.workouts = [];
-  const existing = data.workouts.find(w => w.date === today);
-  if (existing) {
-    if (!confirm('¿Quitar el entrenamiento de hoy?')) return;
-    data.workouts = data.workouts.filter(w => w.date !== today);
-    scheduleSave(); renderWeeklySummary();
-    showToast('ENTRENAMIENTO QUITADO');
-    return;
+  // If already has entries today, ask to clear
+  const todayEntries = data.workouts.filter(w => (w.date||w) === today);
+  if (todayEntries.length > 0) {
+    if (!confirm('Ya registraste ' + todayEntries.length + ' actividad(es) hoy. ¿Agregar otra?')) return;
   }
   // Open modal
-  selectedSplit = null;
-  ['A','B','C'].forEach(s => document.getElementById('split-'+s).classList.remove('selected'));
+  selectedActivity = null;
+  ['bici','gym'].forEach(a => {
+    document.getElementById('act-'+a)?.classList.remove('selected');
+    document.getElementById('fields-'+a).style.display = 'none';
+  });
   document.getElementById('btn-confirm-workout').style.opacity = '.4';
   document.getElementById('btn-confirm-workout').style.pointerEvents = 'none';
+  document.getElementById('bici-min').value = '';
+  document.getElementById('bici-kmh').value = '';
+  document.getElementById('gym-min').value  = '';
+  document.getElementById('gym-note').value = '';
+  document.getElementById('bici-cal-preview').style.display = 'none';
   const d = new Date();
   document.getElementById('workout-modal-date').textContent =
-    d.toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'});
-  const mo = document.getElementById('workout-modal');
-  mo.classList.add('open');
-  document.getElementById('workout-modal-inner').style.transform = 'scale(1)';
+    d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('workout-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-function selectSplit(s) {
-  selectedSplit = s;
-  ['A','B','C'].forEach(x => document.getElementById('split-'+x).classList.toggle('selected', x===s));
+function selectActivity(type) {
+  selectedActivity = type;
+  ['bici','gym'].forEach(a => {
+    document.getElementById('act-'+a).classList.toggle('selected', a===type);
+    document.getElementById('fields-'+a).style.display = a===type ? 'flex' : 'none';
+  });
   document.getElementById('btn-confirm-workout').style.opacity = '1';
   document.getElementById('btn-confirm-workout').style.pointerEvents = 'auto';
 }
 
+function calcBiciCals() {
+  const min = parseFloat(document.getElementById('bici-min').value);
+  const kmh = parseFloat(document.getElementById('bici-kmh').value);
+  const w   = data.setup?.startWeight || 80;
+  if (!min || !kmh) { document.getElementById('bici-cal-preview').style.display='none'; return; }
+  // MET based on speed: <16kmh=6, 16-19=8, 20-22=10, 23-25=12, >25=14
+  const met = kmh < 16 ? 6 : kmh < 20 ? 8 : kmh < 23 ? 10 : kmh < 26 ? 12 : 14;
+  const cals = Math.round(met * w * (min / 60));
+  document.getElementById('bici-cal-val').textContent = cals + ' kcal';
+  document.getElementById('bici-cal-preview').style.display = 'block';
+}
+
 function confirmWorkout() {
-  if (!selectedSplit) return;
+  if (!selectedActivity) return;
   const today = isoDate(new Date());
   if (!data.workouts) data.workouts = [];
-  data.workouts.push({ date: today, split: selectedSplit });
+
+  let entry = { date: today, type: selectedActivity };
+
+  if (selectedActivity === 'bici') {
+    const min = parseFloat(document.getElementById('bici-min').value);
+    const kmh = parseFloat(document.getElementById('bici-kmh').value);
+    if (!min) { showToast('⚠ INGRESÁ LA DURACIÓN'); return; }
+    const w   = data.setup?.startWeight || 80;
+    const met = !kmh ? 8 : kmh < 16 ? 6 : kmh < 20 ? 8 : kmh < 23 ? 10 : kmh < 26 ? 12 : 14;
+    const cal = Math.round(met * w * (min / 60));
+    entry = { ...entry, min, kmh: kmh||null, cal };
+  } else if (selectedActivity === 'gym') {
+    const min  = parseFloat(document.getElementById('gym-min').value);
+    const note = document.getElementById('gym-note').value.trim();
+    if (!min) { showToast('⚠ INGRESÁ LA DURACIÓN'); return; }
+    entry = { ...entry, min, note: note||null };
+  }
+
+  data.workouts.push(entry);
   scheduleSave(); renderWeeklySummary();
   closeWorkoutModal();
-  showToast('✓ ENTRENAMIENTO REGISTRADO');
+  showToast('✓ ACTIVIDAD REGISTRADA');
 }
 
 function closeWorkoutModal(e) {
