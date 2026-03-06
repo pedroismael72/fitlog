@@ -318,6 +318,16 @@ header {
   background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);
 }
 
+/* Login layout */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-box{max-width:400px;width:100%;text-align:center;}
+.login-icon{font-size:3rem;margin-bottom:16px;}
+.login-eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:3.5rem;letter-spacing:6px;color:var(--text);margin-bottom:12px;}
+.login-sub{font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:32px;}
+.login-note{font-size:.75rem;color:var(--muted);margin-top:16px;line-height:1.5;}
+.google-logo{width:20px;height:20px;flex-shrink:0;}
+
 /* Google btn */
 .google-btn{
   display:flex;align-items:center;justify-content:center;gap:10px;
@@ -463,7 +473,7 @@ header {
       <div class="hpill"><span class="hl">Meta</span><span class="hv n" id="h-goal">—</span></div>
     </div>
     <div class="user-chip" id="user-chip" style="display:none">
-      <img class="user-avatar" id="u-avatar" src="" alt="">
+      <img class="u-avatar" id="u-avatar" src="" alt="" style="display:none;">
       <span class="user-name" id="u-name"></span>
       <div class="sync-dot synced" id="sync-dot"></div>
     </div>
