@@ -255,10 +255,13 @@ header {
 .bmi-stats { display:flex; flex-direction:column; gap:6px; }
 .bmi-stat  {
   display:flex; justify-content:space-between; align-items:center;
-  padding:5px 8px; background:var(--s2); border-radius:7px;
+  padding:6px 10px; background:var(--s2); border-radius:7px; gap:10px;
 }
-.bmi-stat-lbl { font-size:.7rem; color:var(--muted); }
-.bmi-stat-val { font-family:'Bebas Neue',sans-serif; font-size:.95rem; letter-spacing:1px; }
+.bmi-stat-lbl { font-size:.7rem; color:var(--muted); white-space:nowrap; flex-shrink:0; }
+.bmi-stat-val {
+  font-family:'Bebas Neue',sans-serif; font-size:.92rem; letter-spacing:1px;
+  text-align:right; white-space:nowrap;
+}
 .bmi-stat-val.ok   { color:var(--accent); }
 .bmi-stat-val.warn { color:var(--warn); }
 .bmi-stat-val.bad  { color:var(--danger); }
@@ -896,6 +899,8 @@ async function boot() {
       const r = await fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${c._token}`);
       const info = await r.json();
       if (!info.error) { await driveLoad(c._token); afterLoad(); return; }
+      // Token expired — clear it
+      delete c._token; setCache(c);
     } catch {}
   }
   hideLoader(); show('login');
@@ -1294,14 +1299,14 @@ function renderBMI() {
 
   const diffEl = document.getElementById('bmi-diff');
   if (diff > 0) {
-    diffEl.textContent = '+' + diff + ' kg sobre lo normal';
+    diffEl.textContent = '+' + diff + ' kg (sobre)';
     diffEl.className   = 'bmi-stat-val warn';
   } else if (diff < 0) {
-    diffEl.textContent = Math.abs(diff) + ' kg bajo el límite';
-    diffEl.className   = 'bmi-stat-val info';
-  } else {
-    diffEl.textContent = 'En el límite exacto';
+    diffEl.textContent = Math.abs(diff) + ' kg (margen)';
     diffEl.className   = 'bmi-stat-val ok';
+  } else {
+    diffEl.textContent = 'En el límite';
+    diffEl.className   = 'bmi-stat-val warn';
   }
 
   // Estado nutricional detallado
@@ -1363,8 +1368,12 @@ async function loadSteps() {
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       const msg = document.getElementById('steps-msg');
-      if (res.status === 403) {
-        msg.innerHTML = '⚠ Sin permiso de Fitness. <u style="cursor:pointer;color:var(--accent)" onclick="signOut()">Cerrá sesión y volvé a entrar</u> para otorgarlo.';
+      if (res.status === 401) {
+        // Token expired — clear it and prompt re-login
+        const c = getCache(); if (c) { delete c._token; setCache(c); }
+        msg.innerHTML = '🔒 Sesión expirada. <u style="cursor:pointer;color:var(--accent);text-decoration:none;font-weight:600" onclick="signIn()">Volvé a ingresar →</u>';
+      } else if (res.status === 403) {
+        msg.innerHTML = '⚠ Sin permiso de Fitness. <u style="cursor:pointer;color:var(--accent);text-decoration:none;font-weight:600" onclick="signIn()">Cerrá sesión y volvé a entrar →</u>';
       } else {
         msg.textContent = `Error ${res.status}: ${err?.error?.message || 'revisá permisos de Fitness API'}`;
       }
