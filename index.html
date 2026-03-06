@@ -257,12 +257,12 @@ header {
 .bmi-alert.ok { color:var(--accent); }
 
 /* BMI horizontal full layout */
-.bmi-main { display:grid; grid-template-columns:150px 1fr; gap:0; align-items:stretch; margin-bottom:16px; }
+.bmi-main { display:grid; grid-template-columns:120px 1fr; gap:0; align-items:stretch; margin-bottom:16px; }
 .bmi-left {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:8px; border-right:1px solid var(--border); padding-right:16px;
 }
-.bmi-big  { font-family:'Bebas Neue',sans-serif; font-size:5rem; letter-spacing:1px; line-height:1; text-align:center; }
+.bmi-big  { font-family:'Bebas Neue',sans-serif; font-size:4rem; letter-spacing:1px; line-height:1; text-align:center; }
 .bmi-cat  {
   font-family:'Bebas Neue',sans-serif; font-size:.78rem; letter-spacing:2px;
   padding:4px 10px; border-radius:6px; text-align:center; white-space:nowrap;
@@ -604,23 +604,23 @@ header {
           </div>
           <div class="bmi-stats">
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Peso actual</span>
+              <span class="bmi-stat-lbl">Tu peso actual</span>
               <span class="bmi-stat-val" id="bmi-cur-weight">—</span>
             </div>
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Máx. normal</span>
+              <span class="bmi-stat-lbl">Peso máx. normal</span>
               <span class="bmi-stat-val info" id="bmi-max-normal">—</span>
             </div>
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Diferencia</span>
+              <span class="bmi-stat-lbl">Diferencia al rango</span>
               <span class="bmi-stat-val" id="bmi-diff">—</span>
             </div>
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Peso ideal</span>
+              <span class="bmi-stat-lbl">Peso ideal (IMC 22)</span>
               <span class="bmi-stat-val ok" id="bmi-ideal">—</span>
             </div>
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Estado</span>
+              <span class="bmi-stat-lbl">Estado nutricional</span>
               <span class="bmi-stat-val" id="bmi-nutri">—</span>
             </div>
           </div>
