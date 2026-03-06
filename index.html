@@ -219,22 +219,27 @@ header {
 .act-btns { display:flex; gap:6px; flex-shrink:0; }
 
 /* ── STEPS RING ── */
-.steps-card-inner { display:flex; align-items:center; gap:20px; }
-.steps-ring-wrap  { position:relative; flex-shrink:0; width:90px; height:90px; }
-.steps-ring-wrap svg { width:90px; height:90px; transform:rotate(-90deg); }
-.steps-ring-bg    { fill:none; stroke:var(--s3); stroke-width:8; }
-.steps-ring-fill  { fill:none; stroke:var(--accent); stroke-width:8; stroke-linecap:round; transition:stroke-dashoffset .8s ease; }
-.steps-ring-fill.over { stroke:var(--danger); }
+.steps-card-inner {
+  display:grid; grid-template-columns:110px 1fr; gap:0; align-items:stretch;
+}
+.steps-ring-wrap  { position:relative; width:110px; height:110px; }
+.steps-ring-wrap svg { width:110px; height:110px; transform:rotate(-90deg); }
+.steps-ring-bg    { fill:none; stroke:var(--s3); stroke-width:9; }
+.steps-ring-fill  { fill:none; stroke:var(--accent); stroke-width:9; stroke-linecap:round; transition:stroke-dashoffset .8s ease; }
+.steps-ring-fill.over { stroke:#c8f04c; }
 .steps-ring-center {
   position:absolute; inset:0; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:1px;
+  align-items:center; justify-content:center;
 }
-.steps-ring-pct  { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:1px; line-height:1; }
-.steps-ring-lbl  { font-size:.58rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
-.steps-info      { flex:1; display:flex; flex-direction:column; gap:6px; }
-.steps-num       { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:1px; line-height:1; color:var(--accent); }
+.steps-ring-pct  { font-family:'Bebas Neue',sans-serif; font-size:1.55rem; letter-spacing:1px; line-height:1; }
+.steps-info      {
+  display:flex; flex-direction:column; justify-content:center;
+  padding-left:18px; border-left:1px solid var(--border); gap:4px;
+}
+.steps-num       { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; letter-spacing:1px; line-height:1; color:var(--accent); }
 .steps-goal-txt  { font-size:.72rem; color:var(--muted); }
-.steps-msg       { font-size:.74rem; color:var(--muted); margin-top:2px; }
+.steps-msg       { font-size:.74rem; color:var(--muted); }
+.steps-updated   { font-size:.64rem; color:var(--s3); text-align:center; margin-top:10px; letter-spacing:.5px; }
 
 /* ── BMI ── */
 .bmi-row1  { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
@@ -251,11 +256,14 @@ header {
 .bmi-alert.ok { color:var(--accent); }
 
 /* BMI horizontal full layout */
-.bmi-main { display:grid; grid-template-columns:auto 1fr; gap:20px; align-items:start; margin-bottom:16px; }
-.bmi-left { display:flex; flex-direction:column; gap:4px; }
-.bmi-big  { font-family:'Bebas Neue',sans-serif; font-size:4rem; letter-spacing:1px; line-height:1; }
+.bmi-main { display:grid; grid-template-columns:120px 1fr; gap:0; align-items:stretch; margin-bottom:16px; }
+.bmi-left {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:8px; border-right:1px solid var(--border); padding-right:16px;
+}
+.bmi-big  { font-family:'Bebas Neue',sans-serif; font-size:4.2rem; letter-spacing:1px; line-height:1; text-align:center; }
 .bmi-cat  {
-  font-family:'Bebas Neue',sans-serif; font-size:.82rem; letter-spacing:2px;
+  font-family:'Bebas Neue',sans-serif; font-size:.78rem; letter-spacing:2px;
   padding:4px 10px; border-radius:6px; text-align:center; white-space:nowrap;
 }
 .bmi-cat.normal    { background:rgba(200,240,76,.15); color:var(--accent); }
@@ -263,7 +271,7 @@ header {
 .bmi-cat.sobrepeso { background:rgba(240,160,76,.15);  color:var(--warn); }
 .bmi-cat.obesidad  { background:rgba(240,76,76,.15);   color:var(--danger); }
 
-.bmi-stats { display:flex; flex-direction:column; gap:6px; }
+.bmi-stats { display:flex; flex-direction:column; gap:5px; padding-left:16px; justify-content:center; }
 .bmi-stat  {
   display:flex; justify-content:space-between; align-items:center;
   padding:6px 10px; background:var(--s2); border-radius:7px; gap:10px;
@@ -573,14 +581,13 @@ header {
         </div>
         <div class="steps-card-inner">
           <div class="steps-ring-wrap">
-            <svg viewBox="0 0 90 90">
-              <circle class="steps-ring-bg"   cx="45" cy="45" r="36"/>
-              <circle class="steps-ring-fill" id="steps-ring" cx="45" cy="45" r="36"
-                stroke-dasharray="226" stroke-dashoffset="226"/>
+            <svg viewBox="0 0 110 110">
+              <circle class="steps-ring-bg"   cx="55" cy="55" r="44"/>
+              <circle class="steps-ring-fill" id="steps-ring" cx="55" cy="55" r="44"
+                stroke-dasharray="276" stroke-dashoffset="276"/>
             </svg>
             <div class="steps-ring-center">
-              <span class="steps-ring-pct" id="steps-pct-ring">0%</span>
-              <span class="steps-ring-lbl">meta</span>
+              <span class="steps-ring-pct" id="steps-pct-ring">—</span>
             </div>
           </div>
           <div class="steps-info">
@@ -589,6 +596,7 @@ header {
             <div class="steps-msg" id="steps-msg"></div>
           </div>
         </div>
+        <div class="steps-updated" id="steps-updated"></div>
       </div>
 
       <div class="card" id="bmi-card" style="display:none">
@@ -1406,11 +1414,11 @@ async function loadSteps() {
     json.bucket?.forEach(b => b.dataset?.forEach(ds => ds.point?.forEach(p => p.value?.forEach(v => { steps += v.intVal||0; }))));
 
     const pct  = Math.min(100, Math.round(steps / goal * 100));
-    const circ = 226; // 2π × r(36)
+    const circ = 276; // 2π × r(44)
     const offset = circ - (circ * pct / 100);
 
     document.getElementById('steps-n').textContent        = steps.toLocaleString('es-AR');
-    document.getElementById('steps-sub').textContent      = 'meta: ' + goal.toLocaleString('es-AR');
+    document.getElementById('steps-sub').textContent      = 'de ' + goal.toLocaleString('es-AR') + ' · meta';
     document.getElementById('steps-pct-ring').textContent = pct + '%';
     document.getElementById('steps-ring').style.strokeDashoffset = offset;
     document.getElementById('steps-ring').classList.toggle('over', pct >= 100);
@@ -1423,6 +1431,13 @@ async function loadSteps() {
       msg.textContent = `Faltan ${(goal - steps).toLocaleString('es-AR')}`;
       msg.style.color = 'var(--muted)';
     }
+    // Last updated timestamp
+    const now = new Date();
+    const hh = now.getHours().toString().padStart(2,'0');
+    const mm = now.getMinutes().toString().padStart(2,'0');
+    const upd = document.getElementById('steps-updated');
+    if (upd) upd.textContent = `actualizado ${hh}:${mm}`;
+
     document.getElementById('ws-s').textContent     = steps.toLocaleString('es-AR');
     document.getElementById('ws-s-sub').textContent = pct + '% de la meta';
 
