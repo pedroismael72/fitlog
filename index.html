@@ -693,6 +693,28 @@ function hideLoading() { document.getElementById('loading').classList.add('hide'
 
 function setSyncStatus(s) {
   const d = document.getElementById('sync-dot');
+  if (d) d.className = 'sync-dot ' + s;
+}
+
+function showUserChip(p) {
+  document.getElementById('user-chip').style.display   = 'flex';
+  document.getElementById('btn-signout').style.display = 'flex';
+  const av = document.getElementById('u-avatar');
+  if (p.picture) { av.src = p.picture; av.style.display = 'block'; }
+  else { av.style.display = 'none'; }
+  document.getElementById('u-name').textContent = p.name || '';
+}
+
+function clearToken() {
+  const cache = loadCache() || {};
+  delete cache._token;
+  saveCache(cache);
+}
+
+
+
+function setSyncStatus(s) {
+  const d = document.getElementById('sync-dot');
   d.className = 'sync-dot ' + s;
 }
 
