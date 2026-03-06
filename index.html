@@ -261,7 +261,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 
   <div class="nav-tabs" id="nav-tabs" style="display:none">
     <button class="nav-tab active" onclick="switchTab('peso')"  id="tab-peso">⚖ PESO</button>
-    <button class="nav-tab"        onclick="switchTab('rutina')" id="tab-rutina">🏋 RUTINA</button>
   </div>
 
   <div class="hdr-right">
@@ -371,13 +370,16 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
           <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;position:relative;">
             <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:5px;">TU IMC
-  <span onclick="toggleImc()" style="cursor:pointer;background:var(--border);color:var(--accent);border-radius:50%;width:14px;height:14px;font-size:.6rem;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-style:italic;">i</span>
+  <span onclick="event.stopPropagation();toggleImc(this)" style="cursor:pointer;background:var(--border);color:var(--accent);border-radius:50%;width:14px;height:14px;font-size:.6rem;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-style:italic;">i</span>
 </div>
-<div id="imc-tooltip" style="display:none;position:absolute;left:50%;transform:translateX(-50%);top:100%;margin-top:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-size:.75rem;color:var(--text2);line-height:1.55;z-index:50;width:220px;box-shadow:var(--shadow);text-align:left;">
-  El <strong>IMC</strong> (Índice de Masa Corporal) se calcula dividiendo tu peso en kg por tu altura en metros al cuadrado.<br><br>
-  <b style="color:var(--accent)">Normal:</b> 18.5 – 24.9<br>
-  <b style="color:var(--warn)">Sobrepeso:</b> 25 – 29.9<br>
-  <b style="color:var(--danger)">Obesidad:</b> 30+
+<div id="imc-tooltip" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;font-size:.78rem;color:var(--text2);line-height:1.6;z-index:9000;width:240px;box-shadow:0 8px 32px rgba(0,0,0,.4);text-align:left;pointer-events:none;">
+  El <strong style="color:var(--text)">IMC</strong> (Índice de Masa Corporal) es el peso en kg dividido por la altura en m².<br><br>
+  <span style="display:flex;flex-direction:column;gap:3px;">
+    <span><b style="color:#4cc8f0">Bajo peso:</b> &lt; 18.5</span>
+    <span><b style="color:var(--accent)">Normal:</b> 18.5 – 24.9</span>
+    <span><b style="color:var(--warn)">Sobrepeso:</b> 25 – 29.9</span>
+    <span><b style="color:var(--danger)">Obesidad:</b> 30+</span>
+  </span>
 </div>
             <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;" id="bmi-value">—</div>
           </div>
@@ -428,11 +430,11 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
             <span id="fit-steps-total" style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;color:var(--accent);">—</span>
             <span id="fit-steps-avg" style="font-size:.75rem;color:var(--muted);"></span>
           </div>
-          <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:160px;">
-            <div id="fit-bars" style="flex:1;background:var(--surface2);border-radius:20px;height:7px;overflow:hidden;">
+          <div style="flex:1;min-width:120px;display:flex;align-items:center;gap:8px;">
+            <div style="flex:1;background:var(--surface2);border-radius:20px;height:7px;overflow:hidden;min-width:60px;">
               <div id="fit-bar-inner" style="height:100%;width:0%;background:var(--accent);border-radius:20px;transition:width .6s ease;"></div>
             </div>
-            <span id="fit-bar-pct" style="font-size:.72rem;font-weight:700;color:var(--muted);white-space:nowrap;"></span>
+            <span id="fit-bar-pct" style="font-size:.72rem;font-weight:700;color:var(--muted);white-space:nowrap;min-width:36px;"></span>
           </div>
           <button class="btn-edit" onclick="loadFitData()" id="fit-refresh" style="flex-shrink:0;">↻</button>
         </div>
@@ -455,117 +457,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
     </div>
   </div>
 
-  <!-- TAB: RUTINA -->
-  <div id="tab-content-rutina" style="display:none">
-    <div class="rutina-main">
-
-      <div class="day-tabs">
-        <div class="day-tab active" onclick="showDay(0)">
-          <div class="day-label">Día 1</div><div class="day-name">LUNES</div>
-          <div class="day-focus">Pecho · Espalda · Hombros · Piernas</div>
-          <div class="day-tag">Tren completo</div>
-        </div>
-        <div class="day-tab" onclick="showDay(1)">
-          <div class="day-label">Día 2</div><div class="day-name">MIÉRCOLES</div>
-          <div class="day-focus">Bíceps · Tríceps · Hombros · Piernas</div>
-          <div class="day-tag">Brazos + Piernas</div>
-        </div>
-        <div class="day-tab" onclick="showDay(2)">
-          <div class="day-label">Día 3</div><div class="day-name">VIERNES</div>
-          <div class="day-focus">Full Body · Cardio · Core</div>
-          <div class="day-tag">Liviano + Quema</div>
-        </div>
-      </div>
-
-      <!-- LUNES -->
-      <div class="day-view active" id="day-0">
-        <div class="day-header">
-          <h2>LUNES — TREN COMPLETO</h2>
-          <p>Grupos grandes: pecho, espalda, hombros y piernas. Alta intensidad para maximizar la quema calórica.</p>
-          <div class="day-badges"><span class="badge badge-orange">~70 min</span><span class="badge badge-red">Alta intensidad</span><span class="badge badge-green">4 × 10-12 reps</span><span class="badge badge-blue">Descanso 60-90 seg</span></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>PECHO</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('press-banca')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🏋️<span>Press Banca</span></div><div class="muscle-tag">PECHO</div></div><div class="ex-body"><div class="ex-name">PRESS DE BANCA</div><div class="ex-sets"><span class="ex-set-pill">4 × 10-12</span><span class="ex-set-pill">Moderado-pesado</span></div><div class="ex-desc">Ejercicio rey para el pecho. Activa pectoral mayor, deltoides anterior y tríceps.</div><div class="ex-tips"><strong>💡 Clave</strong>Bajá hasta el pecho, codos a 45°, no rebotes.</div></div></div>
-          <div class="ex-card" onclick="openModal('aperturas')"><div class="ex-img-wrap"><div class="ex-img-placeholder">💪<span>Aperturas</span></div><div class="muscle-tag">PECHO</div></div><div class="ex-body"><div class="ex-name">APERTURAS CON MANCUERNAS</div><div class="ex-sets"><span class="ex-set-pill">3 × 12-15</span><span class="ex-set-pill">Ligero-moderado</span></div><div class="ex-desc">Aislamiento del pectoral con gran rango de movimiento. Ideal para definición.</div><div class="ex-tips"><strong>💡 Clave</strong>Controlá el descenso 3 segundos. No bloquees los codos al subir.</div></div></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>ESPALDA</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('dominadas')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🔝<span>Dominadas</span></div><div class="muscle-tag">ESPALDA</div></div><div class="ex-body"><div class="ex-name">DOMINADAS</div><div class="ex-sets"><span class="ex-set-pill">4 × máx</span><span class="ex-set-pill">Peso corporal</span></div><div class="ex-desc">El mejor ejercicio para el dorsal ancho. Construye una espalda en V.</div><div class="ex-tips"><strong>💡 Clave</strong>Agarre prono ancho. Subí hasta que la barbilla supere la barra.</div></div></div>
-          <div class="ex-card" onclick="openModal('remo-barra')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🚣<span>Remo Barra</span></div><div class="muscle-tag">ESPALDA</div></div><div class="ex-body"><div class="ex-name">REMO CON BARRA</div><div class="ex-sets"><span class="ex-set-pill">4 × 10</span><span class="ex-set-pill">Pesado</span></div><div class="ex-desc">Ejercicio compuesto para dorsal, romboides y trapecio.</div><div class="ex-tips"><strong>💡 Clave</strong>Espalda recta, torso a 45°. Llevá la barra al ombligo.</div></div></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>HOMBROS</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('press-militar')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🏋️<span>Press Militar</span></div><div class="muscle-tag">HOMBROS</div></div><div class="ex-body"><div class="ex-name">PRESS MILITAR</div><div class="ex-sets"><span class="ex-set-pill">4 × 10-12</span><span class="ex-set-pill">Moderado</span></div><div class="ex-desc">Ejercicio compuesto para deltoides anterior y medio. También trabaja tríceps.</div><div class="ex-tips"><strong>💡 Clave</strong>No hiperextiendas la espalda baja. Core apretado.</div></div></div>
-          <div class="ex-card" onclick="openModal('elevaciones-laterales')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🙌<span>Elev. Laterales</span></div><div class="muscle-tag">HOMBROS</div></div><div class="ex-body"><div class="ex-name">ELEVACIONES LATERALES</div><div class="ex-sets"><span class="ex-set-pill">4 × 15</span><span class="ex-set-pill">Ligero</span></div><div class="ex-desc">Aislamiento del deltoides medio. Da amplitud a los hombros.</div><div class="ex-tips"><strong>💡 Clave</strong>Subí hasta la altura del hombro. Sin impulso.</div></div></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>PIERNAS</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('sentadilla')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🦵<span>Sentadilla</span></div><div class="muscle-tag">PIERNAS</div></div><div class="ex-body"><div class="ex-name">SENTADILLA CON BARRA</div><div class="ex-sets"><span class="ex-set-pill">4 × 10-12</span><span class="ex-set-pill">Pesado</span></div><div class="ex-desc">El ejercicio más completo del tren inferior. Cuádriceps, glúteos, isquios y core.</div><div class="ex-tips"><strong>💡 Clave</strong>Rodillas en dirección de los pies. Bajá hasta paralelo.</div></div></div>
-          <div class="ex-card" onclick="openModal('prensa')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🦵<span>Prensa</span></div><div class="muscle-tag">PIERNAS</div></div><div class="ex-body"><div class="ex-name">PRENSA DE PIERNAS</div><div class="ex-sets"><span class="ex-set-pill">3 × 12-15</span><span class="ex-set-pill">Moderado-pesado</span></div><div class="ex-desc">Complementa la sentadilla con menor exigencia sobre la espalda.</div><div class="ex-tips"><strong>💡 Clave</strong>No bloquees las rodillas. Pies a la anchura de los hombros.</div></div></div>
-        </div>
-        <div class="notes-box"><h3>📋 NOTAS DEL DÍA</h3><ul><li>Calentá 10 min antes: caminata rápida o bici estática</li><li>Empezá con los compuestos pesados (sentadilla, press banca)</li><li>Terminá con 15 min de cardio moderado en cinta o elíptica</li><li>Mínimo 500ml de agua durante el entrenamiento</li></ul></div>
-      </div>
-
-      <!-- MIÉRCOLES -->
-      <div class="day-view" id="day-1">
-        <div class="day-header">
-          <h2>MIÉRCOLES — BRAZOS + PIERNAS</h2>
-          <p>Bíceps, tríceps y hombros completos, más tren inferior enfocado en posterior.</p>
-          <div class="day-badges"><span class="badge badge-orange">~65 min</span><span class="badge badge-red">Media-alta intensidad</span><span class="badge badge-green">3-4 × 12-15 reps</span><span class="badge badge-blue">Descanso 45-60 seg</span></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>BÍCEPS</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('curl-barra')"><div class="ex-img-wrap"><div class="ex-img-placeholder">💪<span>Curl Barra</span></div><div class="muscle-tag">BÍCEPS</div></div><div class="ex-body"><div class="ex-name">CURL CON BARRA</div><div class="ex-sets"><span class="ex-set-pill">4 × 10-12</span><span class="ex-set-pill">Moderado</span></div><div class="ex-desc">Ejercicio fundamental para el bíceps. Mayor carga que el curl con mancuernas.</div><div class="ex-tips"><strong>💡 Clave</strong>Codos pegados al cuerpo. No uses el impulso de la espalda.</div></div></div>
-          <div class="ex-card" onclick="openModal('curl-martillo')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🔨<span>Curl Martillo</span></div><div class="muscle-tag">BÍCEPS</div></div><div class="ex-body"><div class="ex-name">CURL MARTILLO</div><div class="ex-sets"><span class="ex-set-pill">3 × 12</span><span class="ex-set-pill">Moderado</span></div><div class="ex-desc">Trabaja el braquial y braquiorradial además del bíceps. Agarre neutro.</div><div class="ex-tips"><strong>💡 Clave</strong>Pulgares apuntando arriba. Sin balanceo de torso.</div></div></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>TRÍCEPS</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('fondos')"><div class="ex-img-wrap"><div class="ex-img-placeholder">⬇️<span>Fondos</span></div><div class="muscle-tag">TRÍCEPS</div></div><div class="ex-body"><div class="ex-name">FONDOS EN PARALELAS</div><div class="ex-sets"><span class="ex-set-pill">4 × máx</span><span class="ex-set-pill">Peso corporal</span></div><div class="ex-desc">Ejercicio compuesto para tríceps, pecho inferior y deltoides anterior.</div><div class="ex-tips"><strong>💡 Clave</strong>Torso vertical para aislar tríceps. Bajá hasta 90° en los codos.</div></div></div>
-          <div class="ex-card" onclick="openModal('extension-polea')"><div class="ex-img-wrap"><div class="ex-img-placeholder">📏<span>Ext. Polea</span></div><div class="muscle-tag">TRÍCEPS</div></div><div class="ex-body"><div class="ex-name">EXTENSIÓN EN POLEA</div><div class="ex-sets"><span class="ex-set-pill">4 × 12-15</span><span class="ex-set-pill">Ligero-moderado</span></div><div class="ex-desc">Aislamiento perfecto de tríceps con tensión constante. Ideal para definición.</div><div class="ex-tips"><strong>💡 Clave</strong>Codos fijos. Extendé completamente y apretá el tríceps.</div></div></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>HOMBROS</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('face-pull')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🎯<span>Face Pull</span></div><div class="muscle-tag">HOMBROS</div></div><div class="ex-body"><div class="ex-name">FACE PULL EN POLEA</div><div class="ex-sets"><span class="ex-set-pill">4 × 15</span><span class="ex-set-pill">Ligero</span></div><div class="ex-desc">Trabaja deltoides posterior y manguito rotador. Clave para la salud del hombro.</div><div class="ex-tips"><strong>💡 Clave</strong>Polea a altura de la cara. Tirá separando las manos al final.</div></div></div>
-          <div class="ex-card" onclick="openModal('elevaciones-frontales')"><div class="ex-img-wrap"><div class="ex-img-placeholder">⬆️<span>Elev. Frontales</span></div><div class="muscle-tag">HOMBROS</div></div><div class="ex-body"><div class="ex-name">ELEVACIONES FRONTALES</div><div class="ex-sets"><span class="ex-set-pill">3 × 12-15</span><span class="ex-set-pill">Ligero</span></div><div class="ex-desc">Aislamiento del deltoides anterior. Complementa las laterales del lunes.</div><div class="ex-tips"><strong>💡 Clave</strong>Subí hasta la altura de los ojos. Bajá lento. Sin impulso.</div></div></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>PIERNAS</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('peso-muerto-rumano')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🏋️<span>P.M. Rumano</span></div><div class="muscle-tag">PIERNAS</div></div><div class="ex-body"><div class="ex-name">PESO MUERTO RUMANO</div><div class="ex-sets"><span class="ex-set-pill">4 × 10-12</span><span class="ex-set-pill">Moderado-pesado</span></div><div class="ex-desc">El mejor ejercicio para isquiotibiales y glúteos. Tonifica la cadena posterior.</div><div class="ex-tips"><strong>💡 Clave</strong>Espalda recta siempre. Bajá sintiendo el estiramiento en los femorales.</div></div></div>
-          <div class="ex-card" onclick="openModal('zancadas')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🚶<span>Zancadas</span></div><div class="muscle-tag">PIERNAS</div></div><div class="ex-body"><div class="ex-name">ZANCADAS CON MANCUERNAS</div><div class="ex-sets"><span class="ex-set-pill">3 × 12 c/lado</span><span class="ex-set-pill">Moderado</span></div><div class="ex-desc">Trabaja cuádriceps, glúteos e isquios unilateralmente. Mejora equilibrio.</div><div class="ex-tips"><strong>💡 Clave</strong>Rodilla delantera no supera la punta del pie. Torso erguido.</div></div></div>
-        </div>
-        <div class="notes-box"><h3>📋 NOTAS DEL DÍA</h3><ul><li>Superseries bíceps + tríceps alternados para mayor quema</li><li>Peso muerto rumano primero (más exigente)</li><li>Terminá con 10 min de HIIT: 30seg esfuerzo / 30seg descanso × 10</li><li>Si tenés tiempo, agregá 3 series de encogimientos para trapecio</li></ul></div>
-      </div>
-
-      <!-- VIERNES -->
-      <div class="day-view" id="day-2">
-        <div class="day-header">
-          <h2>VIERNES — FULL BODY + CARDIO</h2>
-          <p>Sesión más liviana para cerrar la semana. Full body con énfasis en quema calórica, cardio y core.</p>
-          <div class="day-badges"><span class="badge badge-orange">~60 min</span><span class="badge badge-green">Intensidad media</span><span class="badge badge-green">3 × 15 reps</span><span class="badge badge-blue">Descanso 45 seg</span></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>FULL BODY — COMPUESTOS</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('peso-muerto')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🏋️<span>Peso Muerto</span></div><div class="muscle-tag">FULL BODY</div></div><div class="ex-body"><div class="ex-name">PESO MUERTO CONVENCIONAL</div><div class="ex-sets"><span class="ex-set-pill">3 × 8-10</span><span class="ex-set-pill">Moderado (hoy)</span></div><div class="ex-desc">El ejercicio más completo del gym. Activa más de 200 músculos simultáneamente.</div><div class="ex-tips"><strong>💡 Clave</strong>Hoy peso moderado, técnica perfecta. Espalda neutral siempre.</div></div></div>
-          <div class="ex-card" onclick="openModal('remo-mancuerna')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🚣<span>Remo Mancuerna</span></div><div class="muscle-tag">ESPALDA</div></div><div class="ex-body"><div class="ex-name">REMO CON MANCUERNA</div><div class="ex-sets"><span class="ex-set-pill">3 × 12 c/lado</span><span class="ex-set-pill">Moderado</span></div><div class="ex-desc">Remo unilateral para espalda y bíceps. Mayor rango de movimiento.</div><div class="ex-tips"><strong>💡 Clave</strong>Apoyá rodilla y mano en el banco. Codo bien atrás.</div></div></div>
-          <div class="ex-card" onclick="openModal('press-inclinado')"><div class="ex-img-wrap"><div class="ex-img-placeholder">📐<span>Press Inclinado</span></div><div class="muscle-tag">PECHO</div></div><div class="ex-body"><div class="ex-name">PRESS INCLINADO MANCUERNAS</div><div class="ex-sets"><span class="ex-set-pill">3 × 12</span><span class="ex-set-pill">Moderado</span></div><div class="ex-desc">Enfoca el pectoral superior. Banco a 30-45 grados.</div><div class="ex-tips"><strong>💡 Clave</strong>No abras codos más de 75°. Bajá lento, empujá explosivo.</div></div></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>PIERNAS — LIVIANO</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('extension-cuad')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🦵<span>Ext. Cuádriceps</span></div><div class="muscle-tag">PIERNAS</div></div><div class="ex-body"><div class="ex-name">EXTENSIÓN DE CUÁDRICEPS</div><div class="ex-sets"><span class="ex-set-pill">3 × 15-20</span><span class="ex-set-pill">Ligero</span></div><div class="ex-desc">Aislamiento de cuádriceps. Liviano hoy para no sobrecargar las piernas.</div><div class="ex-tips"><strong>💡 Clave</strong>Mantené 1 seg arriba. Bajá lento controlando el peso.</div></div></div>
-          <div class="ex-card" onclick="openModal('curl-femoral')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🦵<span>Curl Femoral</span></div><div class="muscle-tag">PIERNAS</div></div><div class="ex-body"><div class="ex-name">CURL FEMORAL TUMBADO</div><div class="ex-sets"><span class="ex-set-pill">3 × 15</span><span class="ex-set-pill">Ligero-moderado</span></div><div class="ex-desc">Aislamiento de isquiotibiales. Equilibra el trabajo de cuádriceps.</div><div class="ex-tips"><strong>💡 Clave</strong>Caderas pegadas al banco. Controlá la bajada.</div></div></div>
-          <div class="ex-card" onclick="openModal('gemelos')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🦶<span>Gemelos</span></div><div class="muscle-tag">PIERNAS</div></div><div class="ex-body"><div class="ex-name">ELEVACIÓN DE GEMELOS</div><div class="ex-sets"><span class="ex-set-pill">4 × 20</span><span class="ex-set-pill">Moderado</span></div><div class="ex-desc">Gastrocnemio y sóleo. Los gemelos necesitan alto volumen.</div><div class="ex-tips"><strong>💡 Clave</strong>Rango completo. Mantené 2 seg arriba. Sin rebote.</div></div></div>
-        </div>
-        <div class="section-title"><div class="dot"></div>CORE + CARDIO</div>
-        <div class="ex-grid">
-          <div class="ex-card" onclick="openModal('plancha')"><div class="ex-img-wrap"><div class="ex-img-placeholder">🧱<span>Plancha</span></div><div class="muscle-tag">CORE</div></div><div class="ex-body"><div class="ex-name">PLANCHA ABDOMINAL</div><div class="ex-sets"><span class="ex-set-pill">3 × 60 seg</span><span class="ex-set-pill">Peso corporal</span></div><div class="ex-desc">Activa todo el core: abdominales, oblicuos y transverso.</div><div class="ex-tips"><strong>💡 Clave</strong>Cuerpo en línea recta. No eleves ni hundas las caderas.</div></div></div>
-          <div class="ex-card" onclick="openModal('crunch')"><div class="ex-img-wrap"><div class="ex-img-placeholder">💫<span>Crunch</span></div><div class="muscle-tag">ABDOMEN</div></div><div class="ex-body"><div class="ex-name">CRUNCH EN MÁQUINA</div><div class="ex-sets"><span class="ex-set-pill">3 × 20</span><span class="ex-set-pill">Ligero</span></div><div class="ex-desc">Aislamiento del recto abdominal con resistencia constante.</div><div class="ex-tips"><strong>💡 Clave</strong>Exhala al contraer. Mantené 1 seg. No uses el cuello.</div></div></div>
-        </div>
-        <div class="notes-box"><h3>📋 NOTAS DEL DÍA</h3><ul><li>Usá 70-75% de tu peso habitual en todos los ejercicios</li><li>Terminá con 20-25 min de cardio: cinta a ritmo moderado o bicicleta</li><li>Terminá con 10 min de stretching completo</li><li>Fin de semana de descanso — el músculo crece en el descanso</li></ul></div>
-      </div>
-
-    </div>
-  </div>
 </div><!-- fin v-dash -->
 
 <!-- MODAL -->
@@ -625,11 +516,7 @@ function setTheme(t) {
 // NAV
 // ═══════════════════════════════════════════════════
 function switchTab(tab) {
-  document.getElementById('tab-content-peso').style.display   = tab==='peso'   ? 'block' : 'none';
-  document.getElementById('tab-content-rutina').style.display = tab==='rutina' ? 'block' : 'none';
-  document.getElementById('tab-peso').classList.toggle('active',   tab==='peso');
-  document.getElementById('tab-rutina').classList.toggle('active', tab==='rutina');
-  if (tab==='peso') updateStats();
+  updateStats();
 }
 
 function showView(id) {
@@ -1021,12 +908,19 @@ function renderTimeline() {
 // ═══════════════════════════════════════════════════
 // CHART + STATS
 // ═══════════════════════════════════════════════════
-function toggleImc() {
+function toggleImc(btn) {
   const t = document.getElementById('imc-tooltip');
-  t.style.display = t.style.display === 'none' ? 'block' : 'none';
+  if (t.style.display !== 'none') { t.style.display='none'; return; }
+  const r = btn.getBoundingClientRect();
+  t.style.display = 'block';
+  t.style.top  = (r.bottom + 8) + 'px';
+  t.style.left = Math.min(r.left, window.innerWidth - 260) + 'px';
 }
 document.addEventListener('click', e => {
-  if (!e.target.closest('#bmi-card')) document.getElementById('imc-tooltip') && (document.getElementById('imc-tooltip').style.display='none');
+  if (!e.target.closest('[onclick*="toggleImc"]')) {
+    const t = document.getElementById('imc-tooltip');
+    if (t) t.style.display='none';
+  }
 });
 
 function updateBMI() {
@@ -1086,8 +980,29 @@ function updateStats() {
   const ttBrd=dark?'#2a2a3e':'#d4d4e8';
   const ttTxt=dark?'#e8e8f0':'#1a1a2e';
   if(pts.length<2){myChart=new Chart(ctx,{type:'line',data:{labels:['Inicio'],datasets:[{data:[data.setup?.startWeight||0],borderColor:accent+'55',backgroundColor:accent+'11',tension:.4,pointRadius:5}]},options:cOpts(grid,tick,ttBg,ttBrd,ttTxt,accent)});return;}
-  const pc=pts.map((p,i)=>i===0?tick:p.w<=pts[i-1].w?accent:(dark?'#f04c4c':'#cc2222'));
-  const ds=[{label:'Peso (kg)',data:pts.map(p=>p.w),borderColor:accent,backgroundColor:(c)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,240);g.addColorStop(0,accent+'44');g.addColorStop(1,accent+'05');return g;},fill:true,tension:.35,pointBackgroundColor:pc,pointBorderColor:pc,pointRadius:6,pointHoverRadius:9,borderWidth:2.5}];
+  // Color each point: red if overweight for height, green if normal
+  const hM   = data.setup?.height ? data.setup.height/100 : null;
+  const pc=pts.map((p,i)=>{
+    if(i===0) return tick;
+    if(hM) {
+      const bmi = p.w/(hM*hM);
+      if(bmi>=30)   return dark?'#cc2222':'#aa0000';
+      if(bmi>=25)   return dark?'#f04c4c':'#cc2222';
+      if(bmi>=18.5) return accent;
+      return '#4cc8f0';
+    }
+    return p.w<=pts[i-1].w ? accent : (dark?'#f04c4c':'#cc2222');
+  });
+  const ds=[{label:'Peso (kg)',data:pts.map(p=>p.w),borderColor:accent,
+    segment:{borderColor:(ctx)=>{
+      if(!hM) return accent;
+      const bmi=pts[ctx.p1DataIndex]?.w/(hM*hM);
+      if(bmi>=30)   return dark?'#cc2222':'#aa0000';
+      if(bmi>=25)   return dark?'#f04c4c':'#cc2222';
+      return accent;
+    }},
+    backgroundColor:(c)=>{const g=c.chart.ctx.createLinearGradient(0,0,0,240);g.addColorStop(0,accent+'44');g.addColorStop(1,accent+'05');return g;},
+    fill:true,tension:.35,pointBackgroundColor:pc,pointBorderColor:pc,pointRadius:6,pointHoverRadius:9,borderWidth:2.5}];
   if(data.setup?.goalWeight)ds.push({label:'Meta',data:pts.map(()=>data.setup.goalWeight),borderColor:dark?'rgba(76,240,200,.45)':'rgba(0,153,119,.4)',borderDash:[6,4],borderWidth:1.5,pointRadius:0,fill:false});
   myChart=new Chart(ctx,{type:'line',data:{labels:pts.map(p=>p.label),datasets:ds},options:cOpts(grid,tick,ttBg,ttBrd,ttTxt,accent)});
 }
@@ -1098,13 +1013,6 @@ function cOpts(grid,tick,ttBg,ttBrd,ttTxt,accent){
     scales:{x:{grid:{color:grid},ticks:{color:tick,font:{family:'DM Sans',size:10}}},y:{grid:{color:grid},ticks:{color:tick,font:{family:'DM Sans',size:10},callback:v=>v+' kg'}}}};
 }
 
-// ═══════════════════════════════════════════════════
-// RUTINA — TABS
-// ═══════════════════════════════════════════════════
-function showDay(i) {
-  document.querySelectorAll('.day-tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));
-  document.querySelectorAll('.day-view').forEach((v,idx)=>v.classList.toggle('active',idx===i));
-}
 
 // ═══════════════════════════════════════════════════
 // EXERCISE DATA
@@ -1209,7 +1117,7 @@ async function loadFitData() {
     const dark      = document.documentElement.getAttribute('data-theme') === 'dark';
 
     document.getElementById('fit-steps-total').textContent = steps.toLocaleString('es');
-    document.getElementById('fit-steps-avg').textContent   = stepsPct + '% de la meta (10.000)';
+    document.getElementById('fit-steps-avg').textContent   = stepsPct + '% de la meta (' + goalSteps.toLocaleString('es') + ')';
 
     // Steps progress bar
     const barsEl = document.getElementById('fit-bars');
