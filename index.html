@@ -58,7 +58,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 header {
   display:flex; align-items:center; padding:0 28px; height:60px;
   background:var(--s1); border-bottom:1px solid var(--border);
-  position:sticky; top:0; z-index:200;
+  position:sticky; top:0; z-index:200; overflow:visible;
 }
 .logo { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; letter-spacing:4px; color:var(--accent); cursor:pointer; }
 .logo span { color:var(--text); }
@@ -251,11 +251,12 @@ header {
 .weather-pill .w-icon { font-size:1.1rem; line-height:1; }
 .weather-pill .w-temp { font-family:'Bebas Neue',sans-serif; font-size:.95rem; letter-spacing:1px; }
 .weather-pill .w-tooltip {
-  display:none; position:absolute; right:0; top:44px; width:220px;
+  display:none; position:fixed; width:240px;
   background:var(--s1); border:1px solid var(--border); border-radius:10px;
-  padding:10px 13px; font-size:.72rem; color:var(--text2); line-height:1.55;
-  z-index:300; text-align:left; font-family:'DM Sans',sans-serif;
-  box-shadow:0 8px 24px rgba(0,0,0,.5);
+  padding:10px 13px; font-size:.76rem; color:var(--text2); line-height:1.6;
+  z-index:9999; text-align:left; font-family:'DM Sans',sans-serif;
+  box-shadow:0 8px 24px rgba(0,0,0,.6); pointer-events:none;
+  top:66px; right:20px;
 }
 .weather-pill:hover .w-tooltip,
 .weather-pill.touch-open .w-tooltip { display:block; }
@@ -624,6 +625,12 @@ header {
     <div class="motiv-card" id="motiv-card">
       <span class="motiv-icon">💬</span>
       <div class="motiv-text" id="motiv-text"><span class="motiv-loading">Generando tu frase del día...</span></div>
+    </div>
+
+    <!-- Weight reminder banner -->
+    <div id="weight-reminder" style="display:none;align-items:center;justify-content:space-between;gap:12px;background:rgba(200,240,76,.07);border:1px solid rgba(200,240,76,.2);border-radius:12px;padding:12px 16px;margin-bottom:16px">
+      <span class="reminder-msg" style="font-size:.83rem;color:var(--text2)"></span>
+      <button class="btn" style="font-size:.72rem;padding:5px 14px;white-space:nowrap" onclick="openWeightModal()">REGISTRAR</button>
     </div>
 
     <!-- Gráfico + Estadísticas -->
@@ -1404,15 +1411,35 @@ function renderStats() {
   document.getElementById('s-weeks').textContent = APP.entries.length;
   document.getElementById('s-rem').textContent   = rem !== null ? rem + ' KG' : '—';
 
-  // Best single drop
+  // Best single drop (fix: use .weight not .w)
   let best = null;
-  const all = [{ w: ini, date:'inicio' }, ...APP.entries];
+  const all = [{ weight: ini, date:'inicio' }, ...APP.entries];
   for (let i = 1; i < all.length; i++) {
-    const d = all[i-1].w - all[i].w;
-    if (best === null || d > best.d) best = { d, lbl: all[i].date === 'inicio' ? 'inicio' : fmtShort(all[i].date) };
+    const d = all[i-1].weight - all[i].weight;
+    if (best === null || d > best.d) best = { d, lbl: fmtShort(all[i].date) };
   }
   document.getElementById('s-best').textContent = best && best.d !== 0
     ? (best.d > 0 ? '-' : '+') + Math.abs(best.d).toFixed(1) + ' KG (' + best.lbl + ')' : '—';
+
+  // Reminder banner (Mon=1, Fri=5)
+  renderWeightReminder();
+}
+
+function renderWeightReminder() {
+  const el = document.getElementById('weight-reminder');
+  if (!el) return;
+  const dow = new Date().getDay(); // 0=Sun,1=Mon,...,5=Fri
+  if (dow !== 1 && dow !== 5) { el.style.display = 'none'; return; }
+  // Check if already registered this week
+  const { start } = weekBounds();
+  const hasThisWeek = APP.entries.some(e => e.date >= start && e.date <= today());
+  if (hasThisWeek && dow === 1) { el.style.display = 'none'; return; } // already logged monday
+  const dayLabel = dow === 1 ? 'lunes' : 'viernes';
+  const msg = dow === 1
+    ? '📅 Es lunes — ¿cómo arrancás la semana? Registrá tu peso.'
+    : '📅 Es viernes — ¿cómo terminás la semana? Registrá tu peso.';
+  el.querySelector('.reminder-msg').textContent = msg;
+  el.style.display = 'flex';
 }
 
 // ═══════════════════════════════════════════
