@@ -648,7 +648,8 @@ const CLIENT_ID = '7598314266-c5k6g302077l8fb3v3748563h7khav69.apps.googleuserco
 const SCOPES    = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.body.read';
 const FIT_API   = 'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate';
 const DISCOVERY = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
-const FILE_NAME = 'fitlog_data.json';
+const FILE_NAME    = 'fitlog_data.json';
+const REDIRECT_URI = 'https://pedroismael72.github.io/fitlog/';
 const LS_THEME  = 'fitlog_theme';
 const LS_CACHE  = 'fitlog_cache';
 
@@ -660,7 +661,6 @@ let fileId      = null;
 let myChart     = null;
 let saveTimer   = null;
 let gapiReady   = false;
-let tokenClient = null;
 
 // Utility: Argentina date string (UTC-3)
 function isoDate(d) {
@@ -697,7 +697,7 @@ function setSyncStatus(s) {
 }
 
 // ═══════════════════════════════════════════════════
-// GOOGLE AUTH
+// GOOGLE AUTH — redirect flow (avoids COOP popup issues)
 // ═══════════════════════════════════════════════════
 function loadScript(src) {
   return new Promise(res => {
@@ -706,99 +706,98 @@ function loadScript(src) {
   });
 }
 
-async function initGoogle() {
-  await Promise.all([
-    loadScript('https://apis.google.com/js/api.js'),
-    loadScript('https://accounts.google.com/gsi/client')
-  ]);
-  await new Promise(res => gapi.load('client', res));
-  await gapi.client.init({ discoveryDocs: [DISCOVERY] });
-  gapiReady = true;
-
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID,
-    scope: SCOPES,
-    callback: async (resp) => {
-      if (resp.error) {
-        hideLoading();
-        showToast('⚠ ' + (resp.error_description || resp.error));
-        showView('login');
-        return;
-      }
-      try {
-        gapi.client.setToken({ access_token: resp.access_token });
-        const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { 'Authorization': 'Bearer ' + resp.access_token }
-        });
-        const profile = await profileRes.json();
-        const up = { name: profile.given_name || profile.name || 'Usuario', picture: profile.picture || '' };
-        const c = loadCache() || {};
-        c._token = resp.access_token; c._profile = up;
-        saveCache(c);
-        showUserChip(up);
-        await loadFromDrive(false);
-        renderAfterLoad();
-      } catch(e) {
-        console.error(e);
-        hideLoading();
-        showToast('⚠ ERROR DE AUTENTICACIÓN');
-        showView('login');
-      }
-    }
+function buildAuthUrl() {
+  const params = new URLSearchParams({
+    client_id:              CLIENT_ID,
+    redirect_uri:           REDIRECT_URI,
+    response_type:          'token',
+    scope:                  SCOPES,
+    include_granted_scopes: 'true',
+    prompt:                 'select_account',
   });
-
-  const cached = loadCache();
-  if (cached?._token) {
-    gapi.client.setToken({ access_token: cached._token });
-    try {
-      await loadFromDrive(true);
-      showUserChip(cached._profile || { name:'Usuario', picture:'' });
-      renderAfterLoad();
-    } catch(e) {
-      // Token expired — clear and show login with a helpful message
-      clearToken();
-      hideLoading();
-      showView('login');
-      showToast('SESIÓN EXPIRADA — VOLVÉ A INGRESAR');
-    }
-  } else {
-    hideLoading();
-    showView('login');
-  }
+  return 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
 }
 
 function signIn() {
-  if (!gapiReady) { showToast('CARGANDO...'); return; }
-  tokenClient.requestAccessToken({ prompt: 'select_account' });
+  window.location.href = buildAuthUrl();
 }
 
 function signOut() {
   if (!confirm('¿Cerrar sesión?')) return;
-  const token = gapi.client.getToken();
-  if (token) google.accounts.oauth2.revoke(token.access_token, ()=>{});
-  gapi.client.setToken(null);
+  const cached = loadCache();
+  if (cached?._token) {
+    fetch('https://oauth2.googleapis.com/revoke?token=' + cached._token, { method:'POST' }).catch(()=>{});
+  }
   clearToken();
-  data = { setup: null, months: [] }; fileId = null;
+  data = { setup:null, months:[], workouts:[] }; fileId = null;
   document.getElementById('user-chip').style.display   = 'none';
   document.getElementById('btn-signout').style.display = 'none';
-  document.getElementById('nav-tabs').style.display    = 'none';
   document.getElementById('hdr-stats').style.display   = 'none';
   showView('login');
   showToast('SESIÓN CERRADA');
 }
 
-function showUserChip(p) {
-  document.getElementById('user-chip').style.display   = 'flex';
-  document.getElementById('btn-signout').style.display = 'flex';
-
-  const av = document.getElementById('u-avatar');
-  av.src = p.picture || ''; av.style.display = p.picture ? 'block' : 'none';
-  document.getElementById('u-name').textContent = p.name || '';
+async function initGapi() {
+  if (gapiReady) return;
+  await loadScript('https://apis.google.com/js/api.js');
+  await new Promise(res => gapi.load('client', res));
+  await gapi.client.init({ discoveryDocs: [DISCOVERY] });
+  gapiReady = true;
 }
 
-function clearToken() {
-  const c = loadCache() || {};
-  delete c._token; delete c._profile; saveCache(c);
+async function handleNewToken(token) {
+  try {
+    await initGapi();
+    gapi.client.setToken({ access_token: token });
+    const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const profile = await profileRes.json();
+    const up = { name: profile.given_name||profile.name||'Usuario', picture: profile.picture||'', email: profile.email||'' };
+    const cache = loadCache()||{};
+    cache._token = token; cache._profile = up;
+    saveCache(cache);
+    showUserChip(up);
+    await loadFromDrive(false);
+    renderAfterLoad();
+  } catch(e) {
+    console.error('handleNewToken error:', e);
+    hideLoading();
+    showToast('⚠ ERROR — INTENTÁ DE NUEVO');
+    showView('login');
+  }
+}
+
+async function initGoogle() {
+  // 1. Check if returning from OAuth redirect (token in URL hash)
+  const hash = window.location.hash;
+  if (hash && hash.includes('access_token')) {
+    const params = new URLSearchParams(hash.slice(1));
+    const token  = params.get('access_token');
+    history.replaceState(null, '', REDIRECT_URI);
+    if (token) { await handleNewToken(token); return; }
+  }
+
+  // 2. Try cached token — verify it's still valid
+  const cached = loadCache();
+  if (cached?._token) {
+    try {
+      await initGapi();
+      gapi.client.setToken({ access_token: cached._token });
+      const test = await fetch('https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=' + cached._token);
+      const info = await test.json();
+      if (info.error || !info.scope) throw new Error('expired');
+      await loadFromDrive(true);
+      showUserChip(cached._profile || { name:'Usuario', picture:'' });
+      renderAfterLoad();
+      return;
+    } catch(e) {
+      clearToken();
+    }
+  }
+
+  hideLoading();
+  showView('login');
 }
 
 // ═══════════════════════════════════════════════════
