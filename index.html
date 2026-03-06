@@ -399,31 +399,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
         </div>
       </div>
 
-      <!-- VELOCIDAD + PROYECCIÓN -->
-      <div class="two-col">
-        <div class="card">
-          <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>VELOCIDAD DE PÉRDIDA</div></div>
-          <div class="chart-wrap" style="height:200px;"><canvas id="rateChart"></canvas></div>
-          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
-            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:100px;">
-              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">PROMEDIO/SEMANA</div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;" id="rate-avg">—</div>
-            </div>
-            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:100px;">
-              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">ÚLTIMA SEMANA</div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;" id="rate-last">—</div>
-            </div>
-            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:100px;">
-              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">META ESTIMADA</div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;" id="rate-eta">—</div>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>COMPARATIVA MENSUAL</div></div>
-          <div id="month-compare" style="display:flex;flex-direction:column;gap:8px;"></div>
-        </div>
-      </div>
+
 
       <!-- BMI CARD -->
       <div class="card" id="bmi-card" style="display:none;padding:16px 20px;">
@@ -533,6 +509,33 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
           <div class="empty" id="empty"><div class="ei">📅</div><p>No hay meses todavía.<br>Hacé clic en <strong>+ AGREGAR MES</strong> para empezar.</p></div>
         </div>
       </div>
+
+      <!-- VELOCIDAD + PROYECCIÓN -->
+      <div class="two-col">
+        <div class="card">
+          <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>VELOCIDAD DE PÉRDIDA</div></div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="rateChart"></canvas></div>
+          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:100px;">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">PROMEDIO/SEMANA</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;" id="rate-avg">—</div>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:100px;">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">ÚLTIMA SEMANA</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;" id="rate-last">—</div>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:100px;">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">META ESTIMADA</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;" id="rate-eta">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>COMPARATIVA MENSUAL</div></div>
+          <div id="month-compare" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -558,7 +561,44 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 
 <div class="toast" id="toast"></div>
 
+<!-- WORKOUT MODAL -->
+<div class="modal-overlay" id="workout-modal" onclick="closeWorkoutModal(event)" style="z-index:600;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:340px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.5);transform:scale(.95);transition:transform .25s;" id="workout-modal-inner">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;margin-bottom:4px;">¿QUÉ ENTRENASTE?</div>
+    <div style="font-size:.8rem;color:var(--muted);margin-bottom:20px;" id="workout-modal-date"></div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px;">
+      <button class="split-btn" onclick="selectSplit('A')" id="split-A" data-split="A">
+        <div class="split-day">LUNES</div>
+        <div class="split-desc">Pecho · Espalda · Hombros · Piernas</div>
+      </button>
+      <button class="split-btn" onclick="selectSplit('B')" id="split-B" data-split="B">
+        <div class="split-day">MIÉRCOLES</div>
+        <div class="split-desc">Bíceps · Tríceps · Hombros · Piernas</div>
+      </button>
+      <button class="split-btn" onclick="selectSplit('C')" id="split-C" data-split="C">
+        <div class="split-day">VIERNES</div>
+        <div class="split-desc">Full Body · Cardio · Core</div>
+      </button>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="closeWorkoutModal()" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.85rem;padding:10px;cursor:pointer;">CANCELAR</button>
+      <button onclick="confirmWorkout()" id="btn-confirm-workout" style="flex:2;background:var(--accent);color:#0a0a0f;border:none;border-radius:10px;font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.85rem;padding:10px;cursor:pointer;opacity:.4;pointer-events:none;transition:opacity .2s;">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.split-btn{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 15px;cursor:pointer;text-align:left;transition:all .18s;width:100%;}
+.split-btn:hover{border-color:rgba(200,240,76,.3);}
+.split-btn.selected{border-color:var(--accent);background:rgba(200,240,76,.08);}
+.split-day{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--text);margin-bottom:2px;}
+.split-btn.selected .split-day{color:var(--accent);}
+.split-desc{font-size:.72rem;color:var(--muted);}
+</style>
+
 <script>
+
+
 // ═══════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════
@@ -1029,7 +1069,7 @@ function renderWeeklySummary() {
   // Workouts this week
   const monStr = isoDate(mon);
   const sunStr = isoDate(sun);
-  const ww = (data.workouts||[]).filter(d => d >= monStr && d <= sunStr);
+  const ww = (data.workouts||[]).filter(w => { const d = w.date||w; return d >= monStr && d <= sunStr; });
   document.getElementById('ws-workouts').textContent = ww.length;
 
   // Workout dots Mon-Sun
@@ -1039,7 +1079,9 @@ function renderWeeklySummary() {
   for (let i=0; i<7; i++) {
     const d = new Date(mon); d.setDate(mon.getDate()+i);
     const ds = isoDate(d);
-    const trained = (data.workouts||[]).includes(ds);
+    const wo = (data.workouts||[]).find(w => (w.date||w) === ds);
+    const trained = !!wo;
+    const splitLabel = wo?.split ? wo.split : '';
     const isToday = ds === isoDate(new Date());
     const dot = document.createElement('div');
     dot.title = days[i];
@@ -1048,13 +1090,15 @@ function renderWeeklySummary() {
       background:${trained?'var(--accent)':isToday?'var(--surface3)':'var(--surface2)'};
       color:${trained?'#0a0a0f':'var(--muted)'};
       border:${isToday?'1px solid var(--accent)':'1px solid var(--border)'};`;
-    dot.textContent = days[i];
+    dot.innerHTML = trained
+      ? '<span style="font-size:.55rem;font-weight:900;letter-spacing:.5px;">' + splitLabel + '</span>'
+      : '<span style="font-size:.6rem;">' + days[i] + '</span>';
     dots.appendChild(dot);
   }
 
   // Update button
   const today = isoDate(new Date());
-  const alreadyLogged = (data.workouts||[]).includes(today);
+  const alreadyLogged = !!(data.workouts||[]).find(w => (w.date||w) === today);
   const btn = document.getElementById('btn-workout');
   btn.textContent    = alreadyLogged ? '✓ ENTRENADO' : '+ ENTRENÉ HOY';
   btn.style.background = alreadyLogged ? 'var(--surface3)' : 'var(--accent)';
@@ -1062,18 +1106,54 @@ function renderWeeklySummary() {
   btn.style.border     = alreadyLogged ? '1px solid var(--border)' : 'none';
 }
 
+let selectedSplit = null;
+
 function logWorkout() {
   const today = isoDate(new Date());
   if (!data.workouts) data.workouts = [];
-  if (data.workouts.includes(today)) {
+  const existing = data.workouts.find(w => w.date === today);
+  if (existing) {
     if (!confirm('¿Quitar el entrenamiento de hoy?')) return;
-    data.workouts = data.workouts.filter(d => d !== today);
+    data.workouts = data.workouts.filter(w => w.date !== today);
+    scheduleSave(); renderWeeklySummary();
     showToast('ENTRENAMIENTO QUITADO');
-  } else {
-    data.workouts.push(today);
-    showToast('✓ ENTRENAMIENTO REGISTRADO');
+    return;
   }
+  // Open modal
+  selectedSplit = null;
+  ['A','B','C'].forEach(s => document.getElementById('split-'+s).classList.remove('selected'));
+  document.getElementById('btn-confirm-workout').style.opacity = '.4';
+  document.getElementById('btn-confirm-workout').style.pointerEvents = 'none';
+  const d = new Date();
+  document.getElementById('workout-modal-date').textContent =
+    d.toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'});
+  const mo = document.getElementById('workout-modal');
+  mo.classList.add('open');
+  document.getElementById('workout-modal-inner').style.transform = 'scale(1)';
+  document.body.style.overflow = 'hidden';
+}
+
+function selectSplit(s) {
+  selectedSplit = s;
+  ['A','B','C'].forEach(x => document.getElementById('split-'+x).classList.toggle('selected', x===s));
+  document.getElementById('btn-confirm-workout').style.opacity = '1';
+  document.getElementById('btn-confirm-workout').style.pointerEvents = 'auto';
+}
+
+function confirmWorkout() {
+  if (!selectedSplit) return;
+  const today = isoDate(new Date());
+  if (!data.workouts) data.workouts = [];
+  data.workouts.push({ date: today, split: selectedSplit });
   scheduleSave(); renderWeeklySummary();
+  closeWorkoutModal();
+  showToast('✓ ENTRENAMIENTO REGISTRADO');
+}
+
+function closeWorkoutModal(e) {
+  if (e && e.target !== document.getElementById('workout-modal')) return;
+  document.getElementById('workout-modal').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ═══════════════════════════════════════════════════
@@ -1213,8 +1293,8 @@ function renderMonthCompare() {
       start: ws[0],
       end: ws[ws.length-1],
       delta: ws[ws.length-1] - ws[0],
-      workouts: (data.workouts||[]).filter(d => {
-        const dm = new Date(d);
+      workouts: (data.workouts||[]).filter(w => {
+        const dm = new Date(w.date||w);
         return dm.getMonth()===m.month && dm.getFullYear()===m.year;
       }).length
     };
