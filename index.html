@@ -584,8 +584,6 @@ function isoDate(d) {
 // ═══════════════════════════════════════════════════
 function setTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
-  document.getElementById('tb-dark').classList.toggle('on', t==='dark');
-  document.getElementById('tb-light').classList.toggle('on', t==='light');
   localStorage.setItem(LS_THEME, t);
   if (myChart) updateStats();
 }
@@ -594,10 +592,14 @@ function setTheme(t) {
 // NAV
 // ═══════════════════════════════════════════════════
 function switchTab(tab) {
-  document.getElementById('tab-content-peso').style.display   = tab==='peso'   ? 'block' : 'none';
-  document.getElementById('tab-content-rutina').style.display = tab==='rutina' ? 'block' : 'none';
-  document.getElementById('tab-peso').classList.toggle('active',   tab==='peso');
-  document.getElementById('tab-rutina').classList.toggle('active', tab==='rutina');
+  const peso   = document.getElementById('tab-content-peso');
+  const rutina = document.getElementById('tab-content-rutina');
+  const tPeso  = document.getElementById('tab-peso');
+  const tRut   = document.getElementById('tab-rutina');
+  if (peso)   peso.style.display   = tab==='peso'   ? 'block' : 'none';
+  if (rutina) rutina.style.display = tab==='rutina' ? 'block' : 'none';
+  if (tPeso)  tPeso.classList.toggle('active',  tab==='peso');
+  if (tRut)   tRut.classList.toggle('active',   tab==='rutina');
   if (tab==='peso') updateStats();
 }
 
