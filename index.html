@@ -426,60 +426,78 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
       </div>
 
       <!-- BMI CARD -->
-      <div class="card" id="bmi-card" style="display:none">
-        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>ÍNDICE DE MASA CORPORAL</div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;position:relative;">
-            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:5px;">TU IMC
-  <span onclick="event.stopPropagation();toggleImc(this)" style="cursor:pointer;background:var(--border);color:var(--accent);border-radius:50%;width:14px;height:14px;font-size:.6rem;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-style:italic;">i</span>
-</div>
-<div id="imc-tooltip" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;font-size:.78rem;color:var(--text2);line-height:1.6;z-index:9000;width:240px;box-shadow:0 8px 32px rgba(0,0,0,.4);text-align:left;pointer-events:none;">
-  El <strong style="color:var(--text)">IMC</strong> (Índice de Masa Corporal) es el peso en kg dividido por la altura en m².<br><br>
-  <span style="display:flex;flex-direction:column;gap:3px;">
-    <span><b style="color:#4cc8f0">Bajo peso:</b> &lt; 18.5</span>
-    <span><b style="color:var(--accent)">Normal:</b> 18.5 – 24.9</span>
-    <span><b style="color:var(--warn)">Sobrepeso:</b> 25 – 29.9</span>
-    <span><b style="color:var(--danger)">Obesidad:</b> 30+</span>
-  </span>
-</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;" id="bmi-value">—</div>
+      <div class="card" id="bmi-card" style="display:none;padding:16px 20px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:7px;">
+            <div class="dot"></div>
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;color:var(--muted);">IMC</span>
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;" id="bmi-value">—</span>
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:1px;" id="bmi-label"></span>
+            <span onclick="event.stopPropagation();toggleImc(this)" style="cursor:pointer;background:var(--border);color:var(--accent);border-radius:50%;width:14px;height:14px;font-size:.6rem;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-style:italic;flex-shrink:0;">i</span>
+            <div id="imc-tooltip" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 15px;font-size:.78rem;color:var(--text2);line-height:1.6;z-index:9000;width:240px;box-shadow:0 8px 32px rgba(0,0,0,.4);text-align:left;pointer-events:none;">
+              El <strong style="color:var(--text)">IMC</strong> es el peso en kg dividido por la altura en m².<br><br>
+              <span style="display:flex;flex-direction:column;gap:3px;">
+                <span><b style="color:#4cc8f0">Bajo peso:</b> &lt; 18.5</span>
+                <span><b style="color:var(--accent)">Normal:</b> 18.5 – 24.9</span>
+                <span><b style="color:var(--warn)">Sobrepeso:</b> 25 – 29.9</span>
+                <span><b style="color:var(--danger)">Obesidad:</b> 30+</span>
+              </span>
+            </div>
           </div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
-            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">ESTADO NUTRICIONAL</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;" id="bmi-label">—</div>
+          <div id="bmi-alert" style="display:none;align-items:center;gap:7px;">
+            <span style="font-size:1rem;">⚠️</span>
+            <span style="font-size:.78rem;color:var(--muted);" id="bmi-alert-text"></span>
           </div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
-            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">PESO MÁXIMO NORMAL</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1px;color:var(--text2);" id="bmi-maxnormal">—</div>
-          </div>
-        </div>
-        <!-- Overweight alert -->
-        <div id="bmi-alert" style="display:none;background:rgba(240,76,76,.06);border:1px solid rgba(240,76,76,.18);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
-          <div style="font-size:1.3rem;flex-shrink:0;">⚠️</div>
-          <div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px;color:var(--danger);margin-bottom:2px;">SOBREPESO</div>
-            <div style="font-size:.78rem;color:var(--muted);line-height:1.5;" id="bmi-alert-text"></div>
+          <div id="bmi-ok" style="display:none;align-items:center;gap:7px;">
+            <span style="font-size:1rem;">✅</span>
+            <span style="font-size:.78rem;color:var(--muted);" id="bmi-ok-text"></span>
           </div>
         </div>
-        <div id="bmi-ok" style="display:none;background:rgba(200,240,76,.05);border:1px solid rgba(200,240,76,.15);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
-          <div style="font-size:1.3rem;flex-shrink:0;">✅</div>
-          <div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:2px;color:var(--accent);margin-bottom:2px;">PESO NORMAL</div>
-            <div style="font-size:.78rem;color:var(--muted);line-height:1.5;" id="bmi-ok-text"></div>
+
+        <!-- Progress bar with zones + excess -->
+        <div style="position:relative;margin-bottom:6px;">
+          <!-- Zone labels -->
+          <div style="display:flex;font-size:.6rem;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px;position:relative;height:12px;">
+            <span style="position:absolute;left:0%;">Bajo</span>
+            <span style="position:absolute;left:10.4%;">Normal</span>
+            <span style="position:absolute;left:39.6%;">Sobrepeso</span>
+            <span style="position:absolute;left:70.8%;">Obesidad</span>
           </div>
+
+          <!-- Bar track: IMC 14→40 = 26 units wide -->
+          <div style="position:relative;height:10px;border-radius:6px;overflow:hidden;background:linear-gradient(to right,
+            #4cc8f0 0%,       /* bajo peso  14–18.5  = 17.3% */
+            #4cc8f0 17.3%,
+            #c8f04c 17.3%,    /* normal     18.5–25  = 25%   */
+            #c8f04c 42.3%,
+            #f0a04c 42.3%,    /* sobrepeso  25–30    = 19.2% */
+            #f0a04c 61.5%,
+            #f04c4c 61.5%,    /* obesidad   30–40    = 38.5% */
+            #f04c4c 100%);" id="bmi-bar-track">
+            <!-- Divider lines -->
+            <div style="position:absolute;left:17.3%;top:0;bottom:0;width:1.5px;background:rgba(0,0,0,.4);z-index:2;"></div>
+            <div style="position:absolute;left:42.3%;top:0;bottom:0;width:1.5px;background:rgba(0,0,0,.4);z-index:2;"></div>
+            <div style="position:absolute;left:61.5%;top:0;bottom:0;width:1.5px;background:rgba(0,0,0,.4);z-index:2;"></div>
+            <!-- Dark overlay (right side unlit) -->
+            <div id="bmi-bar-unlit" style="position:absolute;right:0;top:0;bottom:0;background:rgba(10,10,15,.65);transition:left .6s ease;" ></div>
+            <!-- Excess bar (red, shown when overweight) -->
+            <div id="bmi-bar-excess" style="position:absolute;top:0;bottom:0;background:rgba(240,76,76,.0);display:none;transition:all .6s ease;"></div>
+          </div>
+
+          <!-- Marker -->
+          <div id="bmi-marker" style="position:absolute;top:-3px;width:4px;height:16px;border-radius:2px;background:#fff;transform:translateX(-50%);transition:left .6s ease;box-shadow:0 0 6px rgba(0,0,0,.5);z-index:5;left:0%;"></div>
         </div>
-        <!-- IMC scale -->
-        <div style="margin-top:16px;">
-          <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-bottom:4px;">
-            <span>Bajo peso</span><span>Normal</span><span>Sobrepeso</span><span>Obesidad</span>
-          </div>
-          <div style="height:8px;border-radius:20px;background:linear-gradient(to right,#4cc8f0 0%,#c8f04c 25%,#c8f04c 50%,#f0a04c 62%,#f04c4c 80%,#cc2222 100%);position:relative;">
-            <div id="bmi-marker" style="position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #333;transform:translateX(-50%);transition:left .6s ease;left:0%;"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--muted);margin-top:3px;">
-            <span>16</span><span>18.5</span><span>25</span><span>30</span><span>40</span>
-          </div>
+
+        <!-- Scale numbers -->
+        <div style="display:flex;font-size:.6rem;color:var(--muted);position:relative;height:10px;">
+          <span style="position:absolute;left:0%;">14</span>
+          <span style="position:absolute;left:17.3%;">18.5</span>
+          <span style="position:absolute;left:42.3%;">25</span>
+          <span style="position:absolute;left:61.5%;">30</span>
+          <span style="position:absolute;right:0%;">40</span>
         </div>
+        <!-- Hidden legacy elements to avoid JS errors -->
+        <span id="bmi-maxnormal" style="display:none;"></span>
       </div>
 
       <!-- GOOGLE FIT CARD -->
@@ -1246,11 +1264,26 @@ document.addEventListener('click', e => {
 function updateBMI() {
   const s = data.setup;
   if (!s?.height || !s?.startWeight) { document.getElementById('bmi-card').style.display='none'; return; }
-  const curW  = latestWeight() ?? s.startWeight;
-  const hM    = s.height / 100;
-  const bmi   = curW / (hM * hM);
-  const maxNW = Math.round(24.9 * hM * hM * 10) / 10; // max kg for normal BMI
-  const bmiR  = Math.round(bmi * 10) / 10;
+  document.getElementById('bmi-card').style.display = 'block';
+
+  const curW = latestWeight() ?? s.startWeight;
+  const hM   = s.height / 100;
+  const bmi  = curW / (hM * hM);
+  const bmiR = Math.round(bmi * 10) / 10;
+
+  // IMC scale: 14 → 40 (range = 26)
+  const MIN = 14, MAX = 40, RANGE = MAX - MIN;
+  const pct = v => Math.min(100, Math.max(0, (v - MIN) / RANGE * 100));
+
+  const markerPct = pct(bmi);
+
+  // Zone thresholds as percentages
+  const pctNormal   = pct(18.5); // 17.3%
+  const pctOverwt   = pct(25);   // 42.3%
+  const pctObese    = pct(30);   // 61.5%
+
+  // Max normal weight for this height
+  const maxNW = 24.9 * hM * hM;
 
   let label, color;
   if      (bmi < 18.5) { label='Bajo peso'; color='#4cc8f0'; }
@@ -1258,30 +1291,46 @@ function updateBMI() {
   else if (bmi < 30)   { label='Sobrepeso'; color='var(--warn)'; }
   else                 { label='Obesidad';  color='var(--danger)'; }
 
-  document.getElementById('bmi-card').style.display    = 'block';
-  document.getElementById('bmi-value').textContent     = bmiR;
-  document.getElementById('bmi-value').style.color     = color;
-  document.getElementById('bmi-label').textContent     = label;
-  document.getElementById('bmi-label').style.color     = color;
-  document.getElementById('bmi-maxnormal').textContent = maxNW + ' kg';
+  document.getElementById('bmi-value').textContent = bmiR;
+  document.getElementById('bmi-value').style.color = color;
+  document.getElementById('bmi-label').textContent = label;
+  document.getElementById('bmi-label').style.color = color;
+  document.getElementById('bmi-maxnormal').textContent = Math.round(maxNW*10)/10 + ' kg';
 
-  // Alert or OK
-  const alert = document.getElementById('bmi-alert');
-  const ok    = document.getElementById('bmi-ok');
+  // Marker
+  document.getElementById('bmi-marker').style.left = markerPct + '%';
+
+  // Unlit overlay — darkens everything to the right of the marker
+  document.getElementById('bmi-bar-unlit').style.left = markerPct + '%';
+
+  // Excess bar — shows overweight portion in red
+  const excessEl = document.getElementById('bmi-bar-excess');
   if (bmi >= 25) {
-    const excess = Math.round((curW - maxNW) * 10) / 10;
-    document.getElementById('bmi-alert-text').textContent = `Tu peso actual (${curW} kg) supera el máximo normal para tu altura (${maxNW} kg) por ${excess} kg. Cada kilo que bajás te acerca al rango saludable.`;
-    alert.style.display = 'flex'; ok.style.display = 'none';
+    // excess starts at 25 (pctOverwt), ends at marker
+    excessEl.style.display = 'block';
+    excessEl.style.left    = pctOverwt + '%';
+    excessEl.style.width   = (markerPct - pctOverwt) + '%';
+    excessEl.style.background = 'rgba(240,76,76,.55)';
   } else {
-    const margin = Math.round((maxNW - curW) * 10) / 10;
-    document.getElementById('bmi-ok-text').textContent = `Tu peso actual (${curW} kg) está dentro del rango normal. Tenés un margen de ${margin} kg antes del límite.`;
-    ok.style.display = 'flex'; alert.style.display = 'none';
+    excessEl.style.display = 'none';
   }
 
-  // Marker position on scale (IMC 16 → 40, mapped to 0% → 100%)
-  const pct = Math.min(100, Math.max(0, Math.round((bmi - 16) / (40 - 16) * 100)));
-  document.getElementById('bmi-marker').style.left = pct + '%';
+  // Alert / OK
+  const alertEl = document.getElementById('bmi-alert');
+  const okEl    = document.getElementById('bmi-ok');
+  if (bmi >= 25) {
+    const excess = Math.round((curW - maxNW) * 10) / 10;
+    document.getElementById('bmi-alert-text').textContent =
+      curW + ' kg · ' + excess + ' kg sobre el límite normal (' + Math.round(maxNW*10)/10 + ' kg)';
+    alertEl.style.display = 'flex'; okEl.style.display = 'none';
+  } else {
+    const margin = Math.round((maxNW - curW) * 10) / 10;
+    document.getElementById('bmi-ok-text').textContent =
+      curW + ' kg · margen de ' + margin + ' kg';
+    okEl.style.display = 'flex'; alertEl.style.display = 'none';
+  }
 }
+
 
 function updateStats() {
   updateHeader();
