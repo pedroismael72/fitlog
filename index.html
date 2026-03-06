@@ -1447,12 +1447,13 @@ function renderStats() {
 function renderWeightReminder() {
   const el = document.getElementById('weight-reminder');
   if (!el) return;
-  const dow = new Date().getDay(); // 0=Sun,1=Mon,...,5=Fri
+  // Hide immediately if already registered today
+  if (todayEntry()) { el.style.display = 'none'; return; }
+  const dow = new Date().getDay();
   if (dow !== 1 && dow !== 5) { el.style.display = 'none'; return; }
   const { start } = weekBounds();
   const hasThisWeek = APP.entries.some(e => e.date >= start && e.date <= today());
   if (hasThisWeek) { el.style.display = 'none'; return; }
-
   const isMonday = dow === 1;
   document.getElementById('reminder-emoji').textContent = isMonday ? '🌅' : '🏁';
   document.getElementById('reminder-title').textContent = isMonday ? 'INICIO DE SEMANA' : 'CIERRE DE SEMANA';
