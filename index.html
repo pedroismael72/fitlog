@@ -354,6 +354,37 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
           </div>
         </div>
       </div>
+      <!-- GOOGLE FIT CARD -->
+      <div class="card" id="fit-card">
+        <div class="ctitle">
+          <div class="ctitle-l"><div class="dot"></div>ACTIVIDAD — ÚLTIMOS 7 DÍAS</div>
+          <button class="btn-edit" onclick="loadFitData()" id="fit-refresh">↻ ACTUALIZAR</button>
+        </div>
+        <div id="fit-loading" style="text-align:center;padding:20px;color:var(--muted);font-size:.85rem;display:none;">Cargando datos de Google Fit...</div>
+        <div id="fit-error"   style="text-align:center;padding:20px;color:var(--danger);font-size:.82rem;display:none;"></div>
+        <div id="fit-content" style="display:none;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+              <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">PASOS TOTALES</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;color:var(--accent)" id="fit-steps-total">—</div>
+              <div style="font-size:.75rem;color:var(--muted);margin-top:2px;" id="fit-steps-avg">— promedio/día</div>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+              <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">CALORÍAS QUEMADAS</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;color:var(--warn)" id="fit-cal-total">—</div>
+              <div style="font-size:.75rem;color:var(--muted);margin-top:2px;" id="fit-cal-avg">— promedio/día</div>
+            </div>
+          </div>
+          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">PASOS POR DÍA</div>
+          <div id="fit-bars" style="display:flex;gap:6px;align-items:flex-end;height:80px;"></div>
+          <div id="fit-bar-labels" style="display:flex;gap:6px;margin-top:4px;"></div>
+        </div>
+        <div id="fit-empty" style="text-align:center;padding:24px;color:var(--muted);font-size:.85rem;">
+          <div style="font-size:2rem;margin-bottom:8px;">📊</div>
+          <p>Hacé clic en <strong>↻ ACTUALIZAR</strong> para cargar tus datos de actividad.</p>
+        </div>
+      </div>
+
       <div class="card">
         <div class="ctitle">
           <div class="ctitle-l"><div class="dot"></div>REGISTRO MENSUAL</div>
@@ -504,7 +535,8 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
 // CONFIG
 // ═══════════════════════════════════════════════════
 const CLIENT_ID = '7598314266-c5k6g302077l8fb3v3748563h7khav69.apps.googleusercontent.com';
-const SCOPES    = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
+const SCOPES    = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/fitness.activity.read https://www.googleapis.com/auth/fitness.body.read';
+const FIT_API   = 'https://www.fitness.googleapis.com/fitness/v1/users/me/dataset:aggregate';
 const DISCOVERY = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
 const FILE_NAME = 'fitlog_data.json';
 const LS_THEME  = 'fitlog_theme';
@@ -1011,6 +1043,109 @@ function openModal(id) {
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; }
 function closeModalOutside(e) { if (e.target===document.getElementById('modal-overlay')) closeModal(); }
 document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+
+// ═══════════════════════════════════════════════════
+// GOOGLE FIT
+// ═══════════════════════════════════════════════════
+async function loadFitData() {
+  const token = gapi.client.getToken();
+  if (!token) { showToast('⚠ INICIÁ SESIÓN PRIMERO'); return; }
+
+  document.getElementById('fit-loading').style.display = 'block';
+  document.getElementById('fit-content').style.display = 'none';
+  document.getElementById('fit-error').style.display   = 'none';
+  document.getElementById('fit-empty').style.display   = 'none';
+  document.getElementById('fit-refresh').textContent   = '...';
+
+  try {
+    const now     = Date.now();
+    const weekAgo = now - 7 * 24 * 60 * 60 * 1000;
+
+    const body = {
+      aggregateBy: [
+        { dataTypeName: 'com.google.step_count.delta' },
+        { dataTypeName: 'com.google.calories.expended' }
+      ],
+      bucketByTime: { durationMillis: 86400000 },
+      startTimeMillis: weekAgo,
+      endTimeMillis:   now
+    };
+
+    const res = await fetch(FIT_API, {
+      method:  'POST',
+      headers: { 'Authorization': 'Bearer ' + token.access_token, 'Content-Type': 'application/json' },
+      body:    JSON.stringify(body)
+    });
+
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+
+    const days = (json.bucket || []).map(b => {
+      const date  = new Date(parseInt(b.startTimeMillis));
+      const label = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][date.getDay()];
+      let steps = 0, cals = 0;
+      (b.dataset || []).forEach(ds => {
+        (ds.point || []).forEach(pt => {
+          (pt.value || []).forEach(v => {
+            if (ds.dataSourceId?.includes('step_count'))      steps += (v.intVal  || 0);
+            if (ds.dataSourceId?.includes('calories.expended')) cals  += (v.fpVal || 0);
+          });
+        });
+      });
+      return { label, steps: Math.round(steps), cals: Math.round(cals) };
+    });
+
+    const totalSteps = days.reduce((a,d) => a+d.steps, 0);
+    const totalCals  = days.reduce((a,d) => a+d.cals,  0);
+    const activeDays = days.filter(d => d.steps > 0).length || 1;
+
+    document.getElementById('fit-steps-total').textContent = totalSteps.toLocaleString('es');
+    document.getElementById('fit-steps-avg').textContent   = Math.round(totalSteps/activeDays).toLocaleString('es') + ' promedio/día';
+    document.getElementById('fit-cal-total').textContent   = totalCals.toLocaleString('es') + ' kcal';
+    document.getElementById('fit-cal-avg').textContent     = Math.round(totalCals/activeDays).toLocaleString('es') + ' promedio/día';
+
+    // Bars
+    const maxSteps = Math.max(...days.map(d => d.steps), 1);
+    const barsEl   = document.getElementById('fit-bars');
+    const labsEl   = document.getElementById('fit-bar-labels');
+    barsEl.innerHTML = ''; labsEl.innerHTML = '';
+
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const goal = 10000;
+
+    days.forEach(d => {
+      const pct     = Math.round((d.steps / maxSteps) * 100);
+      const reached = d.steps >= goal;
+      const color   = reached ? 'var(--accent)' : (dark ? '#2a2a3e' : '#d4d4e8');
+      const fill    = reached ? 'var(--accent)' : 'var(--warn)';
+
+      const bar = document.createElement('div');
+      bar.style.cssText = `flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;`;
+      bar.innerHTML = `
+        <div style="font-size:.6rem;color:var(--muted);font-weight:600;">${d.steps > 0 ? (d.steps/1000).toFixed(1)+'k' : ''}</div>
+        <div style="flex:1;width:100%;background:var(--surface2);border-radius:4px;overflow:hidden;display:flex;align-items:flex-end;">
+          <div style="width:100%;height:${Math.max(pct,2)}%;background:${fill};border-radius:4px;transition:height .5s ease;"></div>
+        </div>`;
+      barsEl.appendChild(bar);
+
+      const lbl = document.createElement('div');
+      lbl.style.cssText = 'flex:1;text-align:center;font-size:.68rem;color:var(--muted);';
+      lbl.textContent = d.label;
+      labsEl.appendChild(lbl);
+    });
+
+    document.getElementById('fit-loading').style.display = 'none';
+    document.getElementById('fit-content').style.display = 'block';
+  } catch(e) {
+    console.error('Fit error:', e);
+    document.getElementById('fit-loading').style.display = 'none';
+    document.getElementById('fit-error').style.display   = 'block';
+    document.getElementById('fit-error').textContent     = 'No se pudieron cargar los datos. Verificá los permisos de Google Fit.';
+    document.getElementById('fit-empty').style.display   = 'none';
+  } finally {
+    document.getElementById('fit-refresh').textContent = '↻ ACTUALIZAR';
+  }
+}
 
 // ═══════════════════════════════════════════════════
 // TOAST
