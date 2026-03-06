@@ -664,6 +664,8 @@ function renderAfterLoad() {
     document.getElementById('inp-name').value  = data.setup.name || '';
     document.getElementById('inp-start').value = data.setup.startWeight || '';
     document.getElementById('inp-goal').value  = data.setup.goalWeight || '';
+    if (document.getElementById('inp-height')) document.getElementById('inp-height').value = data.setup.height || '';
+    if (document.getElementById('inp-steps')) document.getElementById('inp-steps').value = data.setup.stepGoal || '8000';
     document.getElementById('s-reset').style.display = 'block';
     renderDash();
     showView('dash');
@@ -770,7 +772,7 @@ function saveNotes(mid, wid, val) {
 // ═══════════════════════════════════════════════════
 // RENDER DASH
 // ═══════════════════════════════════════════════════
-function renderDash() { updateHeader(); renderTimeline(); updateStats(); }
+function renderDash() { updateHeader(); renderTimeline(); updateStats(); renderBMI(); renderWeeklySummary(); renderRateChart(); renderMonthCompare(); setTimeout(loadFitSteps, 600); }
 
 function updateHeader() {
   const s = data.setup; if (!s) return;
@@ -960,6 +962,454 @@ function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+
+// ═══════════════════════════════════════════════════
+// BMI
+// ═══════════════════════════════════════════════════
+function calcBMI(weight, heightCm) {
+  if (!weight || !heightCm) return null;
+  return weight / ((heightCm/100)**2);
+}
+
+function renderBMI() {
+  const card = document.getElementById('bmi-card');
+  if (!card) return;
+  const h = data.setup?.height;
+  const w = latestWeight() ?? data.setup?.startWeight;
+  if (!h || !w) { card.style.display='none'; return; }
+  card.style.display='block';
+  const bmi = calcBMI(w, h);
+  const bmiR = Math.round(bmi*10)/10;
+
+  let state, color;
+  if (bmi < 18.5)      { state='BAJO PESO';  color='#4cc8f0'; }
+  else if (bmi < 25)   { state='NORMAL';     color='#c8f04c'; }
+  else if (bmi < 30)   { state='SOBREPESO';  color='#f0a84c'; }
+  else                  { state='OBESIDAD';   color='#f04c4c'; }
+
+  document.getElementById('imc-val').textContent   = bmiR;
+  document.getElementById('imc-state').textContent = state;
+  document.getElementById('imc-val').style.color   = color;
+  document.getElementById('imc-state').style.color = color;
+
+  // Marker position: scale 14-40
+  const pct = Math.min(100, Math.max(0, (bmi - 14) / 26 * 100));
+  const marker = document.getElementById('bmi-marker');
+  if (marker) marker.style.left = pct + '%';
+
+  // Dim unreached portion
+  const unlit = document.getElementById('bmi-bar-unlit');
+  if (unlit) unlit.style.width = (100 - pct) + '%';
+
+  // Excess bar (above normal = IMC 25, at 42.3%)
+  const excess = document.getElementById('bmi-bar-excess');
+  if (excess) {
+    if (bmi > 25) {
+      const excessPct = pct - 42.3;
+      excess.style.display = 'block';
+      excess.style.left = '42.3%';
+      excess.style.width = excessPct + '%';
+      excess.style.background = 'rgba(240,76,76,0.5)';
+    } else {
+      excess.style.display = 'none';
+    }
+  }
+
+  // Alert
+  const alertEl = document.getElementById('bmi-alert');
+  const okEl    = document.getElementById('bmi-ok');
+  if (bmi >= 25) {
+    const maxNormalW = Math.round(25 * (h/100)**2 * 10)/10;
+    const over = Math.round((w - maxNormalW)*10)/10;
+    if (alertEl) { alertEl.style.display='flex'; alertEl.querySelector('span').textContent = w+' kg · '+over+' kg sobre el límite normal ('+maxNormalW+' kg)'; }
+    if (okEl) okEl.style.display='none';
+  } else {
+    const maxNormalW = Math.round(25 * (h/100)**2 * 10)/10;
+    const margin = Math.round((maxNormalW - w)*10)/10;
+    if (okEl) { okEl.style.display='flex'; okEl.querySelector('span').textContent = w+' kg · margen de '+margin+' kg'; }
+    if (alertEl) alertEl.style.display='none';
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// GOOGLE FIT
+// ═══════════════════════════════════════════════════
+async function loadFitSteps() {
+  const fitCard = document.getElementById('fit-card');
+  if (!fitCard) return;
+  const token = loadCache()?._token;
+  if (!token) return;
+  const goal = parseInt(data.setup?.stepGoal || 8000);
+
+  const fitLoading = document.getElementById('fit-loading');
+  const fitError   = document.getElementById('fit-error');
+  const fitContent = document.getElementById('fit-content');
+  if (fitLoading) fitLoading.style.display='block';
+  if (fitError)   fitError.style.display='none';
+  if (fitContent) fitContent.style.display='none';
+
+  try {
+    const now   = new Date();
+    const start = new Date(now); start.setHours(0,0,0,0);
+    const body  = {
+      aggregateBy:[{dataTypeName:'com.google.step_count.delta'}],
+      bucketByTime:{durationMillis:86400000},
+      startTimeMillis: start.getTime(),
+      endTimeMillis:   now.getTime()
+    };
+    const res  = await fetch(FIT_API, { method:'POST', headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error?.message || 'Fit error');
+    let steps = 0;
+    json.bucket?.forEach(b => b.dataset?.forEach(ds => ds.point?.forEach(p => p.value?.forEach(v2 => { steps += v2.intVal||0; }))));
+
+    if (fitLoading) fitLoading.style.display='none';
+    if (fitContent) fitContent.style.display='block';
+
+    const pct = Math.min(100, Math.round(steps/goal*100));
+    const col = pct>=100?'var(--accent)':pct>=75?'#a8e040':pct>=50?'var(--warn)':'var(--danger)';
+
+    if (fitContent) fitContent.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-top:6px;">
+        <span id="fit-steps-total" style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;color:${col};">${steps.toLocaleString('es')}</span>
+        <span style="font-size:.75rem;color:var(--muted);">/ ${goal.toLocaleString('es')}</span>
+        <div style="flex:1;height:6px;background:var(--surface3);border-radius:20px;overflow:hidden;">
+          <div style="height:100%;width:${pct}%;background:${col};border-radius:20px;transition:width .6s;"></div>
+        </div>
+        <span id="fit-steps-avg" style="font-size:.75rem;font-weight:700;color:${col};">${pct}%</span>
+      </div>`;
+
+    // Update weekly summary steps
+    const wsEl = document.getElementById('ws-steps');
+    if (wsEl) wsEl.textContent = steps.toLocaleString('es');
+    const wsSub = document.getElementById('ws-steps-sub');
+    if (wsSub) wsSub.textContent = pct+'% de la meta ('+goal.toLocaleString('es')+')';
+
+  } catch(e) {
+    if (fitLoading) fitLoading.style.display='none';
+    if (fitError)   { fitError.style.display='block'; fitError.textContent='No se pudieron cargar los datos.'; }
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// WEEKLY SUMMARY
+// ═══════════════════════════════════════════════════
+function getWeekBounds() {
+  const now = new Date();
+  const day = (now.getDay() + 6) % 7;
+  const mon = new Date(now); mon.setDate(now.getDate() - day); mon.setHours(0,0,0,0);
+  const sun = new Date(mon); sun.setDate(mon.getDate() + 6); sun.setHours(23,59,59,999);
+  return { mon, sun };
+}
+
+function renderWeeklySummary() {
+  const card = document.getElementById('weekly-card');
+  if (!card) return;
+  const { mon, sun } = getWeekBounds();
+  const fmt = d => d.toLocaleDateString('es',{day:'numeric',month:'short'});
+  const rangeEl = document.getElementById('weekly-range');
+  if (rangeEl) rangeEl.textContent = fmt(mon) + ' – ' + fmt(sun);
+  const monStr = isoDate(mon);
+  const sunStr = isoDate(sun);
+
+  // Weight
+  let wts = [];
+  data.months.forEach(m => m.weeks.forEach(w => { if (w.weight!=null) wts.push(w.weight); }));
+  const curW  = wts.length ? wts[wts.length-1] : null;
+  const prevW = wts.length > 1 ? wts[wts.length-2] : (data.setup?.startWeight||null);
+  const wsW = document.getElementById('ws-weight');
+  const wsWSub = document.getElementById('ws-weight-sub');
+  if (wsW) {
+    if (curW!=null) {
+      const diff = Math.round((curW-(prevW||curW))*10)/10;
+      wsW.textContent  = curW+' kg';
+      wsW.style.color  = diff<0?'var(--accent)':diff>0?'var(--danger)':'var(--text)';
+      if (wsWSub) wsWSub.textContent = diff===0?'sin cambio':(diff>0?'+':'')+diff+' kg vs anterior';
+    } else { wsW.textContent='—'; if(wsWSub) wsWSub.textContent='sin datos'; }
+  }
+
+  // This week workouts
+  const ww = (data.workouts||[]).filter(w => { const d=(w.date||w); return d>=monStr && d<=sunStr; });
+  const wwEl = document.getElementById('ws-workouts');
+  if (wwEl) wwEl.textContent = ww.length;
+
+  // Dots
+  const dotsEl = document.getElementById('workout-dots');
+  if (dotsEl) {
+    dotsEl.innerHTML='';
+    const days=['L','M','X','J','V','S','D'];
+    for(let i=0;i<7;i++){
+      const d=new Date(mon); d.setDate(mon.getDate()+i);
+      const ds=isoDate(d);
+      const dayWos=(data.workouts||[]).filter(w=>(w.date||w)===ds);
+      const trained=dayWos.length>0;
+      const isToday=ds===isoDate(new Date());
+      const icons=dayWos.map(w=>w.type==='bici'?'🚴':w.type==='gym'?'🏋️':'•').join('');
+      const dot=document.createElement('div');
+      dot.className='wdot'+(trained?' active':'')+(isToday?' today':'');
+      dot.textContent=trained?icons:days[i];
+      dotsEl.appendChild(dot);
+    }
+  }
+
+  // Activity list
+  renderActivityList(ww);
+}
+
+function renderActivityList(ww) {
+  const el = document.getElementById('ws-activity-list');
+  if (!el) return;
+  if (!ww.length) { el.innerHTML=''; return; }
+  const sorted = [...ww].sort((a,b)=>((b.date||b)<(a.date||a)?-1:1));
+  el.innerHTML = sorted.map(w => {
+    const d = new Date((w.date||w)+'T12:00:00');
+    const dateStr = d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'});
+    const icon = w.type==='bici'?'🚴':w.type==='gym'?'🏋️':'•';
+    const typeLabel = w.type==='bici'?'BICI / CARDIO':w.type==='gym'?'GIMNASIO':'ACTIVIDAD';
+    let details=[];
+    if(w.min)  details.push(w.min+' min');
+    if(w.kmh)  details.push(w.kmh+' km/h');
+    if(w.cal)  details.push('~'+w.cal+' kcal');
+    if(w.note) details.push(w.note);
+    const idx = data.workouts.indexOf(w);
+    return `<div class="act-row" onclick="toggleActDetail(${idx})" id="act-row-${idx}">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">${icon}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:1.5px;">${typeLabel}</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:1px;">${dateStr}${details.length?' · '+details.join(' · '):''}</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button onclick="event.stopPropagation();editWorkout(${idx})" class="btn-edit">EDITAR</button>
+          <button onclick="event.stopPropagation();deleteWorkout(${idx})" style="background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:.7rem;padding:3px 8px;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;transition:all .18s;" onmouseover="this.style.borderColor='var(--danger)';this.style.color='var(--danger)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">✕</button>
+        </div>
+      </div>
+      <div id="act-detail-${idx}" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+        ${buildDetailHTML(w)}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildDetailHTML(w) {
+  const chip = (icon,label,val) => `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;"><div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">${label}</div><div style="font-size:.88rem;font-weight:600;">${icon} ${val}</div></div>`;
+  if(w.type==='bici') {
+    const met=!w.kmh?8:w.kmh<16?6:w.kmh<20?8:w.kmh<23?10:w.kmh<26?12:14;
+    const intensity=met<=6?'Suave':met<=8?'Moderada':met<=10?'Intensa':'Muy intensa';
+    return `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">${w.min?chip('⏱','DURACIÓN',w.min+' min'):''}${w.kmh?chip('💨','VELOCIDAD',w.kmh+' km/h'):''}${w.cal?chip('🔥','CALORÍAS','~'+w.cal+' kcal'):''}</div><div style="margin-top:8px;font-size:.75rem;color:var(--muted);">Intensidad: <span style="color:var(--accent);">${intensity}</span></div>`;
+  } else if(w.type==='gym') {
+    return `<div style="display:grid;grid-template-columns:${w.note?'1fr 2fr':'1fr'};gap:8px;">${w.min?chip('⏱','DURACIÓN',w.min+' min'):''}${w.note?chip('📝','NOTA',w.note):''}</div>`;
+  }
+  return '';
+}
+
+function toggleActDetail(idx) {
+  const el=document.getElementById('act-detail-'+idx);
+  if(el) el.style.display=el.style.display==='none'?'block':'none';
+}
+
+function deleteWorkout(idx) {
+  if(!confirm('¿Borrar este registro?')) return;
+  data.workouts.splice(idx,1);
+  scheduleSave(); renderWeeklySummary();
+  showToast('REGISTRO ELIMINADO');
+}
+
+function editWorkout(idx) {
+  const w=data.workouts[idx]; if(!w) return;
+  selectedActivity=w.type;
+  ['bici','gym'].forEach(a=>{
+    document.getElementById('act-'+a)?.classList.toggle('selected',a===w.type);
+    const f=document.getElementById('fields-'+a);
+    if(f) f.style.display=a===w.type?'flex':'none';
+  });
+  if(w.type==='bici'){ document.getElementById('bici-min').value=w.min||''; document.getElementById('bici-kmh').value=w.kmh||''; calcBiciCals(); }
+  else if(w.type==='gym'){ document.getElementById('gym-min').value=w.min||''; document.getElementById('gym-note').value=w.note||''; }
+  document.getElementById('btn-confirm-workout').style.opacity='1';
+  document.getElementById('btn-confirm-workout').style.pointerEvents='auto';
+  document.getElementById('btn-confirm-workout').dataset.editIdx=idx;
+  const d=new Date((w.date||w)+'T12:00:00');
+  document.getElementById('workout-modal-date').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('workout-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function logWorkout() {
+  selectedActivity=null;
+  ['bici','gym'].forEach(a=>{
+    document.getElementById('act-'+a)?.classList.remove('selected');
+    const f=document.getElementById('fields-'+a);
+    if(f) f.style.display='none';
+  });
+  document.getElementById('btn-confirm-workout').style.opacity='.4';
+  document.getElementById('btn-confirm-workout').style.pointerEvents='none';
+  document.getElementById('btn-confirm-workout').dataset.editIdx='';
+  document.getElementById('bici-min').value='';
+  document.getElementById('bici-kmh').value='';
+  document.getElementById('gym-min').value='';
+  document.getElementById('gym-note').value='';
+  document.getElementById('bici-cal-preview').style.display='none';
+  const d=new Date();
+  document.getElementById('workout-modal-date').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('workout-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function selectActivity(type) {
+  selectedActivity=type;
+  ['bici','gym'].forEach(a=>{
+    document.getElementById('act-'+a).classList.toggle('selected',a===type);
+    document.getElementById('fields-'+a).style.display=a===type?'flex':'none';
+  });
+  document.getElementById('btn-confirm-workout').style.opacity='1';
+  document.getElementById('btn-confirm-workout').style.pointerEvents='auto';
+}
+
+function calcBiciCals() {
+  const min=parseFloat(document.getElementById('bici-min').value);
+  const kmh=parseFloat(document.getElementById('bici-kmh').value);
+  const w=latestWeight()||data.setup?.startWeight||80;
+  if(!min||!kmh){ document.getElementById('bici-cal-preview').style.display='none'; return; }
+  const met=kmh<16?6:kmh<20?8:kmh<23?10:kmh<26?12:14;
+  const cals=Math.round(met*w*(min/60));
+  document.getElementById('bici-cal-val').textContent=cals+' kcal';
+  document.getElementById('bici-cal-preview').style.display='block';
+}
+
+function confirmWorkout() {
+  if(!selectedActivity) return;
+  if(!data.workouts) data.workouts=[];
+  const btn=document.getElementById('btn-confirm-workout');
+  const editIdx=btn.dataset.editIdx!==undefined&&btn.dataset.editIdx!==''?parseInt(btn.dataset.editIdx):-1;
+  const date=editIdx>=0?(data.workouts[editIdx].date||isoDate(new Date())):isoDate(new Date());
+  let entry={date,type:selectedActivity};
+  if(selectedActivity==='bici'){
+    const min=parseFloat(document.getElementById('bici-min').value);
+    const kmh=parseFloat(document.getElementById('bici-kmh').value);
+    if(!min){showToast('⚠ INGRESÁ LA DURACIÓN');return;}
+    const w=latestWeight()||data.setup?.startWeight||80;
+    const met=!kmh?8:kmh<16?6:kmh<20?8:kmh<23?10:kmh<26?12:14;
+    entry={...entry,min,kmh:kmh||null,cal:Math.round(met*w*(min/60))};
+  } else if(selectedActivity==='gym'){
+    const min=parseFloat(document.getElementById('gym-min').value);
+    const note=document.getElementById('gym-note').value.trim();
+    if(!min){showToast('⚠ INGRESÁ LA DURACIÓN');return;}
+    entry={...entry,min,note:note||null};
+  }
+  if(editIdx>=0){ data.workouts[editIdx]=entry; showToast('✓ ACTIVIDAD ACTUALIZADA'); }
+  else { data.workouts.push(entry); showToast('✓ ACTIVIDAD REGISTRADA'); }
+  delete btn.dataset.editIdx;
+  scheduleSave(); renderWeeklySummary();
+  closeWorkoutModal();
+}
+
+function closeWorkoutModal(e) {
+  if(e&&e.target!==document.getElementById('workout-modal')) return;
+  document.getElementById('workout-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ═══════════════════════════════════════════════════
+// RATE CHART
+// ═══════════════════════════════════════════════════
+function renderRateChart() {
+  const canvas=document.getElementById('rateChart'); if(!canvas) return;
+  const pts=allPoints(); if(pts.length<2) return;
+  const deltas=[];
+  for(let i=1;i<pts.length;i++) deltas.push({label:pts[i].label,delta:Math.round((pts[i].w-pts[i-1].w)*10)/10});
+  const avg=deltas.reduce((s,d)=>s+d.delta,0)/deltas.length;
+  const proj=[]; const curW=pts[pts.length-1].w; const goal=data.setup?.goalWeight;
+  for(let i=1;i<=Math.min(12,goal?Math.ceil((curW-goal)/Math.abs(avg||0.5)):4);i++) proj.push({x:i,y:Math.round((curW+avg*i)*10)/10});
+  if(rateChart) rateChart.destroy();
+  rateChart=new Chart(canvas,{
+    data:{datasets:[
+      {type:'bar',label:'Variación semanal',data:deltas.map((d,i)=>({x:i,y:d.delta})),backgroundColor:deltas.map(d=>d.delta<=0?'rgba(200,240,76,.7)':'rgba(240,76,76,.7)'),borderRadius:4},
+      {type:'line',label:'Proyección',data:proj.map(p=>({x:deltas.length-1+p.x,y:p.y})),borderColor:'#4cc8f0',borderDash:[4,4],pointBackgroundColor:'#4cc8f0',pointRadius:3,tension:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{
+      x:{ticks:{callback:(v)=>deltas[v]?.label||'+'+(v-deltas.length+1)+' sem',color:'#585878',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}},
+      y:{ticks:{color:'#585878',font:{size:10},callback:v=>(v>0?'+':'')+v+' kg'},grid:{color:'rgba(255,255,255,.05)'},beginAtZero:false}
+    }}
+  });
+  const last=deltas[deltas.length-1]?.delta||0;
+  const avgEl=document.getElementById('rate-avg'); if(avgEl) avgEl.textContent=(avg>0?'+':'')+Math.round(avg*100)/100+' kg';
+  const lastEl=document.getElementById('rate-last'); if(lastEl) lastEl.textContent=(last>0?'+':'')+last+' kg';
+  const etaEl=document.getElementById('rate-eta');
+  if(etaEl&&goal&&avg<0){
+    const weeks=Math.ceil((curW-goal)/Math.abs(avg));
+    const eta=new Date(); eta.setDate(eta.getDate()+weeks*7);
+    etaEl.textContent=eta.toLocaleDateString('es-AR',{day:'numeric',month:'long',year:'numeric'});
+  } else if(etaEl) { etaEl.textContent=avg>=0?'tendencia al alza':'sin meta'; }
+}
+
+// ═══════════════════════════════════════════════════
+// MONTH COMPARE
+// ═══════════════════════════════════════════════════
+function renderMonthCompare() {
+  const el=document.getElementById('month-compare'); if(!el) return;
+  const months=data.months.map(m=>{
+    const ws=m.weeks.filter(w=>w.weight!=null).map(w=>w.weight);
+    const delta=ws.length>=2?Math.round((ws[ws.length-1]-ws[0])*10)/10:ws.length===1?0:null;
+    const wos=(data.workouts||[]).filter(w=>{const dm=new Date((w.date||w)+'T12:00:00');return dm.getMonth()===m.month&&dm.getFullYear()===m.year;}).length;
+    return {label:MNAMES[m.month].slice(0,3)+' '+m.year,delta,workouts:wos};
+  }).filter(m=>m.delta!==null);
+  if(!months.length){el.innerHTML='<div style="font-size:.8rem;color:var(--muted);padding:8px 0;">Sin datos suficientes.</div>';return;}
+  const maxAbs=Math.max(...months.map(m=>Math.abs(m.delta)),0.1);
+  el.innerHTML=months.map(m=>{
+    const pct=Math.round(Math.abs(m.delta)/maxAbs*100);
+    const col=m.delta<0?'var(--accent)':m.delta>0?'var(--danger)':'var(--muted)';
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:1px;min-width:70px;">${m.label}</span>
+      <span style="font-size:.75rem;color:var(--muted);">🏋 ×${m.workouts}</span>
+      <div style="flex:1;height:6px;background:var(--surface3);border-radius:10px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${col};border-radius:10px;"></div></div>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:${col};min-width:50px;text-align:right;">${m.delta>0?'+':''}${m.delta} kg</span>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// QUICK ADD WEIGHT
+// ═══════════════════════════════════════════════════
+function quickAddWeight() {
+  const sel=document.getElementById('qw-week'); sel.innerHTML='';
+  data.months.forEach(m=>{
+    m.weeks.forEach(w=>{
+      const opt=document.createElement('option');
+      opt.value=m.id+'|'+w.id;
+      opt.textContent=MNAMES[m.month]+' '+m.year+' — '+w.label+(w.weight?' ('+w.weight+' kg)':'');
+      sel.appendChild(opt);
+    });
+  });
+  const opt=document.createElement('option'); opt.value='__new__'; opt.textContent='+ Agregar mes nuevo'; sel.appendChild(opt);
+  if(sel.options.length>1) sel.selectedIndex=sel.options.length-2;
+  document.getElementById('qw-weight').value='';
+  const d=new Date(); document.getElementById('qw-date').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('qw-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('qw-weight').focus(),100);
+}
+
+function confirmQW() {
+  const val=parseFloat(document.getElementById('qw-weight').value.replace(',','.'));
+  const sel=document.getElementById('qw-week').value;
+  if(!val||val<=0){showToast('⚠ INGRESÁ UN PESO VÁLIDO');return;}
+  if(sel==='__new__'){addMonth();data.months[data.months.length-1].weeks[0].weight=val;}
+  else{
+    const[mid,wid]=sel.split('|');
+    const month=data.months.find(m=>m.id===mid);
+    const week=month?.weeks.find(w=>w.id===wid);
+    if(!week){showToast('⚠ ERROR');return;}
+    week.weight=val;
+  }
+  scheduleSave(); renderDash(); closeQWModal(); showToast('✓ PESO GUARDADO');
+}
+
+function closeQWModal(e) {
+  if(e&&e.target!==document.getElementById('qw-modal')) return;
+  document.getElementById('qw-modal').classList.remove('open');
+  document.body.style.overflow='';
 }
 
 // ═══════════════════════════════════════════════════
