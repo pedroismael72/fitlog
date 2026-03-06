@@ -165,7 +165,49 @@ header{display:flex;align-items:center;gap:16px;padding:0 28px;height:60px;backg
 .s-field-row{display:flex;gap:10px;}
 .s-field-row .field{flex:1;}
 
-/* ── TOAST ── */
+/* ── TIMELINE MONTH BLOCKS ── */
+.mblock{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:12px;}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;user-select:none;transition:background .2s;}
+.mhead:hover{background:var(--surface2);}
+.mname{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:2px;display:flex;align-items:center;gap:10px;}
+.mbadge{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:20px;font-family:'DM Sans',sans-serif;}
+.mbadge.bd{background:rgba(200,240,76,.15);color:var(--accent);}
+.mbadge.bu{background:rgba(240,76,76,.15);color:var(--danger);}
+.mbadge.bn{background:var(--surface3);color:var(--muted);}
+.mchev{font-size:.75rem;color:var(--muted);transition:transform .25s;}
+.wcont{overflow:hidden;max-height:0;transition:max-height .35s ease;}
+.wcont.open{max-height:600px;}
+.wtable{width:100%;border-collapse:collapse;padding:0 18px 16px;}
+.wtable th{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:8px 18px;text-align:left;border-bottom:1px solid var(--border);}
+.wrow td{padding:8px 18px;vertical-align:middle;}
+.wrow:not(:last-child) td{border-bottom:1px solid rgba(255,255,255,.04);}
+.wlabel{font-family:'Bebas Neue',sans-serif;font-size:.85rem;letter-spacing:1.5px;color:var(--text2);}
+.wcell{display:flex;flex-direction:column;gap:2px;}
+.wdelta{font-size:.72rem;margin-top:2px;}
+.dd{color:var(--accent);}
+.du{color:var(--danger);}
+.dn2{color:var(--muted);}
+.ninput{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.82rem;padding:7px 10px;outline:none;width:100%;resize:vertical;min-height:36px;transition:border-color .2s;}
+.ninput:focus{border-color:var(--accent);}
+.mfooter{padding:10px 18px 14px;display:flex;gap:8px;}
+.del-month-btn{font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.72rem;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;}
+.del-month-btn:hover{border-color:var(--danger);color:var(--danger);}
+
+/* ── GOAL PROGRESS BAR ── */
+.goal-bar-wrap{height:5px;background:var(--surface3);border-radius:20px;overflow:hidden;margin:0 10px;}
+.goal-bar{height:100%;border-radius:20px;background:var(--accent);transition:width .6s;}
+
+/* ── RATE CHART CARDS ── */
+.rate-stat{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.rate-stat-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.rate-stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;color:var(--accent);}
+.rate-stat-sub{font-size:.7rem;color:var(--muted);margin-top:2px;}
+
+/* ── FIT / STEPS ── */
+.fit-bar-wrap{flex:1;background:var(--surface3);border-radius:20px;height:6px;overflow:hidden;}
+.fit-bar{height:100%;border-radius:20px;background:var(--accent);transition:width .6s;}
+
+
 .toast{position:fixed;bottom:28px;right:28px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:2px;color:var(--accent);box-shadow:0 8px 32px rgba(0,0,0,.4);transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.4,0,.2,1);z-index:999;}
 .toast.show{transform:translateY(0);opacity:1;}
 
