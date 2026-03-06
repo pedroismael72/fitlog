@@ -631,7 +631,7 @@ header {
       <div class="card">
         <div class="ctitle">
           <div class="ctitle-l"><div class="dot"></div>PROGRESO DE PESO</div>
-          <button class="btn" style="font-size:.75rem;padding:6px 16px" onclick="openWeightModal()">+ NUEVO PESO</button>
+          <button class="btn" id="btn-new-weight" style="font-size:.75rem;padding:6px 16px" onclick="openWeightModal()">+ NUEVO PESO</button>
         </div>
         <div class="chart-wrap"><canvas id="wChart"></canvas></div>
       </div>
@@ -955,6 +955,9 @@ function fmtShort(iso) {
 function latestW() {
   return APP.entries.length ? APP.entries[APP.entries.length-1].weight : null;
 }
+function todayEntry() {
+  return APP.entries.find(e => e.date === today()) ?? null;
+}
 function calcCals(min, kmh, kg) {
   const met = !kmh||kmh<16?6 : kmh<20?8 : kmh<23?10 : kmh<26?12 : 14;
   return Math.round(met * (kg||75) * (min/60));
@@ -1194,6 +1197,7 @@ function renderAll() {
   renderWeekly();
   renderBMI();
   renderWeightHistory();
+  renderWeightBtn();
   loadSteps();
 }
 
@@ -1217,6 +1221,28 @@ function renderHeader() {
   } else { dEl.textContent = '—'; dEl.className = 'hv'; }
 
   document.getElementById('hdr-mid').style.display = 'flex';
+}
+
+// ═══════════════════════════════════════════
+// WEIGHT BUTTON STATE
+// ═══════════════════════════════════════════
+function renderWeightBtn() {
+  const btn = document.getElementById('btn-new-weight');
+  if (!btn) return;
+  const hasToday = !!todayEntry();
+  if (hasToday) {
+    btn.textContent = '✏ EDITAR PESO HOY';
+    btn.style.background    = 'rgba(240,160,76,.15)';
+    btn.style.color         = 'var(--warn)';
+    btn.style.border        = '1px solid rgba(240,160,76,.4)';
+    btn.style.boxShadow     = 'none';
+  } else {
+    btn.textContent = '+ NUEVO PESO';
+    btn.style.background    = '';
+    btn.style.color         = '';
+    btn.style.border        = '';
+    btn.style.boxShadow     = '';
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -1657,6 +1683,8 @@ function openWeightModal() {
   document.querySelectorAll('.mood-btn').forEach(b => {
     b.classList.toggle('sel', parseInt(b.dataset.mood) === selMood);
   });
+  const modalTitle = document.querySelector('#m-weight .modal-title');
+  if (modalTitle) modalTitle.textContent = ex ? 'EDITAR PESO HOY' : 'NUEVO PESO';
   openModal('m-weight');
   setTimeout(() => document.getElementById('mw-val').select(), 80);
 }
