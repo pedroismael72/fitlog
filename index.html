@@ -355,20 +355,33 @@ header {
 }
 .bmi-info-btn:hover .bmi-tooltip { display:block; }
 
+.bmi-bar-outer {
+  position:relative; height:12px; border-radius:20px; overflow:visible;
+  display:flex; margin-bottom:5px;
+}
+.bmi-seg {
+  height:12px; position:relative; cursor:pointer; transition:filter .15s;
+  overflow:visible;
+}
+.bmi-seg:first-child { border-radius:20px 0 0 20px; }
+.bmi-seg:last-child  { border-radius:0 20px 20px 0; }
+.bmi-seg:hover { filter:brightness(1.3); }
+.bmi-seg-tip {
+  display:none; position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+  background:var(--s1); border:1px solid var(--border); border-radius:8px;
+  padding:6px 10px; font-size:.7rem; color:var(--text2); white-space:nowrap;
+  z-index:100; box-shadow:0 4px 16px rgba(0,0,0,.5); pointer-events:none;
+  line-height:1.5; text-align:center;
+}
+.bmi-seg:hover .bmi-seg-tip { display:block; }
 .bmi-bar-wrap {
-  height:12px; border-radius:20px; overflow:hidden; position:relative;
-  background:linear-gradient(to right,
-    var(--blue)   0%,   var(--blue)   17.3%,
-    var(--accent) 17.3%,var(--accent) 42.3%,
-    var(--warn)   42.3%,var(--warn)   61.5%,
-    var(--danger) 61.5%,var(--danger) 100%);
-  margin-bottom:5px;
+  position:absolute; inset:0; border-radius:20px; overflow:hidden; pointer-events:none;
 }
 .bmi-unlit  { position:absolute; right:0; top:0; bottom:0; background:rgba(10,10,15,.65); transition:width .6s; }
 .bmi-cursor {
   position:absolute; top:-4px; width:5px; height:20px;
   background:#fff; border-radius:3px; transform:translateX(-50%);
-  transition:left .6s; box-shadow:0 0 6px rgba(0,0,0,.5);
+  transition:left .6s; box-shadow:0 0 6px rgba(0,0,0,.5); z-index:10; pointer-events:none;
 }
 .bmi-scale-row { display:flex; justify-content:space-between; font-size:8px; color:var(--muted); letter-spacing:.5px; margin-top:4px; }
 
@@ -718,8 +731,29 @@ header {
             </div>
           </div>
         </div>
-        <div class="bmi-bar-wrap">
-          <div class="bmi-unlit"  id="bmi-unlit"></div>
+        <!-- BMI color bar with hover tooltips -->
+        <div class="bmi-bar-outer">
+          <!-- Segments as % of 14–40 range (26 units) -->
+          <!-- Bajo peso: 14–18.5 = 4.5/26 = 17.3% -->
+          <div class="bmi-seg" style="width:17.3%;background:var(--blue)">
+            <div class="bmi-seg-tip">🔵 <b>Bajo peso</b><br>IMC &lt; 18.5</div>
+          </div>
+          <!-- Normal: 18.5–25 = 6.5/26 = 25% -->
+          <div class="bmi-seg" style="width:25%;background:var(--accent)">
+            <div class="bmi-seg-tip">🟢 <b>Normal</b><br>IMC 18.5 – 25</div>
+          </div>
+          <!-- Sobrepeso: 25–30 = 5/26 = 19.2% -->
+          <div class="bmi-seg" style="width:19.2%;background:var(--warn)">
+            <div class="bmi-seg-tip">🟠 <b>Sobrepeso</b><br>IMC 25 – 30</div>
+          </div>
+          <!-- Obesidad: 30–40 = 10/26 = 38.5% -->
+          <div class="bmi-seg" style="width:38.5%;background:var(--danger)">
+            <div class="bmi-seg-tip" style="left:auto;right:0;transform:none">🔴 <b>Obesidad</b><br>IMC 30 – 40+</div>
+          </div>
+          <!-- Overlay for dimming + cursor -->
+          <div class="bmi-bar-wrap">
+            <div class="bmi-unlit" id="bmi-unlit"></div>
+          </div>
           <div class="bmi-cursor" id="bmi-cursor"></div>
         </div>
         <div class="bmi-scale-row">
