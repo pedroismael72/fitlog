@@ -218,12 +218,23 @@ header {
 .act-meta { font-size:.72rem; color:var(--muted); margin-top:1px; }
 .act-btns { display:flex; gap:6px; flex-shrink:0; }
 
-/* ── STEPS ── */
-.steps-big { font-family:'Bebas Neue',sans-serif; font-size:2.8rem; letter-spacing:1px; color:var(--accent); line-height:1; }
-.steps-sub { font-size:.76rem; color:var(--muted); margin-top:4px; }
-.steps-track { height:8px; background:var(--s2); border-radius:20px; overflow:hidden; margin-top:14px; }
-.steps-fill  { height:100%; border-radius:20px; background:linear-gradient(90deg,var(--accent),rgba(200,240,76,.5)); transition:width .6s; }
-.steps-msg   { font-size:.74rem; color:var(--muted); margin-top:8px; }
+/* ── STEPS RING ── */
+.steps-card-inner { display:flex; align-items:center; gap:20px; }
+.steps-ring-wrap  { position:relative; flex-shrink:0; width:90px; height:90px; }
+.steps-ring-wrap svg { width:90px; height:90px; transform:rotate(-90deg); }
+.steps-ring-bg    { fill:none; stroke:var(--s3); stroke-width:8; }
+.steps-ring-fill  { fill:none; stroke:var(--accent); stroke-width:8; stroke-linecap:round; transition:stroke-dashoffset .8s ease; }
+.steps-ring-fill.over { stroke:var(--danger); }
+.steps-ring-center {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:1px;
+}
+.steps-ring-pct  { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:1px; line-height:1; }
+.steps-ring-lbl  { font-size:.58rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+.steps-info      { flex:1; display:flex; flex-direction:column; gap:6px; }
+.steps-num       { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:1px; line-height:1; color:var(--accent); }
+.steps-goal-txt  { font-size:.72rem; color:var(--muted); }
+.steps-msg       { font-size:.74rem; color:var(--muted); margin-top:2px; }
 
 /* ── BMI ── */
 .bmi-row1  { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
@@ -282,15 +293,7 @@ header {
   background:#fff; border-radius:3px; transform:translateX(-50%);
   transition:left .6s; box-shadow:0 0 6px rgba(0,0,0,.5);
 }
-.bmi-scale  { display:flex; justify-content:space-between; font-size:8px; color:var(--muted); letter-spacing:.5px; margin-bottom:10px; }
-.bmi-status-chip {
-  display:inline-flex; align-items:center; gap:8px; margin-top:10px;
-  padding:8px 14px; border-radius:10px; font-size:.8rem; font-weight:600;
-}
-.bmi-status-chip.bajo      { background:rgba(76,200,240,.1);  border:1px solid rgba(76,200,240,.25);  color:var(--blue); }
-.bmi-status-chip.normal    { background:rgba(200,240,76,.1);  border:1px solid rgba(200,240,76,.25);  color:var(--accent); }
-.bmi-status-chip.sobrepeso { background:rgba(240,160,76,.1);  border:1px solid rgba(240,160,76,.25);  color:var(--warn); }
-.bmi-status-chip.obesidad  { background:rgba(240,76,76,.1);   border:1px solid rgba(240,76,76,.25);   color:var(--danger); }
+.bmi-scale-row { display:flex; justify-content:space-between; font-size:8px; color:var(--muted); letter-spacing:.5px; margin-top:4px; }
 
 /* ── WEIGHT HISTORY ── */
 .wh-row {
@@ -566,12 +569,26 @@ header {
       <div class="card">
         <div class="ctitle">
           <div class="ctitle-l"><div class="dot"></div>PASOS HOY</div>
-          <button class="btn-ghost" onclick="loadSteps()" style="font-size:.72rem;padding:5px 12px">↺ ACTUALIZAR</button>
+          <button class="btn-ghost" onclick="loadSteps()" style="font-size:.72rem;padding:5px 12px">↺</button>
         </div>
-        <div class="steps-big" id="steps-n">—</div>
-        <div class="steps-sub" id="steps-sub"></div>
-        <div class="steps-track"><div class="steps-fill" id="steps-bar" style="width:0%"></div></div>
-        <div class="steps-msg"  id="steps-msg"></div>
+        <div class="steps-card-inner">
+          <div class="steps-ring-wrap">
+            <svg viewBox="0 0 90 90">
+              <circle class="steps-ring-bg"   cx="45" cy="45" r="36"/>
+              <circle class="steps-ring-fill" id="steps-ring" cx="45" cy="45" r="36"
+                stroke-dasharray="226" stroke-dashoffset="226"/>
+            </svg>
+            <div class="steps-ring-center">
+              <span class="steps-ring-pct" id="steps-pct-ring">0%</span>
+              <span class="steps-ring-lbl">meta</span>
+            </div>
+          </div>
+          <div class="steps-info">
+            <div class="steps-num" id="steps-n">—</div>
+            <div class="steps-goal-txt" id="steps-sub"></div>
+            <div class="steps-msg" id="steps-msg"></div>
+          </div>
+        </div>
       </div>
 
       <div class="card" id="bmi-card" style="display:none">
@@ -584,7 +601,11 @@ header {
           </div>
           <div class="bmi-stats">
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Peso normal máx.</span>
+              <span class="bmi-stat-lbl">Tu peso actual</span>
+              <span class="bmi-stat-val" id="bmi-cur-weight">—</span>
+            </div>
+            <div class="bmi-stat">
+              <span class="bmi-stat-lbl">Peso máx. normal</span>
               <span class="bmi-stat-val info" id="bmi-max-normal">—</span>
             </div>
             <div class="bmi-stat">
@@ -606,7 +627,9 @@ header {
           <div class="bmi-unlit"  id="bmi-unlit"></div>
           <div class="bmi-cursor" id="bmi-cursor"></div>
         </div>
-        <div class="bmi-status-chip" id="bmi-chip"></div>
+        <div class="bmi-scale-row">
+          <span>14</span><span>18.5</span><span>25</span><span>30</span><span>40</span>
+        </div>
       </div>
     </div>
 
@@ -1290,9 +1313,16 @@ function renderBMI() {
   tag.textContent = cat; tag.className = 'bmi-cat ' + cls;
 
   // Derived values
-  const maxNormal = (24.9 * hm * hm).toFixed(1); // max weight for BMI 24.9
-  const ideal     = (22   * hm * hm).toFixed(1); // ideal weight at BMI 22
+  const maxNormal = (24.9 * hm * hm).toFixed(1);
+  const ideal     = (22   * hm * hm).toFixed(1);
   const diff      = (w - parseFloat(maxNormal)).toFixed(1);
+
+  // Current weight with visual context
+  const curEl = document.getElementById('bmi-cur-weight');
+  if (curEl) {
+    curEl.textContent = w + ' kg';
+    curEl.className   = 'bmi-stat-val ' + (diff > 0 ? 'warn' : 'ok');
+  }
 
   document.getElementById('bmi-max-normal').textContent = maxNormal + ' kg';
   document.getElementById('bmi-ideal').textContent      = ideal + ' kg';
@@ -1328,19 +1358,6 @@ function renderBMI() {
   const pct = Math.max(0, Math.min(100, (bmi - 14) / 26 * 100));
   document.getElementById('bmi-unlit').style.width = (100 - pct) + '%';
   document.getElementById('bmi-cursor').style.left = pct + '%';
-
-  // Status chip
-  const chipEl = document.getElementById('bmi-chip');
-  const chipMap = {
-    bajo:      { icon:'🔵', text:'Bajo peso — IMC menor a 18.5' },
-    normal:    { icon:'🟢', text:'Peso normal — IMC entre 18.5 y 25' },
-    sobrepeso: { icon:'🟡', text:'Sobrepeso — IMC entre 25 y 30' },
-    obesidad:  { icon:'🔴', text:'Obesidad — IMC mayor a 30' },
-  };
-  const chip = chipMap[cls];
-  chipEl.innerHTML = `<span>${chip.icon}</span><span>${chip.text}</span>`;
-  chipEl.className = 'bmi-status-chip ' + cls;
-
   card.style.display = 'block';
 }
 
@@ -1358,7 +1375,10 @@ async function loadSteps() {
       method:'POST',
       headers:{ Authorization:`Bearer ${token}`, 'Content-Type':'application/json' },
       body: JSON.stringify({
-        aggregateBy:[{ dataTypeName:'com.google.step_count.delta' }],
+        aggregateBy:[{
+          dataTypeName:'com.google.step_count.delta',
+          dataSourceId:'derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas'
+        }],
         bucketByTime:{ durationMillis:86400000 },
         startTimeMillis: startOfDay.getTime(),
         endTimeMillis:   Date.now()
@@ -1385,13 +1405,24 @@ async function loadSteps() {
     let steps = 0;
     json.bucket?.forEach(b => b.dataset?.forEach(ds => ds.point?.forEach(p => p.value?.forEach(v => { steps += v.intVal||0; }))));
 
-    const pct = Math.min(100, Math.round(steps/goal*100));
-    document.getElementById('steps-n').textContent   = steps.toLocaleString('es-AR');
-    document.getElementById('steps-sub').textContent = '/ ' + goal.toLocaleString('es-AR') + ' · ' + pct + '% de la meta';
-    document.getElementById('steps-bar').style.width = pct + '%';
+    const pct  = Math.min(100, Math.round(steps / goal * 100));
+    const circ = 226; // 2π × r(36)
+    const offset = circ - (circ * pct / 100);
+
+    document.getElementById('steps-n').textContent        = steps.toLocaleString('es-AR');
+    document.getElementById('steps-sub').textContent      = 'meta: ' + goal.toLocaleString('es-AR');
+    document.getElementById('steps-pct-ring').textContent = pct + '%';
+    document.getElementById('steps-ring').style.strokeDashoffset = offset;
+    document.getElementById('steps-ring').classList.toggle('over', pct >= 100);
+
     const msg = document.getElementById('steps-msg');
-    msg.textContent = steps >= goal ? '🎯 ¡Meta alcanzada hoy!' : `Faltan ${(goal-steps).toLocaleString('es-AR')} pasos`;
-    msg.style.color = steps >= goal ? 'var(--accent)' : 'var(--muted)';
+    if (pct >= 100) {
+      msg.textContent = '🎯 ¡Meta alcanzada!';
+      msg.style.color = 'var(--accent)';
+    } else {
+      msg.textContent = `Faltan ${(goal - steps).toLocaleString('es-AR')}`;
+      msg.style.color = 'var(--muted)';
+    }
     document.getElementById('ws-s').textContent     = steps.toLocaleString('es-AR');
     document.getElementById('ws-s-sub').textContent = pct + '% de la meta';
 
