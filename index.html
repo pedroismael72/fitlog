@@ -178,7 +178,6 @@ header {
   display:flex; justify-content:space-between; align-items:center;
   padding:8px 10px; border-radius:8px; transition:background .2s;
 }
-.srow:not(:last-child) { border-bottom:1px solid var(--border); }
 .srow:hover { background:var(--s2); }
 .sn { font-size:.76rem; color:var(--muted); }
 .sv { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:1px; color:var(--accent); }
@@ -240,6 +239,69 @@ header {
 .steps-goal-txt  { font-size:.72rem; color:var(--muted); }
 .steps-msg       { font-size:.74rem; color:var(--muted); }
 .steps-updated   { font-size:.64rem; color:var(--s3); text-align:center; margin-top:8px; letter-spacing:.5px; }
+
+/* ── WEATHER PILL ── */
+.weather-pill {
+  display:none; align-items:center; gap:6px; position:relative;
+  background:var(--s2); border:1px solid var(--border); border-radius:20px;
+  padding:4px 12px 4px 8px; font-size:.75rem; color:var(--text2); cursor:pointer;
+  transition:border-color .2s; white-space:nowrap; user-select:none;
+}
+.weather-pill:hover { border-color:rgba(255,255,255,.2); }
+.weather-pill .w-icon { font-size:1.1rem; line-height:1; }
+.weather-pill .w-temp { font-family:'Bebas Neue',sans-serif; font-size:.95rem; letter-spacing:1px; }
+.weather-pill .w-tooltip {
+  display:none; position:absolute; right:0; top:44px; width:220px;
+  background:var(--s1); border:1px solid var(--border); border-radius:10px;
+  padding:10px 13px; font-size:.72rem; color:var(--text2); line-height:1.55;
+  z-index:300; text-align:left; font-family:'DM Sans',sans-serif;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);
+}
+.weather-pill:hover .w-tooltip,
+.weather-pill.touch-open .w-tooltip { display:block; }
+.weather-alert {
+  display:none; align-items:center; gap:6px;
+  background:rgba(240,160,76,.12); border:1px solid rgba(240,160,76,.3);
+  border-radius:8px; padding:5px 12px; font-size:.72rem; color:var(--warn);
+  margin: 0 28px 0 0; cursor:default; white-space:nowrap;
+}
+.weather-alert.rain  { background:rgba(76,160,240,.12); border-color:rgba(76,160,240,.3); color:var(--blue); }
+.weather-alert.uv    { background:rgba(240,160,76,.12); border-color:rgba(240,160,76,.3); color:var(--warn); }
+.weather-alert.storm { background:rgba(240,76,76,.12);  border-color:rgba(240,76,76,.3);  color:var(--danger); }
+
+/* ── MOTIVATIONAL CARD ── */
+.motiv-card {
+  background:linear-gradient(135deg, rgba(200,240,76,.07) 0%, rgba(200,240,76,.02) 100%);
+  border:1px solid rgba(200,240,76,.15); border-radius:16px;
+  padding:16px 20px; margin-bottom:20px; display:none;
+  align-items:flex-start; gap:12px;
+}
+.motiv-icon { font-size:1.5rem; flex-shrink:0; margin-top:2px; }
+.motiv-text { font-size:.85rem; color:var(--text2); line-height:1.6; flex:1; }
+.motiv-text b { color:var(--accent); font-weight:600; }
+.motiv-loading { color:var(--muted); font-style:italic; font-size:.82rem; }
+
+/* ── MEASURES MODAL ── */
+.meas-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:4px; }
+.meas-result {
+  background:var(--s2); border-radius:12px; padding:14px 16px;
+  margin-top:4px; display:none;
+}
+.meas-result-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--border); }
+.meas-result-row:last-child { border:none; }
+.meas-result-lbl { font-size:.72rem; color:var(--muted); }
+.meas-result-val { font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:1px; }
+.meas-result-val.ok   { color:var(--accent); }
+.meas-result-val.warn { color:var(--warn); }
+.meas-result-val.bad  { color:var(--danger); }
+
+/* ── ACHIEVEMENT MODAL ── */
+.achieve-box { text-align:center; padding:8px 0 16px; }
+.achieve-emoji { font-size:4rem; display:block; margin-bottom:12px; animation: pop .4s cubic-bezier(.36,1.5,.6,1); }
+@keyframes pop { from{transform:scale(0)} to{transform:scale(1)} }
+.achieve-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:3px; color:var(--accent); margin-bottom:6px; }
+.achieve-sub   { font-size:.88rem; color:var(--text2); line-height:1.6; }
+.achieve-kg    { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; letter-spacing:2px; color:var(--accent); display:block; margin:8px 0 4px; }
 
 /* ── BMI ── */
 .bmi-row1  { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
@@ -464,6 +526,7 @@ header {
       <span class="w-icon" id="w-icon">🌤</span>
       <span class="w-temp" id="w-temp">—</span>
       <span id="w-desc" style="font-size:.7rem;color:var(--muted)"></span>
+      <div class="w-tooltip" id="w-tooltip"></div>
     </div>
     <div class="u-chip" id="u-chip" style="display:none">
       <img class="u-avatar" id="u-avatar" src="" alt="" style="display:none">
@@ -580,10 +643,10 @@ header {
         <div class="srow"><span class="sn">Semanas registradas</span><span class="sv" id="s-weeks">0</span></div>
         <div class="srow"><span class="sn">Mejor semana</span><span class="sv" id="s-best" style="font-size:.95rem">—</span></div>
         <div class="srow"><span class="sn">Falta para meta</span><span class="sv" id="s-rem">—</span></div>
-        <div class="srow" style="border:none;padding-top:14px;gap:8px;flex-wrap:wrap;">
-          <button class="btn-ghost" onclick="goSetup()">✏ EDITAR PERFIL</button>
-          <button class="btn-ghost" onclick="openMeasures()" style="display:flex;align-items:center;gap:5px">📏 MEDIDAS</button>
-          <button class="btn-del" onclick="clearAll()">RESETEAR</button>
+        <div style="display:flex;gap:8px;padding:14px 10px 4px;flex-wrap:nowrap">
+          <button class="btn-ghost" onclick="goSetup()" style="flex:1;justify-content:center">✏ PERFIL</button>
+          <button class="btn-ghost" onclick="openMeasures()" style="flex:1;justify-content:center">📏 MEDIDAS</button>
+          <button class="btn-ghost" onclick="clearAll()" style="flex:1;justify-content:center;border-color:rgba(240,76,76,.3);color:var(--danger)">RESETEAR</button>
         </div>
       </div>
     </div>
@@ -1763,7 +1826,6 @@ async function loadWeather() {
       const temp   = Math.round(cur.temperature_2m);
       const code   = cur.weathercode;
       const uv     = cur.uv_index ?? 0;
-      const precip = cur.precipitation ?? 0;
       const precipProb = d.hourly?.precipitation_probability?.[new Date().getHours()] ?? 0;
       const icon   = WEATHER_ICONS[code] || '🌡';
 
@@ -1773,18 +1835,39 @@ async function loadWeather() {
       const pill = document.getElementById('weather-pill');
       pill.style.display = 'flex';
 
+      // Build tooltip recommendation
+      let tip;
+      if (code >= 95)              tip = '⛈ Tormenta en curso. Cancelá cualquier actividad outdoor y esperá que pase.';
+      else if (code >= 61 || precipProb > 60) tip = '🌧 Lluvia probable hoy. Ideal para gym, yoga, o cardio en casa.';
+      else if (temp >= 35)         tip = `🥵 ${temp}°C es calor extremo. Hidratate mucho y evitá entrenar al aire libre.`;
+      else if (temp >= 28)         tip = `☀️ ${temp}°C — si salís, andá temprano o al atardecer. Llevá agua.`;
+      else if (uv >= 8)            tip = `🕶 UV ${Math.round(uv)} (muy alto). Usá protector solar y evitá el mediodía.`;
+      else if (uv >= 6)            tip = `🌞 UV ${Math.round(uv)} — día soleado. Protector solar antes de salir.`;
+      else if (temp <= 0)          tip = `🥶 ${temp}°C — frío extremo. Calentá bien antes y abrigate al salir.`;
+      else if (temp <= 8)          tip = `🧤 ${temp}°C — frío. Perfecto para running si te abrigás bien.`;
+      else if (code <= 1 && temp >= 15 && temp < 28) tip = `✅ Condiciones ideales para entrenar afuera. ¡Aprovechá el día!`;
+      else if (code <= 3)          tip = `👟 Buen día para salir. Temperatura agradable para cualquier actividad.`;
+      else                         tip = `🌤 Clima aceptable. Revisá si hay lluvia más tarde antes de salir.`;
+
+      document.getElementById('w-tooltip').textContent = tip;
+
+      // Touch support
+      pill.addEventListener('click', () => pill.classList.toggle('touch-open'));
+      document.addEventListener('click', e => { if (!pill.contains(e.target)) pill.classList.remove('touch-open'); });
+
       // Build alert
       let alertMsg = '', alertClass = '';
-      if (code >= 95)            { alertMsg = '⛈ Tormenta — quedate adentro'; alertClass = 'storm'; }
-      else if (code >= 61 || precipProb > 60) { alertMsg = '🌧 Lluvia probable — actividad indoor'; alertClass = 'rain'; }
-      else if (uv >= 8)          { alertMsg = `☀️ UV ${Math.round(uv)} (extremo) — evitá salir al mediodía`; alertClass = 'uv'; }
-      else if (uv >= 6)          { alertMsg = `🕶 UV ${Math.round(uv)} (alto) — usá protector solar`; alertClass = 'uv'; }
-      else if (temp <= 4)        { alertMsg = '🥶 Frío extremo — abrigate bien'; alertClass = 'storm'; }
+      if (code >= 95)                             { alertMsg = '⛈ Tormenta — quedate adentro'; alertClass = 'storm'; }
+      else if (code >= 61 || precipProb > 60)     { alertMsg = '🌧 Lluvia probable — actividad indoor'; alertClass = 'rain'; }
+      else if (temp >= 35)                        { alertMsg = `🥵 Calor extremo (${temp}°C) — hidratate y evitá el sol`; alertClass = 'uv'; }
+      else if (uv >= 8)                           { alertMsg = `☀️ UV ${Math.round(uv)} extremo — evitá salir al mediodía`; alertClass = 'uv'; }
+      else if (uv >= 6)                           { alertMsg = `🕶 UV ${Math.round(uv)} alto — usá protector solar`; alertClass = 'uv'; }
+      else if (temp <= 4)                         { alertMsg = '🥶 Frío extremo — abrigate bien'; alertClass = 'storm'; }
 
       const alertEl = document.getElementById('weather-alert');
       if (alertMsg) {
-        alertEl.textContent = alertMsg;
-        alertEl.className   = 'weather-alert ' + alertClass;
+        alertEl.textContent   = alertMsg;
+        alertEl.className     = 'weather-alert ' + alertClass;
         alertEl.style.display = 'flex';
       }
     } catch(e) { console.warn('Weather error', e); }
