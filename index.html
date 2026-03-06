@@ -257,12 +257,12 @@ header {
 .bmi-alert.ok { color:var(--accent); }
 
 /* BMI horizontal full layout */
-.bmi-main { display:grid; grid-template-columns:120px 1fr; gap:0; align-items:stretch; margin-bottom:16px; }
+.bmi-main { display:grid; grid-template-columns:150px 1fr; gap:0; align-items:stretch; margin-bottom:16px; }
 .bmi-left {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:8px; border-right:1px solid var(--border); padding-right:16px;
 }
-.bmi-big  { font-family:'Bebas Neue',sans-serif; font-size:4.2rem; letter-spacing:1px; line-height:1; text-align:center; }
+.bmi-big  { font-family:'Bebas Neue',sans-serif; font-size:5rem; letter-spacing:1px; line-height:1; text-align:center; }
 .bmi-cat  {
   font-family:'Bebas Neue',sans-serif; font-size:.78rem; letter-spacing:2px;
   padding:4px 10px; border-radius:6px; text-align:center; white-space:nowrap;
@@ -273,6 +273,36 @@ header {
 .bmi-cat.obesidad  { background:rgba(240,76,76,.15);   color:var(--danger); }
 
 .bmi-stats { display:flex; flex-direction:column; gap:5px; padding-left:16px; justify-content:center; }
+.bmi-stat  {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:6px 10px; background:var(--s2); border-radius:7px; gap:10px;
+}
+.bmi-stat-lbl { font-size:.7rem; color:var(--muted); white-space:nowrap; flex-shrink:0; }
+.bmi-stat-val {
+  font-family:'Bebas Neue',sans-serif; font-size:.92rem; letter-spacing:1px;
+  text-align:right; white-space:nowrap;
+}
+.bmi-stat-val.ok   { color:var(--accent); }
+.bmi-stat-val.warn { color:var(--warn); }
+.bmi-stat-val.bad  { color:var(--danger); }
+.bmi-stat-val.info { color:var(--blue); }
+
+/* BMI info tooltip */
+.bmi-info-btn {
+  background:none; border:1px solid var(--border); color:var(--muted);
+  border-radius:50%; width:20px; height:20px; font-size:.65rem; font-weight:700;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  position:relative; flex-shrink:0; transition:border-color .15s, color .15s;
+}
+.bmi-info-btn:hover { border-color:var(--accent); color:var(--accent); }
+.bmi-info-btn .bmi-tooltip {
+  display:none; position:absolute; right:0; top:26px; width:220px;
+  background:var(--s1); border:1px solid var(--border); border-radius:10px;
+  padding:10px 12px; font-size:.72rem; color:var(--muted); line-height:1.5;
+  z-index:100; text-align:left; font-family:'DM Sans',sans-serif;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);
+}
+.bmi-info-btn:hover .bmi-tooltip { display:block; }
 .bmi-stat  {
   display:flex; justify-content:space-between; align-items:center;
   padding:6px 10px; background:var(--s2); border-radius:7px; gap:10px;
@@ -577,8 +607,10 @@ header {
       </div>
 
       <div class="card" id="bmi-card" style="display:none">
-        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>MASA CORPORAL (IMC)</div></div>
-
+        <div class="ctitle">
+          <div class="ctitle-l"><div class="dot"></div>MASA CORPORAL (IMC)</div>
+          <button class="bmi-info-btn">!<span class="bmi-tooltip">El IMC relaciona tu peso y altura (kg ÷ m²). Es una referencia general — no distingue músculo de grasa. Normal: 18.5–25.</span></button>
+        </div>
         <div class="bmi-main">
           <div class="bmi-left">
             <div class="bmi-big" id="bmi-n">—</div>
@@ -586,28 +618,27 @@ header {
           </div>
           <div class="bmi-stats">
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Tu peso actual</span>
+              <span class="bmi-stat-lbl">Peso actual</span>
               <span class="bmi-stat-val" id="bmi-cur-weight">—</span>
             </div>
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Peso máx. normal</span>
+              <span class="bmi-stat-lbl">Máx. normal</span>
               <span class="bmi-stat-val info" id="bmi-max-normal">—</span>
             </div>
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Diferencia al rango</span>
+              <span class="bmi-stat-lbl">Diferencia</span>
               <span class="bmi-stat-val" id="bmi-diff">—</span>
             </div>
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Peso ideal (IMC 22)</span>
+              <span class="bmi-stat-lbl">Peso ideal</span>
               <span class="bmi-stat-val ok" id="bmi-ideal">—</span>
             </div>
             <div class="bmi-stat">
-              <span class="bmi-stat-lbl">Estado nutricional</span>
+              <span class="bmi-stat-lbl">Estado</span>
               <span class="bmi-stat-val" id="bmi-nutri">—</span>
             </div>
           </div>
         </div>
-
         <div class="bmi-bar-wrap">
           <div class="bmi-unlit"  id="bmi-unlit"></div>
           <div class="bmi-cursor" id="bmi-cursor"></div>
