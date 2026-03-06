@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FitLog</title>
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0a0f">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -663,6 +662,12 @@ let saveTimer   = null;
 let gapiReady   = false;
 let tokenClient = null;
 
+// Utility: Argentina date string (UTC-3)
+function isoDate(d) {
+  const ar = new Date(d.getTime() - 3 * 60 * 60 * 1000);
+  return ar.toISOString().slice(0,10);
+}
+
 // ═══════════════════════════════════════════════════
 // THEME
 // ═══════════════════════════════════════════════════
@@ -750,51 +755,16 @@ async function initGoogle() {
       showUserChip(cached._profile || { name:'Usuario', picture:'' });
       renderAfterLoad();
     } catch(e) {
-      // Token likely expired — try silent refresh before showing login
+      // Token expired — clear and show login with a helpful message
       clearToken();
-      try {
-        await silentRefresh(cached._profile);
-      } catch(e2) {
-        hideLoading();
-        showView('login');
-      }
+      hideLoading();
+      showView('login');
+      showToast('SESIÓN EXPIRADA — VOLVÉ A INGRESAR');
     }
   } else {
     hideLoading();
     showView('login');
   }
-}
-
-function silentRefresh(profile) {
-  return new Promise((resolve, reject) => {
-    // hint: skip account chooser if we know the user
-    tokenClient.requestAccessToken({ prompt: '' });
-    // The tokenClient callback will handle success/failure
-    // We resolve after a timeout if callback doesn't fire (safety net)
-    const t = setTimeout(() => reject(new Error('timeout')), 8000);
-    // Override callback temporarily to resolve this promise
-    const origCallback = tokenClient.callback;
-    tokenClient.callback = async (resp) => {
-      clearTimeout(t);
-      tokenClient.callback = origCallback;
-      if (resp.error) { reject(resp); return; }
-      try {
-        gapi.client.setToken({ access_token: resp.access_token });
-        const pr = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { 'Authorization': 'Bearer ' + resp.access_token }
-        });
-        const prof = await pr.json();
-        const up = profile || { name: prof.given_name||prof.name||'Usuario', picture: prof.picture||'' };
-        const cache = loadCache()||{};
-        cache._token = resp.access_token; cache._profile = up;
-        saveCache(cache);
-        showUserChip(up);
-        await loadFromDrive(false);
-        renderAfterLoad();
-        resolve();
-      } catch(e) { reject(e); }
-    };
-  });
 }
 
 function signIn() {
@@ -1810,14 +1780,7 @@ function closeQWModal(e) {
   document.getElementById('qw-modal').classList.remove('open');
   document.body.style.overflow = '';
 }
-// Register Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/fitlog/sw.js')
-      .then(r => console.log('SW registered:', r.scope))
-      .catch(e => console.log('SW error:', e));
-  });
-}
+// SW registration disabled until files are uploaded to GitHub
 </script>
 
 <!-- QUICK WEIGHT MODAL -->
