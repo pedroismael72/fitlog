@@ -887,6 +887,38 @@ header {
   </div>
 </div>
 
+<!-- MODAL: DETALLE PESO -->
+<div class="modal-bg" id="m-wdetail" onclick="bgClose(event,'m-wdetail')">
+  <div class="modal-box" style="max-width:360px">
+    <div class="modal-hdr">
+      <div class="modal-title" id="wdet-date">—</div>
+      <button class="modal-x" onclick="closeModal('m-wdetail')">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--s2);border-radius:10px;padding:12px 16px">
+        <span style="font-size:.72rem;color:var(--muted)">Peso registrado</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1px;color:var(--accent)" id="wdet-weight">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--s2);border-radius:10px;padding:12px 16px">
+        <span style="font-size:.72rem;color:var(--muted)">Cambio vs anterior</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px" id="wdet-delta">—</span>
+      </div>
+      <div id="wdet-mood-row" style="display:none;justify-content:space-between;align-items:center;background:var(--s2);border-radius:10px;padding:12px 16px">
+        <span style="font-size:.72rem;color:var(--muted)">Estado de ánimo</span>
+        <span style="font-size:1.4rem" id="wdet-mood">—</span>
+      </div>
+      <div id="wdet-note-row" style="display:none;background:var(--s2);border-radius:10px;padding:12px 16px">
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:5px">Nota</div>
+        <div style="font-size:.85rem;color:var(--text2);line-height:1.5" id="wdet-note"></div>
+      </div>
+    </div>
+    <div class="modal-foot" style="margin-top:16px">
+      <button class="btn-ghost" onclick="closeModal('m-wdetail')">CERRAR</button>
+      <button class="btn" id="wdet-edit-btn">EDITAR</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: MEDIDAS CORPORALES -->
 <div class="modal-bg" id="m-measures" onclick="bgClose(event,'m-measures')">
   <div class="modal-box" style="max-width:480px">
@@ -1397,6 +1429,11 @@ function renderWeightHistory() {
 
     const row = document.createElement('div');
     row.className = 'wh-row';
+    row.style.cursor = 'pointer';
+    row.addEventListener('click', e => {
+      if (e.target.closest('button')) return; // don't open detail when clicking edit/delete
+      openWeightDetail(origIdx);
+    });
 
     let deltaHtml = '';
     if (delta !== null) {
@@ -1422,6 +1459,46 @@ function renderWeightHistory() {
       </div>`;
     list.appendChild(row);
   });
+}
+
+function openWeightDetail(idx) {
+  const e      = APP.entries[idx];
+  const sorted = APP.entries.slice().sort((a,b) => a.date.localeCompare(b.date));
+  const pos    = sorted.indexOf(e);
+  const prev   = pos > 0 ? sorted[pos - 1] : null;
+  const delta  = prev ? (e.weight - prev.weight) : null;
+
+  document.getElementById('wdet-date').textContent   = fmtShort(e.date) + (e.date === today() ? ' · HOY' : '');
+  document.getElementById('wdet-weight').textContent = e.weight + ' kg';
+
+  const dEl = document.getElementById('wdet-delta');
+  if (delta !== null) {
+    const sign = delta < 0 ? '' : '+';
+    dEl.textContent  = sign + delta.toFixed(1) + ' kg';
+    dEl.style.color  = delta < 0 ? 'var(--accent)' : delta > 0 ? 'var(--danger)' : 'var(--muted)';
+  } else {
+    dEl.textContent = 'Primer registro';
+    dEl.style.color = 'var(--muted)';
+  }
+
+  const moodRow = document.getElementById('wdet-mood-row');
+  if (e.mood) {
+    document.getElementById('wdet-mood').textContent = MOOD_MAP[e.mood] || '';
+    moodRow.style.display = 'flex';
+  } else {
+    moodRow.style.display = 'none';
+  }
+
+  const noteRow = document.getElementById('wdet-note-row');
+  if (e.note) {
+    document.getElementById('wdet-note').textContent = e.note;
+    noteRow.style.display = 'block';
+  } else {
+    noteRow.style.display = 'none';
+  }
+
+  document.getElementById('wdet-edit-btn').onclick = () => { closeModal('m-wdetail'); editWeight(idx); };
+  openModal('m-wdetail');
 }
 
 function editWeight(idx) {
