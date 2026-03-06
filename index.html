@@ -450,6 +450,8 @@ header {
 <header>
   <div class="logo" onclick="goSetup()">FIT<span>LOG</span></div>
 
+  <div id="weather-alert" class="weather-alert"></div>
+
   <div class="hdr-mid" id="hdr-mid" style="display:none">
     <div class="hpill"><span class="hl">Inicial</span><span class="hv" id="h-ini">—</span></div>
     <div class="hpill"><span class="hl">Actual</span><span class="hv" id="h-cur">—</span></div>
@@ -458,6 +460,11 @@ header {
   </div>
 
   <div class="hdr-right">
+    <div class="weather-pill" id="weather-pill">
+      <span class="w-icon" id="w-icon">🌤</span>
+      <span class="w-temp" id="w-temp">—</span>
+      <span id="w-desc" style="font-size:.7rem;color:var(--muted)"></span>
+    </div>
     <div class="u-chip" id="u-chip" style="display:none">
       <img class="u-avatar" id="u-avatar" src="" alt="" style="display:none">
       <span class="u-name" id="u-name"></span>
@@ -550,6 +557,12 @@ header {
 <div id="v-dash" class="view">
   <div class="dash">
 
+    <!-- Motivational + Weather alert for mobile -->
+    <div class="motiv-card" id="motiv-card">
+      <span class="motiv-icon">💬</span>
+      <div class="motiv-text" id="motiv-text"><span class="motiv-loading">Generando tu frase del día...</span></div>
+    </div>
+
     <!-- Gráfico + Estadísticas -->
     <div class="two-col">
       <div class="card">
@@ -569,6 +582,7 @@ header {
         <div class="srow"><span class="sn">Falta para meta</span><span class="sv" id="s-rem">—</span></div>
         <div class="srow" style="border:none;padding-top:14px;gap:8px;flex-wrap:wrap;">
           <button class="btn-ghost" onclick="goSetup()">✏ EDITAR PERFIL</button>
+          <button class="btn-ghost" onclick="openMeasures()" style="display:flex;align-items:center;gap:5px">📏 MEDIDAS</button>
           <button class="btn-del" onclick="clearAll()">RESETEAR</button>
         </div>
       </div>
@@ -765,6 +779,56 @@ header {
     <div class="modal-foot">
       <button class="btn-ghost" onclick="closeModal('m-workout')">CANCELAR</button>
       <button class="btn" onclick="saveWorkout()">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: MEDIDAS CORPORALES -->
+<div class="modal-bg" id="m-measures" onclick="bgClose(event,'m-measures')">
+  <div class="modal-box" style="max-width:480px">
+    <div class="modal-hdr">
+      <div class="modal-title">MEDIDAS CORPORALES</div>
+      <button class="modal-x" onclick="closeModal('m-measures')">✕</button>
+    </div>
+    <p style="font-size:.75rem;color:var(--muted);margin-bottom:16px;line-height:1.6">
+      Medite en ayunas, relajado. Los resultados calculan tu % de grasa corporal y riesgo cardiovascular.
+    </p>
+    <div class="meas-grid">
+      <div class="field"><label>Cintura (cm)</label><input type="number" id="meas-waist" placeholder="ej: 88" inputmode="decimal"></div>
+      <div class="field"><label>Cadera (cm)</label><input type="number" id="meas-hip" placeholder="ej: 100" inputmode="decimal"></div>
+      <div class="field"><label>Cuello (cm)</label><input type="number" id="meas-neck" placeholder="ej: 38" inputmode="decimal"></div>
+      <div class="field"><label>Sexo biológico</label>
+        <select id="meas-sex" style="background:var(--s2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px 14px;font-size:.9rem;width:100%;outline:none">
+          <option value="m">Masculino</option>
+          <option value="f">Femenino</option>
+        </select>
+      </div>
+    </div>
+    <div class="meas-result" id="meas-result">
+      <div class="meas-result-row"><span class="meas-result-lbl">% Grasa corporal</span><span class="meas-result-val" id="mr-fat">—</span></div>
+      <div class="meas-result-row"><span class="meas-result-lbl">Índice cintura/cadera (ICC)</span><span class="meas-result-val" id="mr-icc">—</span></div>
+      <div class="meas-result-row"><span class="meas-result-lbl">Riesgo cardiovascular</span><span class="meas-result-val" id="mr-cv">—</span></div>
+      <div class="meas-result-row"><span class="meas-result-lbl">Grasa visceral estimada</span><span class="meas-result-val" id="mr-visc">—</span></div>
+      <div class="meas-result-row"><span class="meas-result-lbl">Categoría</span><span class="meas-result-val" id="mr-cat">—</span></div>
+    </div>
+    <div class="modal-foot" style="margin-top:16px">
+      <button class="btn-ghost" onclick="closeModal('m-measures')">CERRAR</button>
+      <button class="btn" onclick="calcMeasures()">CALCULAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: LOGRO KG -->
+<div class="modal-bg" id="m-achieve" onclick="bgClose(event,'m-achieve')">
+  <div class="modal-box" style="max-width:360px">
+    <div class="achieve-box">
+      <span class="achieve-emoji" id="ach-emoji">🏆</span>
+      <div class="achieve-title" id="ach-title">¡LOGRO DESBLOQUEADO!</div>
+      <span class="achieve-kg" id="ach-kg">-1 KG</span>
+      <div class="achieve-sub" id="ach-sub"></div>
+    </div>
+    <div class="modal-foot" style="margin-top:16px">
+      <button class="btn" onclick="closeModal('m-achieve')" style="width:100%">¡VAMOS! 💪</button>
     </div>
   </div>
 </div>
@@ -1006,6 +1070,8 @@ function afterLoad() {
   }
   if (!APP.setup) { show('setup'); return; }
   show('dash'); renderAll();
+  loadWeather();
+  loadMotiv();
 }
 
 // ═══════════════════════════════════════════
@@ -1539,6 +1605,7 @@ function saveWeight() {
   if (isNaN(v) || v < 20 || v > 300) { toast('⚠ Peso inválido'); return; }
   if (d > today()) { toast('⚠ No podés registrar un peso futuro'); return; }
 
+  const prevWeight = latestW();
   const entry = { date:d, weight:v };
   if (note)    entry.note = note;
   if (selMood) entry.mood = selMood;
@@ -1558,6 +1625,7 @@ function saveWeight() {
 
   APP.entries.sort((a,b) => a.date.localeCompare(b.date));
   scheduleSave(); closeModal('m-weight'); renderAll(); toast('✓ PESO GUARDADO');
+  checkMilestone(prevWeight, v);
 }
 
 // ═══════════════════════════════════════════
@@ -1673,6 +1741,218 @@ document.getElementById('mc-ok').onclick = () => {
   if (_confirmCb) _confirmCb();
   closeConfirm();
 };
+
+// ═══════════════════════════════════════════
+// WEATHER
+// ═══════════════════════════════════════════
+const WEATHER_ICONS = {
+  0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',
+  51:'🌦',53:'🌦',55:'🌧',61:'🌧',63:'🌧',65:'🌧',
+  71:'🌨',73:'🌨',75:'❄️',80:'🌦',81:'🌧',82:'⛈',
+  95:'⛈',96:'⛈',99:'⛈'
+};
+async function loadWeather() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const { latitude: lat, longitude: lon } = pos.coords;
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weathercode,uv_index,precipitation&hourly=precipitation_probability&forecast_days=1&timezone=auto`;
+      const res = await fetch(url);
+      const d   = await res.json();
+      const cur = d.current;
+      const temp   = Math.round(cur.temperature_2m);
+      const code   = cur.weathercode;
+      const uv     = cur.uv_index ?? 0;
+      const precip = cur.precipitation ?? 0;
+      const precipProb = d.hourly?.precipitation_probability?.[new Date().getHours()] ?? 0;
+      const icon   = WEATHER_ICONS[code] || '🌡';
+
+      // Show pill
+      document.getElementById('w-icon').textContent = icon;
+      document.getElementById('w-temp').textContent = temp + '°C';
+      const pill = document.getElementById('weather-pill');
+      pill.style.display = 'flex';
+
+      // Build alert
+      let alertMsg = '', alertClass = '';
+      if (code >= 95)            { alertMsg = '⛈ Tormenta — quedate adentro'; alertClass = 'storm'; }
+      else if (code >= 61 || precipProb > 60) { alertMsg = '🌧 Lluvia probable — actividad indoor'; alertClass = 'rain'; }
+      else if (uv >= 8)          { alertMsg = `☀️ UV ${Math.round(uv)} (extremo) — evitá salir al mediodía`; alertClass = 'uv'; }
+      else if (uv >= 6)          { alertMsg = `🕶 UV ${Math.round(uv)} (alto) — usá protector solar`; alertClass = 'uv'; }
+      else if (temp <= 4)        { alertMsg = '🥶 Frío extremo — abrigate bien'; alertClass = 'storm'; }
+
+      const alertEl = document.getElementById('weather-alert');
+      if (alertMsg) {
+        alertEl.textContent = alertMsg;
+        alertEl.className   = 'weather-alert ' + alertClass;
+        alertEl.style.display = 'flex';
+      }
+    } catch(e) { console.warn('Weather error', e); }
+  }, () => {}, { timeout: 8000 });
+}
+
+// ═══════════════════════════════════════════
+// MOTIVATIONAL PHRASE
+// ═══════════════════════════════════════════
+async function loadMotiv() {
+  const s = APP.setup; if (!s) return;
+  const card = document.getElementById('motiv-card');
+  const txt  = document.getElementById('motiv-text');
+  card.style.display = 'flex';
+  txt.innerHTML = '<span class="motiv-loading">Generando tu frase del día...</span>';
+
+  const cur     = latestW() ?? s.startWeight;
+  const lost    = s.startWeight && cur ? (s.startWeight - cur).toFixed(1) : 0;
+  const toGoal  = s.goalWeight && cur  ? (cur - s.goalWeight).toFixed(1) : null;
+  const entries = APP.entries.length;
+
+  const prompt = `Eres un coach de fitness motivacional. El usuario se llama ${s.name || 'usuario'}. 
+Datos: peso inicial ${s.startWeight}kg, peso actual ${cur}kg, meta ${s.goalWeight}kg, lleva ${lost}kg ${lost>=0?'bajados':'subidos'}, ${entries} registros de peso.
+${toGoal !== null ? `Le faltan ${toGoal}kg para su meta.` : ''}
+Generá UNA frase motivacional personalizada, corta (máximo 2 oraciones), directa, sin emojis al inicio. 
+Usá su nombre. Sé específico con sus números. Tono: alentador pero realista. Solo la frase, nada más.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:120,
+        messages:[{ role:'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const phrase = data.content?.[0]?.text?.trim() || '';
+    if (phrase) {
+      // Bold the name
+      txt.innerHTML = phrase.replace(new RegExp(s.name || 'NOMATCH', 'gi'), `<b>${s.name}</b>`);
+    } else {
+      card.style.display = 'none';
+    }
+  } catch(e) { card.style.display = 'none'; }
+}
+
+// ═══════════════════════════════════════════
+// BODY MEASURES
+// ═══════════════════════════════════════════
+function openMeasures() {
+  // Pre-fill from last saved measures
+  const m = APP.setup?.measures || {};
+  if (m.waist) document.getElementById('meas-waist').value = m.waist;
+  if (m.hip)   document.getElementById('meas-hip').value   = m.hip;
+  if (m.neck)  document.getElementById('meas-neck').value  = m.neck;
+  if (m.sex)   document.getElementById('meas-sex').value   = m.sex;
+  document.getElementById('meas-result').style.display = 'none';
+  openModal('m-measures');
+}
+
+function calcMeasures() {
+  const waist = parseFloat(document.getElementById('meas-waist').value);
+  const hip   = parseFloat(document.getElementById('meas-hip').value);
+  const neck  = parseFloat(document.getElementById('meas-neck').value);
+  const sex   = document.getElementById('meas-sex').value;
+  const h     = APP.setup?.height;
+
+  if (!waist || !neck || !h) { toast('⚠ Ingresá cintura, cuello y asegurate de tener estatura en tu perfil'); return; }
+
+  // Save to profile
+  if (!APP.setup.measures) APP.setup.measures = {};
+  Object.assign(APP.setup.measures, { waist, hip: hip||null, neck, sex });
+  scheduleSave();
+
+  // Navy body fat formula
+  let fatPct;
+  const logH = Math.log10(h);
+  if (sex === 'm') {
+    fatPct = 86.010 * Math.log10(waist - neck) - 70.041 * logH + 36.76;
+  } else {
+    if (!hip) { toast('⚠ Para mujeres necesitamos la medida de cadera'); return; }
+    fatPct = 163.205 * Math.log10(waist + hip - neck) - 97.684 * logH - 78.387;
+  }
+  fatPct = Math.max(3, Math.min(60, fatPct));
+
+  // ICC
+  const icc = hip ? (waist / hip).toFixed(2) : null;
+
+  // CV risk by waist
+  let cvRisk, cvClass;
+  if (sex === 'm') {
+    cvRisk  = waist < 94 ? 'Bajo' : waist < 102 ? 'Moderado' : 'Alto';
+    cvClass = waist < 94 ? 'ok'   : waist < 102 ? 'warn'     : 'bad';
+  } else {
+    cvRisk  = waist < 80 ? 'Bajo' : waist < 88 ? 'Moderado' : 'Alto';
+    cvClass = waist < 80 ? 'ok'   : waist < 88 ? 'warn'     : 'bad';
+  }
+
+  // Visceral fat estimate (simplified)
+  const visceral = waist > 94 ? 'Elevada' : 'Normal';
+  const viscClass = waist > 94 ? 'warn' : 'ok';
+
+  // Fat category
+  let fatCat, fatClass;
+  if (sex === 'm') {
+    if (fatPct < 6)       { fatCat = 'Esencial';    fatClass = 'warn'; }
+    else if (fatPct < 14) { fatCat = 'Atlético';    fatClass = 'ok'; }
+    else if (fatPct < 18) { fatCat = 'En forma';    fatClass = 'ok'; }
+    else if (fatPct < 25) { fatCat = 'Aceptable';   fatClass = 'warn'; }
+    else                  { fatCat = 'Alto';         fatClass = 'bad'; }
+  } else {
+    if (fatPct < 14)      { fatCat = 'Esencial';    fatClass = 'warn'; }
+    else if (fatPct < 21) { fatCat = 'Atlético';    fatClass = 'ok'; }
+    else if (fatPct < 25) { fatCat = 'En forma';    fatClass = 'ok'; }
+    else if (fatPct < 32) { fatCat = 'Aceptable';   fatClass = 'warn'; }
+    else                  { fatCat = 'Alto';         fatClass = 'bad'; }
+  }
+
+  const fatClass2 = fatPct < 18 ? 'ok' : fatPct < 25 ? 'warn' : 'bad';
+
+  document.getElementById('mr-fat').textContent  = fatPct.toFixed(1) + '%';
+  document.getElementById('mr-fat').className    = 'meas-result-val ' + fatClass2;
+  document.getElementById('mr-icc').textContent  = icc ? icc : 'N/A (sin cadera)';
+  document.getElementById('mr-icc').className    = 'meas-result-val ' + (icc ? (parseFloat(icc) < (sex==='m'?0.9:0.85) ? 'ok':'bad') : 'warn');
+  document.getElementById('mr-cv').textContent   = cvRisk;
+  document.getElementById('mr-cv').className     = 'meas-result-val ' + cvClass;
+  document.getElementById('mr-visc').textContent = visceral;
+  document.getElementById('mr-visc').className   = 'meas-result-val ' + viscClass;
+  document.getElementById('mr-cat').textContent  = fatCat;
+  document.getElementById('mr-cat').className    = 'meas-result-val ' + fatClass;
+  document.getElementById('meas-result').style.display = 'block';
+}
+
+// ═══════════════════════════════════════════
+// KG MILESTONE ACHIEVEMENT
+// ═══════════════════════════════════════════
+function checkMilestone(prevWeight, newWeight) {
+  const start = APP.setup?.startWeight;
+  if (!start || !prevWeight || !newWeight) return;
+  const prevLost = Math.floor(start - prevWeight);
+  const newLost  = Math.floor(start - newWeight);
+  if (newLost > prevLost && newLost > 0) {
+    showAchievement(newLost);
+  }
+}
+
+function showAchievement(kg) {
+  const emojis = ['🥉','🥈','🥇','🏆','🔥','💎','👑','🦸','🌟','🚀'];
+  const msgs   = [
+    `¡Primer kilogramo bajado! El camino de mil km empieza con un paso.`,
+    `¡Dos kilos menos! Tu cuerpo ya lo nota, aunque el espejo tarde un poco.`,
+    `¡Tres kilos! Eso es aproximadamente el peso de un ladrillo que ya no cargás.`,
+    `¡Cuatro kilos! Estás construyendo un hábito real. Seguí.`,
+    `¡Cinco kilos! Mitad camino para muchos. Tu disciplina es real.`,
+    `¡Seis kilos menos! El esfuerzo silencioso da resultados ruidosos.`,
+    `¡Siete kilos! Tu versión futura te lo va a agradecer.`,
+    `¡Ocho kilos! Esto ya no es un intento — es un estilo de vida.`,
+    `¡Nueve kilos! Casi dos bolsas de azúcar menos. Increíble.`,
+    `¡Diez kilos! Una cifra redonda para un logro enorme. 🔥`
+  ];
+  const idx = Math.min(kg - 1, emojis.length - 1);
+  document.getElementById('ach-emoji').textContent = emojis[idx];
+  document.getElementById('ach-title').textContent = '¡' + kg + ' KG BAJADOS!';
+  document.getElementById('ach-kg').textContent    = '-' + kg + ' KG';
+  document.getElementById('ach-sub').textContent   = msgs[idx] || `¡${kg} kilogramos menos! Sos una máquina.`;
+  openModal('m-achieve');
+}
 
 // ═══════════════════════════════════════════
 // GO
