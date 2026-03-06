@@ -262,13 +262,11 @@ header {
 .weather-pill.touch-open .w-tooltip { display:block; }
 .weather-alert {
   display:none; align-items:center; gap:6px;
-  background:rgba(240,160,76,.12); border:1px solid rgba(240,160,76,.3);
-  border-radius:8px; padding:5px 12px; font-size:.72rem; color:var(--warn);
-  margin: 0 28px 0 0; cursor:default; white-space:nowrap;
+  border-radius:8px; padding:4px 10px; font-size:.72rem; cursor:default; white-space:nowrap;
 }
-.weather-alert.rain  { background:rgba(76,160,240,.12); border-color:rgba(76,160,240,.3); color:var(--blue); }
-.weather-alert.uv    { background:rgba(240,160,76,.12); border-color:rgba(240,160,76,.3); color:var(--warn); }
-.weather-alert.storm { background:rgba(240,76,76,.12);  border-color:rgba(240,76,76,.3);  color:var(--danger); }
+.weather-alert.rain  { background:rgba(76,160,240,.15); border:1px solid rgba(76,160,240,.3); color:#6ab4f5; }
+.weather-alert.uv    { background:rgba(240,160,76,.15);  border:1px solid rgba(240,160,76,.3);  color:var(--warn); }
+.weather-alert.storm { background:rgba(240,76,76,.15);   border:1px solid rgba(240,76,76,.3);   color:var(--danger); }
 
 /* ── MOTIVATIONAL CARD ── */
 .motiv-card {
@@ -513,8 +511,6 @@ header {
 <header>
   <div class="logo" onclick="goSetup()">FIT<span>LOG</span></div>
 
-  <div id="weather-alert" class="weather-alert"></div>
-
   <div class="hdr-mid" id="hdr-mid" style="display:none">
     <div class="hpill"><span class="hl">Inicial</span><span class="hv" id="h-ini">—</span></div>
     <div class="hpill"><span class="hl">Actual</span><span class="hv" id="h-cur">—</span></div>
@@ -523,10 +519,10 @@ header {
   </div>
 
   <div class="hdr-right">
+    <div id="weather-alert" class="weather-alert" style="margin:0"></div>
     <div class="weather-pill" id="weather-pill">
       <span class="w-icon" id="w-icon">🌤</span>
       <span class="w-temp" id="w-temp">—</span>
-      <span id="w-desc" style="font-size:.7rem;color:var(--muted)"></span>
       <div class="w-tooltip" id="w-tooltip"></div>
     </div>
     <div class="u-chip" id="u-chip" style="display:none">
@@ -628,9 +624,15 @@ header {
     </div>
 
     <!-- Weight reminder banner -->
-    <div id="weight-reminder" style="display:none;align-items:center;justify-content:space-between;gap:12px;background:rgba(200,240,76,.07);border:1px solid rgba(200,240,76,.2);border-radius:12px;padding:12px 16px;margin-bottom:16px">
-      <span class="reminder-msg" style="font-size:.83rem;color:var(--text2)"></span>
-      <button class="btn" style="font-size:.72rem;padding:5px 14px;white-space:nowrap" onclick="openWeightModal()">REGISTRAR</button>
+    <div id="weight-reminder" style="display:none;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,rgba(200,240,76,.1) 0%,rgba(200,240,76,.04) 100%);border:1px solid rgba(200,240,76,.25);border-radius:16px;padding:16px 20px">
+        <div style="font-size:2.2rem;line-height:1;flex-shrink:0" id="reminder-emoji">📅</div>
+        <div style="flex:1">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--accent);margin-bottom:3px" id="reminder-title">RECORDATORIO</div>
+          <div style="font-size:.8rem;color:var(--text2);line-height:1.5" class="reminder-msg"></div>
+        </div>
+        <button class="btn" style="font-size:.72rem;padding:7px 16px;white-space:nowrap;flex-shrink:0" onclick="openWeightModal()">REGISTRAR</button>
+      </div>
     </div>
 
     <!-- Gráfico + Estadísticas -->
@@ -1430,16 +1432,17 @@ function renderWeightReminder() {
   if (!el) return;
   const dow = new Date().getDay(); // 0=Sun,1=Mon,...,5=Fri
   if (dow !== 1 && dow !== 5) { el.style.display = 'none'; return; }
-  // Check if already registered this week
   const { start } = weekBounds();
   const hasThisWeek = APP.entries.some(e => e.date >= start && e.date <= today());
-  if (hasThisWeek && dow === 1) { el.style.display = 'none'; return; } // already logged monday
-  const dayLabel = dow === 1 ? 'lunes' : 'viernes';
-  const msg = dow === 1
-    ? '📅 Es lunes — ¿cómo arrancás la semana? Registrá tu peso.'
-    : '📅 Es viernes — ¿cómo terminás la semana? Registrá tu peso.';
-  el.querySelector('.reminder-msg').textContent = msg;
-  el.style.display = 'flex';
+  if (hasThisWeek) { el.style.display = 'none'; return; }
+
+  const isMonday = dow === 1;
+  document.getElementById('reminder-emoji').textContent = isMonday ? '🌅' : '🏁';
+  document.getElementById('reminder-title').textContent = isMonday ? 'INICIO DE SEMANA' : 'CIERRE DE SEMANA';
+  el.querySelector('.reminder-msg').textContent = isMonday
+    ? 'Es lunes — el mejor momento para registrar tu peso y arrancar la semana con datos reales.'
+    : 'Es viernes — cerrá la semana sabiendo exactamente dónde estás parado.';
+  el.style.display = 'block';
 }
 
 // ═══════════════════════════════════════════
