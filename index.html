@@ -319,6 +319,17 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
           <div class="field"><label>Peso inicial (kg)</label><input type="text" inputmode="decimal" id="inp-start" placeholder="ej: 85.0"></div>
           <div class="field"><label>Peso objetivo (kg)</label><input type="text" inputmode="decimal" id="inp-goal" placeholder="ej: 75.0"></div>
         </div>
+        <div class="s-row">
+          <div class="field"><label>Estatura (cm)</label><input type="text" inputmode="decimal" id="inp-height" placeholder="ej: 175"></div>
+          <div class="field"><label>Meta de pasos diarios</label>
+            <select id="inp-stepgoal" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:12px 15px;outline:none;width:100%;transition:border-color .2s,background .3s;-webkit-appearance:none;">
+              <option value="4000">4.000 pasos (ligero)</option>
+              <option value="6000">6.000 pasos (moderado)</option>
+              <option value="8000">8.000 pasos (activo)</option>
+              <option value="10000" selected>10.000 pasos (óptimo)</option>
+            </select>
+          </div>
+        </div>
       </div>
       <button class="btn btn-primary" onclick="saveSetup()">GUARDAR Y CONTINUAR →</button>
       <div id="s-reset" style="margin-top:12px;display:none;text-align:center;">
@@ -354,6 +365,52 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
           </div>
         </div>
       </div>
+      <!-- BMI CARD -->
+      <div class="card" id="bmi-card" style="display:none">
+        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>ÍNDICE DE MASA CORPORAL</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">TU IMC</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;" id="bmi-value">—</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">CATEGORÍA</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;" id="bmi-label">—</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">PESO MÁXIMO NORMAL</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:1px;color:var(--text2);" id="bmi-maxnormal">—</div>
+          </div>
+        </div>
+        <!-- Overweight alert -->
+        <div id="bmi-alert" style="display:none;background:rgba(240,76,76,.1);border:1px solid rgba(240,76,76,.3);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
+          <div style="font-size:1.8rem;flex-shrink:0;">⚠️</div>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--danger);margin-bottom:3px;">SOBREPESO DETECTADO</div>
+            <div style="font-size:.82rem;color:var(--text2);line-height:1.5;" id="bmi-alert-text"></div>
+          </div>
+        </div>
+        <div id="bmi-ok" style="display:none;background:rgba(200,240,76,.08);border:1px solid rgba(200,240,76,.2);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;">
+          <div style="font-size:1.8rem;flex-shrink:0;">✅</div>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--accent);margin-bottom:3px;">PESO NORMAL</div>
+            <div style="font-size:.82rem;color:var(--text2);line-height:1.5;" id="bmi-ok-text"></div>
+          </div>
+        </div>
+        <!-- IMC scale -->
+        <div style="margin-top:16px;">
+          <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-bottom:4px;">
+            <span>Bajo peso</span><span>Normal</span><span>Sobrepeso</span><span>Obesidad</span>
+          </div>
+          <div style="height:8px;border-radius:20px;background:linear-gradient(to right,#4cc8f0 0%,#c8f04c 25%,#c8f04c 50%,#f0a04c 62%,#f04c4c 80%,#cc2222 100%);position:relative;">
+            <div id="bmi-marker" style="position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #333;transform:translateX(-50%);transition:left .6s ease;left:0%;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.65rem;color:var(--muted);margin-top:3px;">
+            <span>16</span><span>18.5</span><span>25</span><span>30</span><span>40</span>
+          </div>
+        </div>
+      </div>
+
       <!-- GOOGLE FIT CARD -->
       <div class="card" id="fit-card">
         <div class="ctitle">
@@ -363,16 +420,11 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
         <div id="fit-loading" style="text-align:center;padding:20px;color:var(--muted);font-size:.85rem;display:none;">Cargando datos de Google Fit...</div>
         <div id="fit-error"   style="text-align:center;padding:20px;color:var(--danger);font-size:.82rem;display:none;"></div>
         <div id="fit-content" style="display:none;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+          <div style="display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:20px;">
             <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
-              <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">PASOS TOTALES</div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;color:var(--accent)" id="fit-steps-total">—</div>
-              <div style="font-size:.75rem;color:var(--muted);margin-top:2px;" id="fit-steps-avg">— promedio/día</div>
-            </div>
-            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
-              <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">CALORÍAS QUEMADAS</div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;color:var(--warn)" id="fit-cal-total">—</div>
-              <div style="font-size:.75rem;color:var(--muted);margin-top:2px;" id="fit-cal-avg">— promedio/día</div>
+              <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">PASOS HOY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:1px;color:var(--accent)" id="fit-steps-total">—</div>
+              <div style="font-size:.75rem;color:var(--muted);margin-top:2px;" id="fit-steps-avg">cargando...</div>
             </div>
           </div>
           <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">PASOS POR DÍA</div>
@@ -755,6 +807,8 @@ function renderAfterLoad() {
     document.getElementById('inp-name').value  = data.setup.name || '';
     document.getElementById('inp-start').value = data.setup.startWeight || '';
     document.getElementById('inp-goal').value  = data.setup.goalWeight || '';
+    document.getElementById('inp-height').value = data.setup.height || '';
+    document.getElementById('inp-stepgoal').value = data.setup.stepGoal || 10000;
     document.getElementById('s-reset').style.display = 'block';
     renderDash();
     showView('dash');
@@ -780,8 +834,10 @@ function saveSetup() {
   const name = document.getElementById('inp-name').value.trim();
   const sw   = parseFloat(document.getElementById('inp-start').value.replace(',','.'));
   const gw   = parseFloat(document.getElementById('inp-goal').value.replace(',','.'));
+  const ht   = parseFloat(document.getElementById('inp-height').value.replace(',','.'));
+  const sg   = parseInt(document.getElementById('inp-stepgoal').value);
   if (!sw || sw <= 0) { showToast('⚠ INGRESÁ UN PESO VÁLIDO'); return; }
-  data.setup = { name: name||'Atleta', startWeight: sw, goalWeight: gw>0 ? gw : null };
+  data.setup = { name: name||'Atleta', startWeight: sw, goalWeight: gw>0 ? gw : null, height: ht>0 ? ht : null, stepGoal: sg||10000 };
   scheduleSave();
   renderDash();
   showView('dash');
@@ -959,8 +1015,49 @@ function renderTimeline() {
 // ═══════════════════════════════════════════════════
 // CHART + STATS
 // ═══════════════════════════════════════════════════
+function updateBMI() {
+  const s = data.setup;
+  if (!s?.height || !s?.startWeight) { document.getElementById('bmi-card').style.display='none'; return; }
+  const curW  = latestWeight() ?? s.startWeight;
+  const hM    = s.height / 100;
+  const bmi   = curW / (hM * hM);
+  const maxNW = Math.round(24.9 * hM * hM * 10) / 10; // max kg for normal BMI
+  const bmiR  = Math.round(bmi * 10) / 10;
+
+  let label, color;
+  if      (bmi < 18.5) { label='Bajo peso'; color='#4cc8f0'; }
+  else if (bmi < 25)   { label='Normal';    color='var(--accent)'; }
+  else if (bmi < 30)   { label='Sobrepeso'; color='var(--warn)'; }
+  else                 { label='Obesidad';  color='var(--danger)'; }
+
+  document.getElementById('bmi-card').style.display    = 'block';
+  document.getElementById('bmi-value').textContent     = bmiR;
+  document.getElementById('bmi-value').style.color     = color;
+  document.getElementById('bmi-label').textContent     = label;
+  document.getElementById('bmi-label').style.color     = color;
+  document.getElementById('bmi-maxnormal').textContent = maxNW + ' kg';
+
+  // Alert or OK
+  const alert = document.getElementById('bmi-alert');
+  const ok    = document.getElementById('bmi-ok');
+  if (bmi >= 25) {
+    const excess = Math.round((curW - maxNW) * 10) / 10;
+    document.getElementById('bmi-alert-text').textContent = `Tu peso actual (${curW} kg) supera el máximo normal para tu altura (${maxNW} kg) por ${excess} kg. Cada kilo que bajás te acerca al rango saludable.`;
+    alert.style.display = 'flex'; ok.style.display = 'none';
+  } else {
+    const margin = Math.round((maxNW - curW) * 10) / 10;
+    document.getElementById('bmi-ok-text').textContent = `Tu peso actual (${curW} kg) está dentro del rango normal. Tenés un margen de ${margin} kg antes del límite.`;
+    ok.style.display = 'flex'; alert.style.display = 'none';
+  }
+
+  // Marker position on scale (IMC 16 → 40, mapped to 0% → 100%)
+  const pct = Math.min(100, Math.max(0, Math.round((bmi - 16) / (40 - 16) * 100)));
+  document.getElementById('bmi-marker').style.left = pct + '%';
+}
+
 function updateStats() {
   updateHeader();
+  updateBMI();
   const pts=allPoints();
   const dark=document.documentElement.getAttribute('data-theme')==='dark';
   document.getElementById('s-wcount').textContent=Math.max(0,pts.length-(data.setup?.startWeight?1:0));
@@ -1095,14 +1192,12 @@ async function loadFitData() {
     });
     steps = Math.round(steps); cals = Math.round(cals);
 
-    const goalSteps = 10000;
+    const goalSteps = data.setup?.stepGoal || 10000;
     const stepsPct  = Math.min(100, Math.round(steps / goalSteps * 100));
     const dark      = document.documentElement.getAttribute('data-theme') === 'dark';
 
     document.getElementById('fit-steps-total').textContent = steps.toLocaleString('es');
     document.getElementById('fit-steps-avg').textContent   = stepsPct + '% de la meta (10.000)';
-    document.getElementById('fit-cal-total').textContent   = cals.toLocaleString('es') + ' kcal';
-    document.getElementById('fit-cal-avg').textContent     = 'hoy';
 
     // Steps progress bar
     const barsEl = document.getElementById('fit-bars');
@@ -1112,7 +1207,7 @@ async function loadFitData() {
       <div style="width:100%;">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
           <span style="font-size:.75rem;color:var(--muted);">0</span>
-          <span style="font-size:.75rem;color:var(--muted);">Meta: 10.000 pasos</span>
+          <span style="font-size:.75rem;color:var(--muted);">Meta: ${goalSteps.toLocaleString('es')} pasos</span>
         </div>
         <div style="background:var(--surface2);border-radius:20px;height:10px;overflow:hidden;">
           <div style="height:100%;width:${stepsPct}%;background:${stepsColor};border-radius:20px;transition:width .6s ease;"></div>
