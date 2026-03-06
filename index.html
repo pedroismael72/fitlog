@@ -250,15 +250,7 @@ header {
 .weather-pill:hover { border-color:rgba(255,255,255,.2); }
 .weather-pill .w-icon { font-size:1.1rem; line-height:1; }
 .weather-pill .w-temp { font-family:'Bebas Neue',sans-serif; font-size:.95rem; letter-spacing:1px; }
-.weather-pill .w-tooltip {
-  display:none; position:fixed; width:230px;
-  background:var(--s1); border:1px solid var(--border); border-radius:10px;
-  padding:10px 13px; font-size:.76rem; color:var(--text2); line-height:1.6;
-  z-index:9999; text-align:left; font-family:'DM Sans',sans-serif;
-  box-shadow:0 8px 24px rgba(0,0,0,.6); pointer-events:none;
-}
-.weather-pill:hover .w-tooltip,
-.weather-pill.touch-open .w-tooltip { display:block; }
+
 .weather-alert {
   display:none; align-items:center; gap:6px;
   border-radius:8px; padding:4px 10px; font-size:.72rem; cursor:default; white-space:nowrap;
@@ -522,7 +514,6 @@ header {
     <div class="weather-pill" id="weather-pill">
       <span class="w-icon" id="w-icon">🌤</span>
       <span class="w-temp" id="w-temp">—</span>
-      <div class="w-tooltip" id="w-tooltip"></div>
     </div>
     <div class="u-chip" id="u-chip" style="display:none">
       <img class="u-avatar" id="u-avatar" src="" alt="" style="display:none">
@@ -586,13 +577,18 @@ header {
       </div>
       <div class="field">
         <label>Peso objetivo (kg)</label>
-        <input type="text" inputmode="decimal" id="inp-goal" placeholder="ej: 75.0">
+        <input type="text" inputmode="decimal" id="inp-goal" placeholder="ej: 75.0" oninput="updateIdealHint()">
+        <div id="goal-ideal-hint" style="display:none;margin-top:7px;display:none;align-items:center;gap:8px;background:rgba(200,240,76,.08);border:1px solid rgba(200,240,76,.2);border-radius:8px;padding:7px 10px">
+          <span style="font-size:.8rem">💡</span>
+          <span style="font-size:.74rem;color:var(--muted);flex:1">Peso ideal (IMC 22): <strong style="color:var(--accent)" id="goal-ideal-val"></strong> kg</span>
+          <button onclick="applyIdealWeight()" style="background:rgba(200,240,76,.15);border:1px solid rgba(200,240,76,.35);color:var(--accent);border-radius:6px;padding:3px 10px;font-size:.7rem;font-weight:700;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;white-space:nowrap">USAR ESTE</button>
+        </div>
       </div>
     </div>
     <div class="frow">
       <div class="field">
         <label>Estatura (cm)</label>
-        <input type="text" inputmode="decimal" id="inp-height" placeholder="ej: 178">
+        <input type="text" inputmode="decimal" id="inp-height" placeholder="ej: 178" oninput="updateIdealHint()">
       </div>
       <div class="field">
         <label>Meta de pasos diarios</label>
@@ -1151,6 +1147,23 @@ function afterLoad() {
   loadMotiv();
 }
 
+function updateIdealHint() {
+  const h    = parseFloat(document.getElementById('inp-height').value);
+  const hint = document.getElementById('goal-ideal-hint');
+  const val  = document.getElementById('goal-ideal-val');
+  if (!h || h < 100 || h > 250) { hint.style.display = 'none'; return; }
+  const ideal  = (22 * (h/100) ** 2).toFixed(1);
+  const current = document.getElementById('inp-goal').value;
+  val.textContent = ideal;
+  // Hide suggestion if user already set the ideal value
+  if (parseFloat(current) === parseFloat(ideal)) { hint.style.display = 'none'; return; }
+  hint.style.display = 'flex';
+}
+function applyIdealWeight() {
+  const val = document.getElementById('goal-ideal-val').textContent;
+  if (val) document.getElementById('inp-goal').value = val;
+}
+
 // ═══════════════════════════════════════════
 // SETUP
 // ═══════════════════════════════════════════
@@ -1167,6 +1180,8 @@ function goSetup() {
     document.getElementById('inp-goal').value   = s.goalWeight  || '';
     document.getElementById('inp-height').value = s.height      || '';
     document.getElementById('inp-steps').value  = s.stepGoal    || '8000';
+    updateIdealHint();
+    updateIdealHint();
   } else {
     document.getElementById('btn-setup-close').style.display = 'none';
   }
@@ -1909,21 +1924,7 @@ async function loadWeather() {
       else if (code <= 3)          tip = `👟 Buen día para salir. Temperatura agradable para cualquier actividad.`;
       else                         tip = `🌤 Clima aceptable. Revisá si hay lluvia más tarde antes de salir.`;
 
-      document.getElementById('w-tooltip').textContent = tip;
 
-      // Position tooltip dynamically under the pill
-      const tooltip = document.getElementById('w-tooltip');
-      function positionTooltip() {
-        const rect = pill.getBoundingClientRect();
-        tooltip.style.top  = (rect.bottom + 8) + 'px';
-        tooltip.style.right = (window.innerWidth - rect.right) + 'px';
-      }
-      pill.addEventListener('mouseenter', positionTooltip);
-      pill.addEventListener('click', positionTooltip);
-
-      // Touch support
-      pill.addEventListener('click', () => pill.classList.toggle('touch-open'));
-      document.addEventListener('click', e => { if (!pill.contains(e.target)) pill.classList.remove('touch-open'); });
 
       // Build alert
       let alertMsg = '', alertClass = '';
