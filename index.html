@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FitLog</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FitLog">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
@@ -361,6 +368,63 @@ header{display:flex;align-items:center;justify-content:space-between;padding:14p
           </div>
         </div>
       </div>
+      <!-- RESUMEN SEMANAL -->
+      <div class="card" id="weekly-card">
+        <div class="ctitle">
+          <div class="ctitle-l"><div class="dot"></div>RESUMEN SEMANAL</div>
+          <span id="weekly-range" style="font-size:.75rem;color:var(--muted);"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">PESO</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;" id="ws-weight">—</div>
+            <div style="font-size:.72rem;color:var(--muted);margin-top:2px;" id="ws-weight-sub"></div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">PASOS HOY</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;color:var(--accent);" id="ws-steps">—</div>
+            <div style="font-size:.72rem;color:var(--muted);margin-top:2px;" id="ws-steps-sub"></div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;position:relative;">
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">ENTRENAMIENTOS</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;color:var(--accent);" id="ws-workouts">—</div>
+            <div style="font-size:.72rem;color:var(--muted);margin-top:2px;">esta semana</div>
+          </div>
+        </div>
+        <!-- Weekly workout dots -->
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:14px;">
+          <span style="font-size:.7rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-right:4px;">LUN→DOM</span>
+          <div id="workout-dots" style="display:flex;gap:5px;"></div>
+          <button onclick="logWorkout()" id="btn-workout" style="margin-left:auto;background:var(--accent);color:#0a0a0f;font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;font-size:.78rem;padding:6px 14px;border:none;border-radius:8px;cursor:pointer;transition:all .2s;">+ ENTRENÉ HOY</button>
+        </div>
+      </div>
+
+      <!-- VELOCIDAD + PROYECCIÓN -->
+      <div class="two-col">
+        <div class="card">
+          <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>VELOCIDAD DE PÉRDIDA</div></div>
+          <div class="chart-wrap" style="height:200px;"><canvas id="rateChart"></canvas></div>
+          <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:100px;">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">PROMEDIO/SEMANA</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;" id="rate-avg">—</div>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:100px;">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">ÚLTIMA SEMANA</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;" id="rate-last">—</div>
+            </div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:100px;">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">META ESTIMADA</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;" id="rate-eta">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>COMPARATIVA MENSUAL</div></div>
+          <div id="month-compare" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
+
       <!-- BMI CARD -->
       <div class="card" id="bmi-card" style="display:none">
         <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>ÍNDICE DE MASA CORPORAL</div></div>
@@ -491,7 +555,7 @@ const LS_CACHE  = 'fitlog_cache';
 // ═══════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════
-let data        = { setup: null, months: [] };
+let data        = { setup: null, months: [], workouts: [] };
 let fileId      = null;
 let myChart     = null;
 let saveTimer   = null;
@@ -641,17 +705,18 @@ async function loadFromDrive(silent) {
       fileId = files[0].id;
       const res = await gapi.client.drive.files.get({ fileId, alt:'media' });
       data = typeof res.result === 'string' ? JSON.parse(res.result) : res.result;
-      saveCache({ ...loadCache(), setup: data.setup, months: data.months });
+      if (!data.workouts) data.workouts = [];
+      saveCache({ ...loadCache(), setup: data.setup, months: data.months, workouts: data.workouts||[] });
     } else {
       const c = loadCache();
-      if (c?.setup) data = { setup: c.setup, months: c.months || [] };
+      if (c?.setup) data = { setup: c.setup, months: c.months || [], workouts: c.workouts || [] };
       fileId = null;
     }
     if (!silent) setSyncStatus('synced');
   } catch(e) {
     if (!silent) setSyncStatus('error');
     const c = loadCache();
-    if (c?.setup) data = { setup: c.setup, months: c.months || [] };
+    if (c?.setup) data = { setup: c.setup, months: c.months || [], workouts: c.workouts || [] };
     throw e;
   }
 }
@@ -659,7 +724,7 @@ async function loadFromDrive(silent) {
 async function saveToDrive() {
   setSyncStatus('syncing');
   try {
-    const body = JSON.stringify({ setup: data.setup, months: data.months });
+    const body = JSON.stringify({ setup: data.setup, months: data.months, workouts: data.workouts||[] });
     if (fileId) {
       await gapi.client.request({ path:`/upload/drive/v3/files/${fileId}`, method:'PATCH', params:{ uploadType:'media' }, headers:{'Content-Type':'application/json'}, body });
     } else {
@@ -668,7 +733,7 @@ async function saveToDrive() {
       const res = await gapi.client.request({ path:'/upload/drive/v3/files', method:'POST', params:{uploadType:'multipart'}, headers:{'Content-Type':`multipart/related; boundary="${boundary}"`}, body:mp });
       fileId = res.result.id;
     }
-    saveCache({ ...loadCache(), setup: data.setup, months: data.months });
+    saveCache({ ...loadCache(), setup: data.setup, months: data.months, workouts: data.workouts||[] });
     setSyncStatus('synced');
   } catch(e) {
     setSyncStatus('error');
@@ -806,7 +871,7 @@ function saveNotes(mid, wid, val) {
 // ═══════════════════════════════════════════════════
 // RENDER DASH
 // ═══════════════════════════════════════════════════
-function renderDash() { updateHeader(); renderTimeline(); updateStats(); }
+function renderDash() { updateHeader(); renderTimeline(); updateStats(); renderWeeklySummary(); renderRateChart(); renderMonthCompare(); }
 
 function updateHeader() {
   const s = data.setup; if (!s) return;
@@ -903,6 +968,266 @@ function renderTimeline() {
 // ═══════════════════════════════════════════════════
 // CHART + STATS
 // ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// WEEKLY SUMMARY
+// ═══════════════════════════════════════════════════
+function getWeekBounds() {
+  const now = new Date();
+  const day = (now.getDay() + 6) % 7; // Mon=0 .. Sun=6
+  const mon = new Date(now); mon.setDate(now.getDate() - day); mon.setHours(0,0,0,0);
+  const sun = new Date(mon); sun.setDate(mon.getDate() + 6); sun.setHours(23,59,59,999);
+  return { mon, sun };
+}
+
+function isoDate(d) { return d.toISOString().slice(0,10); }
+
+function renderWeeklySummary() {
+  const { mon, sun } = getWeekBounds();
+  const fmt = d => d.toLocaleDateString('es',{day:'numeric',month:'short'});
+  document.getElementById('weekly-range').textContent = fmt(mon) + ' – ' + fmt(sun);
+
+  // Weight this week
+  let weekWeights = [];
+  data.months.forEach(m => m.weeks.forEach(w => { if (w.weight!=null) weekWeights.push(w.weight); }));
+  const curW = weekWeights.length ? weekWeights[weekWeights.length-1] : null;
+  const prevW = weekWeights.length > 1 ? weekWeights[weekWeights.length-2] : (data.setup?.startWeight||null);
+  if (curW!=null) {
+    const diff = curW - (prevW||curW);
+    const col  = diff<0 ? 'var(--accent)' : diff>0 ? 'var(--danger)' : 'var(--text)';
+    document.getElementById('ws-weight').textContent     = curW + ' kg';
+    document.getElementById('ws-weight').style.color     = col;
+    document.getElementById('ws-weight-sub').textContent = diff===0 ? 'sin cambio' : (diff>0?'+':'')+diff.toFixed(1)+' kg vs anterior';
+  } else {
+    document.getElementById('ws-weight').textContent     = '—';
+    document.getElementById('ws-weight-sub').textContent = 'sin datos';
+  }
+
+  // Steps from fit display
+  const stepsEl = document.getElementById('fit-steps-total');
+  const steps   = stepsEl?.textContent || '—';
+  document.getElementById('ws-steps').textContent     = steps;
+  document.getElementById('ws-steps-sub').textContent = document.getElementById('fit-steps-avg')?.textContent || '';
+
+  // Workouts this week
+  const monStr = isoDate(mon);
+  const sunStr = isoDate(sun);
+  const ww = (data.workouts||[]).filter(d => d >= monStr && d <= sunStr);
+  document.getElementById('ws-workouts').textContent = ww.length;
+
+  // Workout dots Mon-Sun
+  const dots = document.getElementById('workout-dots');
+  dots.innerHTML = '';
+  const days = ['L','M','X','J','V','S','D'];
+  for (let i=0; i<7; i++) {
+    const d = new Date(mon); d.setDate(mon.getDate()+i);
+    const ds = isoDate(d);
+    const trained = (data.workouts||[]).includes(ds);
+    const isToday = ds === isoDate(new Date());
+    const dot = document.createElement('div');
+    dot.title = days[i];
+    dot.style.cssText = `width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      font-size:.62rem;font-weight:700;letter-spacing:.5px;
+      background:${trained?'var(--accent)':isToday?'var(--surface3)':'var(--surface2)'};
+      color:${trained?'#0a0a0f':'var(--muted)'};
+      border:${isToday?'1px solid var(--accent)':'1px solid var(--border)'};`;
+    dot.textContent = days[i];
+    dots.appendChild(dot);
+  }
+
+  // Update button
+  const today = isoDate(new Date());
+  const alreadyLogged = (data.workouts||[]).includes(today);
+  const btn = document.getElementById('btn-workout');
+  btn.textContent    = alreadyLogged ? '✓ ENTRENADO' : '+ ENTRENÉ HOY';
+  btn.style.background = alreadyLogged ? 'var(--surface3)' : 'var(--accent)';
+  btn.style.color      = alreadyLogged ? 'var(--muted)' : '#0a0a0f';
+  btn.style.border     = alreadyLogged ? '1px solid var(--border)' : 'none';
+}
+
+function logWorkout() {
+  const today = isoDate(new Date());
+  if (!data.workouts) data.workouts = [];
+  if (data.workouts.includes(today)) {
+    if (!confirm('¿Quitar el entrenamiento de hoy?')) return;
+    data.workouts = data.workouts.filter(d => d !== today);
+    showToast('ENTRENAMIENTO QUITADO');
+  } else {
+    data.workouts.push(today);
+    showToast('✓ ENTRENAMIENTO REGISTRADO');
+  }
+  scheduleSave(); renderWeeklySummary();
+}
+
+// ═══════════════════════════════════════════════════
+// RATE CHART + PROJECTION
+// ═══════════════════════════════════════════════════
+let rateChart = null;
+
+function renderRateChart() {
+  const pts = allPoints();
+  if (pts.length < 2) {
+    document.getElementById('rate-avg').textContent  = '—';
+    document.getElementById('rate-last').textContent = '—';
+    document.getElementById('rate-eta').textContent  = 'Necesitás más datos';
+    return;
+  }
+
+  // Calculate weekly deltas
+  const deltas = [];
+  for (let i=1; i<pts.length; i++) {
+    deltas.push({ label: pts[i].label, delta: pts[i].w - pts[i-1].w });
+  }
+
+  const avg  = deltas.reduce((s,d)=>s+d.delta,0) / deltas.length;
+  const last = deltas[deltas.length-1].delta;
+  const accent = '#c8f04c';
+  const dark = true;
+
+  const fmt = v => (v>0?'+':'')+v.toFixed(2)+' kg';
+  const col = v => v<0 ? accent : v>0 ? '#f04c4c' : '#6a6a88';
+
+  document.getElementById('rate-avg').textContent  = fmt(avg);
+  document.getElementById('rate-avg').style.color  = col(avg);
+  document.getElementById('rate-last').textContent = fmt(last);
+  document.getElementById('rate-last').style.color = col(last);
+
+  // Projection
+  const curW  = pts[pts.length-1].w;
+  const goalW = data.setup?.goalWeight;
+  if (goalW && avg < 0) {
+    const weeksLeft = Math.ceil((curW - goalW) / Math.abs(avg));
+    const eta = new Date();
+    eta.setDate(eta.getDate() + weeksLeft * 7);
+    document.getElementById('rate-eta').textContent = eta.toLocaleDateString('es',{day:'numeric',month:'long',year:'numeric'});
+  } else if (!goalW) {
+    document.getElementById('rate-eta').textContent = 'Sin meta definida';
+  } else {
+    document.getElementById('rate-eta').textContent = avg>=0 ? 'Tendencia al alza' : 'Calculando...';
+  }
+
+  // Build chart: bars of deltas + projection line
+  const labels  = deltas.map(d=>d.label);
+  const values  = deltas.map(d=>d.delta);
+  const colors  = values.map(v=>v<0?accent+'cc':'#f04c4c99');
+  const borders = values.map(v=>v<0?accent:'#f04c4c');
+
+  // Projection points
+  const projLabels = [...labels];
+  const projValues = new Array(values.length).fill(null);
+  if (goalW && avg < 0) {
+    const weeksLeft = Math.min(12, Math.ceil((curW - goalW) / Math.abs(avg)));
+    for (let i=1; i<=Math.min(weeksLeft,4); i++) {
+      projLabels.push('+'+(i)+' sem');
+      projValues.push(avg);
+    }
+    values.push(...new Array(Math.min(weeksLeft,4)).fill(null));
+    colors.push(...new Array(Math.min(weeksLeft,4)).fill('transparent'));
+    borders.push(...new Array(Math.min(weeksLeft,4)).fill('transparent'));
+  }
+
+  if (rateChart) { rateChart.destroy(); rateChart=null; }
+  const ctx = document.getElementById('rateChart').getContext('2d');
+  const grid = 'rgba(42,42,62,.7)';
+  const tick = '#6a6a88';
+
+  rateChart = new Chart(ctx, {
+    data: {
+      labels: projLabels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Variación (kg)',
+          data: [...values, ...new Array(projValues.filter(v=>v!==null).length).fill(null)].slice(0, projLabels.length),
+          backgroundColor: colors,
+          borderColor: borders,
+          borderWidth: 1,
+          borderRadius: 4,
+        },
+        {
+          type: 'line',
+          label: 'Proyección',
+          data: projValues.slice(0, projLabels.length),
+          borderColor: '#4cc8f0aa',
+          borderDash: [5,4],
+          borderWidth: 1.5,
+          pointRadius: 3,
+          pointBackgroundColor: '#4cc8f0',
+          tension: 0,
+        }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{
+        backgroundColor:'var(--surface)',borderColor:'var(--border)',borderWidth:1,
+        titleColor:accent,bodyColor:'#e8e8f0',
+        titleFont:{family:'Bebas Neue',size:12},bodyFont:{family:'DM Sans',size:11},
+        callbacks:{ label: c => ' '+(c.parsed.y!=null?(c.parsed.y>0?'+':'')+c.parsed.y.toFixed(2)+' kg':'proyección') }
+      }},
+      scales:{
+        x:{grid:{color:grid},ticks:{color:tick,font:{family:'DM Sans',size:9}}},
+        y:{grid:{color:grid},ticks:{color:tick,font:{family:'DM Sans',size:9},callback:v=>(v>0?'+':'')+v.toFixed(1)},
+           afterDataLimits(s){const r=Math.max(0.3,Math.abs(s.max),Math.abs(s.min));s.max=r+0.1;s.min=-r-0.1;}}
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// MONTH COMPARE
+// ═══════════════════════════════════════════════════
+function renderMonthCompare() {
+  const el = document.getElementById('month-compare');
+  if (!data.months || data.months.length < 1) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:.85rem;padding:8px 0;">Necesitás al menos un mes de datos.</div>';
+    return;
+  }
+
+  const MNAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const accent = 'var(--accent)';
+
+  // For each month: get first and last recorded weight
+  const monthSummaries = data.months.map(m => {
+    const ws = m.weeks.filter(w=>w.weight!=null).map(w=>w.weight);
+    if (!ws.length) return null;
+    return {
+      name: MNAMES[m.month] + ' ' + m.year,
+      start: ws[0],
+      end: ws[ws.length-1],
+      delta: ws[ws.length-1] - ws[0],
+      workouts: (data.workouts||[]).filter(d => {
+        const dm = new Date(d);
+        return dm.getMonth()===m.month && dm.getFullYear()===m.year;
+      }).length
+    };
+  }).filter(Boolean);
+
+  if (!monthSummaries.length) {
+    el.innerHTML = '<div style="color:var(--muted);font-size:.85rem;padding:8px 0;">Sin pesos registrados aún.</div>';
+    return;
+  }
+
+  const maxAbs = Math.max(...monthSummaries.map(m=>Math.abs(m.delta)), 0.1);
+
+  el.innerHTML = monthSummaries.map((m,i) => {
+    const col  = m.delta<0 ? 'var(--accent)' : m.delta>0 ? 'var(--danger)' : 'var(--muted)';
+    const bar  = Math.round(Math.abs(m.delta)/maxAbs*100);
+    const sign = m.delta>0?'+':'';
+    return `<div style="display:flex;flex-direction:column;gap:4px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:1.5px;color:var(--text2);">${m.name}</span>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <span style="font-size:.72rem;color:var(--muted);">🏋 ${m.workouts}</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:1px;color:${col};">${sign}${m.delta.toFixed(1)} kg</span>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border-radius:20px;height:5px;overflow:hidden;">
+        <div style="height:100%;width:${bar}%;background:${col};border-radius:20px;transition:width .5s ease;"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function toggleImc(btn) {
   const t = document.getElementById('imc-tooltip');
   if (t.style.display !== 'none') { t.style.display='none'; return; }
@@ -1162,6 +1487,15 @@ function showToast(msg) {
 // ═══════════════════════════════════════════════════
 setTheme('dark');
 initGoogle().catch(e => { console.error(e); hideLoading(); showView('login'); });
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/fitlog/sw.js')
+      .then(r => console.log('SW registered:', r.scope))
+      .catch(e => console.log('SW error:', e));
+  });
+}
 </script>
 </body>
 </html>
