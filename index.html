@@ -274,13 +274,13 @@ header {
 
 .bmi-stats { display:flex; flex-direction:column; gap:5px; padding-left:16px; justify-content:center; }
 .bmi-stat  {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:6px 10px; background:var(--s2); border-radius:7px; gap:10px;
+  display:flex; align-items:center;
+  padding:5px 10px; background:var(--s2); border-radius:7px; gap:8px;
 }
 .bmi-stat-lbl { font-size:.7rem; color:var(--muted); white-space:nowrap; flex-shrink:0; }
 .bmi-stat-val {
   font-family:'Bebas Neue',sans-serif; font-size:.92rem; letter-spacing:1px;
-  text-align:right; white-space:nowrap;
+  white-space:nowrap;
 }
 .bmi-stat-val.ok   { color:var(--accent); }
 .bmi-stat-val.warn { color:var(--warn); }
@@ -303,19 +303,6 @@ header {
   box-shadow:0 8px 24px rgba(0,0,0,.5);
 }
 .bmi-info-btn:hover .bmi-tooltip { display:block; }
-.bmi-stat  {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:6px 10px; background:var(--s2); border-radius:7px; gap:10px;
-}
-.bmi-stat-lbl { font-size:.7rem; color:var(--muted); white-space:nowrap; flex-shrink:0; }
-.bmi-stat-val {
-  font-family:'Bebas Neue',sans-serif; font-size:.92rem; letter-spacing:1px;
-  text-align:right; white-space:nowrap;
-}
-.bmi-stat-val.ok   { color:var(--accent); }
-.bmi-stat-val.warn { color:var(--warn); }
-.bmi-stat-val.bad  { color:var(--danger); }
-.bmi-stat-val.info { color:var(--blue); }
 
 .bmi-bar-wrap {
   height:12px; border-radius:20px; overflow:hidden; position:relative;
@@ -608,9 +595,7 @@ header {
 
       <div class="card" id="bmi-card" style="display:none">
         <div class="ctitle">
-          <div class="ctitle-l"><div class="dot"></div>MASA CORPORAL (IMC)</div>
-          <button class="bmi-info-btn">!<span class="bmi-tooltip">El IMC relaciona tu peso y altura (kg ÷ m²). Es una referencia general — no distingue músculo de grasa. Normal: 18.5–25.</span></button>
-        </div>
+          <div class="ctitle-l"><div class="dot"></div>MASA CORPORAL (IMC) <button class="bmi-info-btn" style="vertical-align:middle;margin-left:6px">!<span class="bmi-tooltip">El IMC relaciona tu peso y altura (kg ÷ m²). Es una referencia general — no distingue músculo de grasa. Normal: 18.5–25.</span></button></div>
         <div class="bmi-main">
           <div class="bmi-left">
             <div class="bmi-big" id="bmi-n">—</div>
