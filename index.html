@@ -284,16 +284,36 @@ header {
 .minput-row { display:flex; gap:10px; margin-bottom:12px; }
 .minput-row .minput { margin-bottom:0; }
 
-/* WEIGHT MODAL big input */
-.w-big-wrap { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
-.w-big {
+/* WEIGHT MODAL — contained block */
+.w-block {
+  display:flex; align-items:stretch;
   background:var(--s2); border:1px solid var(--border); border-radius:12px;
-  color:var(--text); font-family:'Bebas Neue',sans-serif; font-size:3rem;
-  letter-spacing:2px; padding:14px 20px; outline:none; flex:1; text-align:center;
-  transition:border-color .2s; min-width:0;
+  overflow:hidden; margin-bottom:14px; transition:border-color .2s;
 }
-.w-big:focus { border-color:var(--accent); }
-.w-unit { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:var(--muted); flex-shrink:0; }
+.w-block:focus-within { border-color:var(--accent); }
+.w-inp {
+  background:transparent; border:none; outline:none;
+  color:var(--text); font-family:'Bebas Neue',sans-serif;
+  font-size:2.8rem; letter-spacing:2px;
+  padding:14px 18px; flex:1; text-align:center; min-width:0;
+}
+.w-lbl {
+  display:flex; align-items:center; padding:0 18px;
+  font-family:'Bebas Neue',sans-serif; font-size:1.2rem;
+  color:var(--muted); background:var(--s3); border-left:1px solid var(--border);
+  letter-spacing:2px;
+}
+
+/* MOOD */
+.mood-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+.mood-row   { display:flex; gap:8px; margin-bottom:14px; }
+.mood-btn {
+  flex:1; background:var(--s2); border:1px solid var(--border);
+  border-radius:10px; font-size:1.4rem; padding:10px 4px;
+  cursor:pointer; transition:all .15s; line-height:1;
+}
+.mood-btn:hover   { border-color:rgba(255,255,255,.2); transform:scale(1.08); }
+.mood-btn.sel     { border-color:var(--accent); background:rgba(200,240,76,.1); transform:scale(1.12); }
 
 /* WORKOUT type picker */
 .type-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px; }
@@ -427,7 +447,7 @@ header {
 <div id="v-dash" class="view">
   <div class="dash">
 
-    <!-- Gráfico + IMC -->
+    <!-- Gráfico + Estadísticas -->
     <div class="two-col">
       <div class="card">
         <div class="ctitle">
@@ -437,32 +457,17 @@ header {
         <div class="chart-wrap"><canvas id="wChart"></canvas></div>
       </div>
 
-      <div class="card" id="bmi-card" style="display:none">
-        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>MASA CORPORAL</div></div>
-        <div class="bmi-row1">
-          <div class="bmi-num" id="bmi-n">—</div>
-          <div class="bmi-tag" id="bmi-tag"></div>
-        </div>
-        <div class="bmi-alert" id="bmi-alert" style="display:none"></div>
-        <div class="bmi-bar-wrap">
-          <div class="bmi-unlit"  id="bmi-unlit"></div>
-          <div class="bmi-cursor" id="bmi-cursor"></div>
-        </div>
-        <div class="bmi-scale"><span>14</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div>
-        <div class="bmi-zones">
-          <span>🔵 &lt;18.5</span>
-          <span>🟢 18.5–25</span>
-          <span>🟡 25–30</span>
-          <span>🔴 &gt;30</span>
-        </div>
-      </div>
-
-      <!-- Fallback stats card when BMI not available -->
-      <div class="card" id="stats-fallback" style="display:none">
+      <div class="card">
         <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>ESTADÍSTICAS</div></div>
-        <div class="srow"><span class="sn">Progreso a meta</span><span class="sv" id="s-pct2">—</span></div>
-        <div class="goal-track"><div class="goal-fill" id="s-bar2" style="width:0%"></div></div>
-        <div class="srow"><span class="sn">Falta para meta</span><span class="sv" id="s-rem2">—</span></div>
+        <div class="srow"><span class="sn">Progreso a meta</span><span class="sv" id="s-pct">—</span></div>
+        <div class="goal-track"><div class="goal-fill" id="s-bar" style="width:0%"></div></div>
+        <div class="srow"><span class="sn">Semanas registradas</span><span class="sv" id="s-weeks">0</span></div>
+        <div class="srow"><span class="sn">Mejor semana</span><span class="sv" id="s-best" style="font-size:.95rem">—</span></div>
+        <div class="srow"><span class="sn">Falta para meta</span><span class="sv" id="s-rem">—</span></div>
+        <div class="srow" style="border:none;padding-top:14px;gap:8px;flex-wrap:wrap;">
+          <button class="btn-ghost" onclick="goSetup()">✏ EDITAR PERFIL</button>
+          <button class="btn-del" onclick="clearAll()">RESETEAR</button>
+        </div>
       </div>
     </div>
 
@@ -472,7 +477,6 @@ header {
         <div class="ctitle-l"><div class="dot"></div>RESUMEN SEMANAL</div>
         <span id="week-range" style="font-size:.75rem;color:var(--muted)"></span>
       </div>
-
       <div class="ws-chips">
         <div class="ws-chip">
           <div class="wc-label">Peso</div>
@@ -490,17 +494,15 @@ header {
           <div class="wc-sub">esta semana</div>
         </div>
       </div>
-
       <div class="dots-row">
         <span class="dots-lbl">LUN→DOM</span>
         <div class="dots-wrap" id="wdots"></div>
         <button class="btn" style="font-size:.75rem;padding:6px 16px;flex-shrink:0" onclick="openWorkoutModal()">+ AGREGAR</button>
       </div>
-
       <div class="act-list" id="act-list"></div>
     </div>
 
-    <!-- Pasos + Estadísticas -->
+    <!-- Pasos + IMC -->
     <div class="two-col">
       <div class="card">
         <div class="ctitle">
@@ -513,16 +515,20 @@ header {
         <div class="steps-msg"  id="steps-msg"></div>
       </div>
 
-      <div class="card">
-        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>ESTADÍSTICAS</div></div>
-        <div class="srow"><span class="sn">Progreso a meta</span><span class="sv" id="s-pct">—</span></div>
-        <div class="goal-track"><div class="goal-fill" id="s-bar" style="width:0%"></div></div>
-        <div class="srow"><span class="sn">Semanas registradas</span><span class="sv" id="s-weeks">0</span></div>
-        <div class="srow"><span class="sn">Mejor semana</span><span class="sv" id="s-best" style="font-size:.95rem">—</span></div>
-        <div class="srow"><span class="sn">Falta para meta</span><span class="sv" id="s-rem">—</span></div>
-        <div class="srow" style="border:none;padding-top:14px;gap:8px;flex-wrap:wrap;">
-          <button class="btn-ghost" onclick="goSetup()">✏ EDITAR PERFIL</button>
-          <button class="btn-del" onclick="clearAll()">RESETEAR</button>
+      <div class="card" id="bmi-card" style="display:none">
+        <div class="ctitle"><div class="ctitle-l"><div class="dot"></div>MASA CORPORAL</div></div>
+        <div class="bmi-row1">
+          <div class="bmi-num" id="bmi-n">—</div>
+          <div class="bmi-tag" id="bmi-tag"></div>
+        </div>
+        <div class="bmi-alert" id="bmi-alert" style="display:none"></div>
+        <div class="bmi-bar-wrap">
+          <div class="bmi-unlit"  id="bmi-unlit"></div>
+          <div class="bmi-cursor" id="bmi-cursor"></div>
+        </div>
+        <div class="bmi-scale"><span>14</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div>
+        <div class="bmi-zones">
+          <span>🔵 &lt;18.5</span><span>🟢 18.5–25</span><span>🟡 25–30</span><span>🔴 &gt;30</span>
         </div>
       </div>
     </div>
@@ -535,14 +541,32 @@ header {
   <div class="modal-box">
     <div class="modal-title">NUEVO PESO</div>
     <div class="modal-sub">Registrá tu peso del día</div>
+
+    <!-- Fecha -->
     <div class="date-row">
       <span class="date-label">Fecha</span>
       <input type="date" class="date-input" id="mw-date">
     </div>
-    <div class="w-big-wrap">
-      <input type="text" inputmode="decimal" class="w-big" id="mw-val" placeholder="78.0">
-      <span class="w-unit">KG</span>
+
+    <!-- Peso con KG adentro -->
+    <div class="w-block">
+      <input type="text" inputmode="decimal" class="w-inp" id="mw-val" placeholder="78.0">
+      <span class="w-lbl">KG</span>
     </div>
+
+    <!-- Estado de ánimo -->
+    <div class="mood-label">ESTADO DE ÁNIMO</div>
+    <div class="mood-row" id="mood-row">
+      <button class="mood-btn" data-mood="1" onclick="pickMood(1)" title="Muy mal">😔</button>
+      <button class="mood-btn" data-mood="2" onclick="pickMood(2)" title="Mal">😕</button>
+      <button class="mood-btn" data-mood="3" onclick="pickMood(3)" title="Normal">😐</button>
+      <button class="mood-btn" data-mood="4" onclick="pickMood(4)" title="Bien">🙂</button>
+      <button class="mood-btn" data-mood="5" onclick="pickMood(5)" title="Muy bien">😄</button>
+    </div>
+
+    <!-- Nota -->
+    <input type="text" class="minput" id="mw-note" placeholder="Nota opcional (ej: dormí bien, día estresante...)" style="margin-bottom:0">
+
     <div class="modal-foot">
       <button class="btn-ghost" onclick="closeModal('m-weight')">CANCELAR</button>
       <button class="btn" onclick="saveWeight()">GUARDAR</button>
@@ -1084,13 +1108,7 @@ function renderBMI() {
   const h = APP.setup?.height;
   const w = latestW() ?? APP.setup?.startWeight;
   const card = document.getElementById('bmi-card');
-  const fallback = document.getElementById('stats-fallback');
-  if (!h || !w) {
-    card.style.display = 'none';
-    if (fallback) fallback.style.display = 'block';
-    return;
-  }
-  if (fallback) fallback.style.display = 'none';
+  if (!h || !w) { card.style.display = 'none'; return; }
 
   const bmi  = w / ((h/100)**2);
   const bmiR = Math.round(bmi*10)/10;
@@ -1168,22 +1186,39 @@ async function loadSteps() {
 // ═══════════════════════════════════════════
 // WEIGHT MODAL
 // ═══════════════════════════════════════════
+let selMood = null;
+function pickMood(m) {
+  selMood = m;
+  document.querySelectorAll('.mood-btn').forEach(b => {
+    b.classList.toggle('sel', parseInt(b.dataset.mood) === m);
+  });
+}
+
 function openWeightModal() {
   const t  = today();
   const ex = APP.entries.find(e => e.date === t);
   document.getElementById('mw-date').value = t;
   document.getElementById('mw-val').value  = ex ? ex.weight : (latestW() || '');
+  document.getElementById('mw-note').value = ex?.note || '';
+  selMood = ex?.mood || null;
+  document.querySelectorAll('.mood-btn').forEach(b => {
+    b.classList.toggle('sel', parseInt(b.dataset.mood) === selMood);
+  });
   openModal('m-weight');
   setTimeout(() => document.getElementById('mw-val').select(), 80);
 }
 
 function saveWeight() {
-  const v = parseFloat(document.getElementById('mw-val').value);
-  const d = document.getElementById('mw-date').value || today();
+  const v    = parseFloat(document.getElementById('mw-val').value);
+  const d    = document.getElementById('mw-date').value || today();
+  const note = document.getElementById('mw-note').value.trim() || null;
   if (isNaN(v) || v < 20 || v > 300) { toast('⚠ Peso inválido'); return; }
+  const entry = { date:d, weight:v };
+  if (note)    entry.note = note;
+  if (selMood) entry.mood = selMood;
   const i = APP.entries.findIndex(e => e.date === d);
-  if (i >= 0) APP.entries[i].weight = v;
-  else        APP.entries.push({ date:d, weight:v });
+  if (i >= 0) APP.entries[i] = entry;
+  else        APP.entries.push(entry);
   APP.entries.sort((a,b) => a.date.localeCompare(b.date));
   scheduleSave(); closeModal('m-weight'); renderAll(); toast('✓ PESO GUARDADO');
 }
