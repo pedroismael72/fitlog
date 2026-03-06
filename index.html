@@ -221,9 +221,9 @@ header {
 
 /* ── STEPS RING ── */
 .steps-card-inner {
-  display:grid; grid-template-columns:110px 1fr; gap:0; align-items:center;
+  display:flex; align-items:center; justify-content:center; gap:24px; padding:8px 0;
 }
-.steps-ring-wrap  { position:relative; width:110px; height:110px; }
+.steps-ring-wrap  { position:relative; width:110px; height:110px; flex-shrink:0; }
 .steps-ring-wrap svg { width:110px; height:110px; transform:rotate(-90deg); }
 .steps-ring-bg    { fill:none; stroke:var(--s3); stroke-width:9; }
 .steps-ring-fill  { fill:none; stroke:var(--accent); stroke-width:9; stroke-linecap:round; transition:stroke-dashoffset .8s ease; }
@@ -234,8 +234,7 @@ header {
 }
 .steps-ring-pct  { font-family:'Bebas Neue',sans-serif; font-size:1.55rem; letter-spacing:1px; line-height:1; }
 .steps-info      {
-  display:flex; flex-direction:column; justify-content:center;
-  padding-left:16px; border-left:1px solid var(--border); gap:4px;
+  display:flex; flex-direction:column; justify-content:center; gap:4px;
 }
 .steps-num       { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; letter-spacing:1px; line-height:1; color:var(--accent); }
 .steps-goal-txt  { font-size:.72rem; color:var(--muted); }
@@ -496,9 +495,19 @@ header {
 <!-- SETUP -->
 <div id="v-setup" class="view">
   <div class="setup-box">
-    <div class="setup-eyebrow" id="se-eyebrow">Configuración</div>
-    <div class="setup-title"   id="se-title">TU PERFIL</div>
-    <div class="setup-sub"     id="se-sub">Completá tus datos para comenzar.</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div class="setup-eyebrow" id="se-eyebrow">Configuración</div>
+        <div class="setup-title"   id="se-title">TU PERFIL</div>
+        <div class="setup-sub"     id="se-sub">Completá tus datos para comenzar.</div>
+      </div>
+      <button id="btn-setup-close" onclick="show('dashboard')"
+        style="display:none;background:none;border:1px solid var(--border);color:var(--muted);
+               border-radius:8px;width:34px;height:34px;font-size:1rem;cursor:pointer;
+               flex-shrink:0;margin-top:4px;transition:border-color .15s,color .15s"
+        onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+        onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">✕</button>
+    </div>
 
     <div class="field">
       <label>Tu nombre</label>
@@ -1009,11 +1018,14 @@ function goSetup() {
     document.getElementById('se-title').textContent   = 'EDITAR PERFIL';
     document.getElementById('se-sub').textContent     = 'Modificá tus datos y guardá.';
     document.getElementById('btn-reset').style.display = 'inline-flex';
+    document.getElementById('btn-setup-close').style.display = 'flex';
     document.getElementById('inp-name').value   = s.name        || '';
     document.getElementById('inp-start').value  = s.startWeight || '';
     document.getElementById('inp-goal').value   = s.goalWeight  || '';
     document.getElementById('inp-height').value = s.height      || '';
     document.getElementById('inp-steps').value  = s.stepGoal    || '8000';
+  } else {
+    document.getElementById('btn-setup-close').style.display = 'none';
   }
   show('setup');
 }
