@@ -750,14 +750,51 @@ async function initGoogle() {
       showUserChip(cached._profile || { name:'Usuario', picture:'' });
       renderAfterLoad();
     } catch(e) {
+      // Token likely expired — try silent refresh before showing login
       clearToken();
-      hideLoading();
-      showView('login');
+      try {
+        await silentRefresh(cached._profile);
+      } catch(e2) {
+        hideLoading();
+        showView('login');
+      }
     }
   } else {
     hideLoading();
     showView('login');
   }
+}
+
+function silentRefresh(profile) {
+  return new Promise((resolve, reject) => {
+    // hint: skip account chooser if we know the user
+    tokenClient.requestAccessToken({ prompt: '' });
+    // The tokenClient callback will handle success/failure
+    // We resolve after a timeout if callback doesn't fire (safety net)
+    const t = setTimeout(() => reject(new Error('timeout')), 8000);
+    // Override callback temporarily to resolve this promise
+    const origCallback = tokenClient.callback;
+    tokenClient.callback = async (resp) => {
+      clearTimeout(t);
+      tokenClient.callback = origCallback;
+      if (resp.error) { reject(resp); return; }
+      try {
+        gapi.client.setToken({ access_token: resp.access_token });
+        const pr = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { 'Authorization': 'Bearer ' + resp.access_token }
+        });
+        const prof = await pr.json();
+        const up = profile || { name: prof.given_name||prof.name||'Usuario', picture: prof.picture||'' };
+        const cache = loadCache()||{};
+        cache._token = resp.access_token; cache._profile = up;
+        saveCache(cache);
+        showUserChip(up);
+        await loadFromDrive(false);
+        renderAfterLoad();
+        resolve();
+      } catch(e) { reject(e); }
+    };
+  });
 }
 
 function signIn() {
