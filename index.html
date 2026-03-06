@@ -280,10 +280,32 @@ header {
   transition:left .6s; box-shadow:0 0 6px rgba(0,0,0,.5);
 }
 .bmi-scale  { display:flex; justify-content:space-between; font-size:8px; color:var(--muted); letter-spacing:.5px; margin-bottom:10px; }
-.bmi-zones  { display:flex; gap:10px; flex-wrap:wrap; }
-.bmi-zones span { font-size:.68rem; color:var(--muted); }
+.bmi-status-chip {
+  display:inline-flex; align-items:center; gap:8px; margin-top:10px;
+  padding:8px 14px; border-radius:10px; font-size:.8rem; font-weight:600;
+}
+.bmi-status-chip.bajo      { background:rgba(76,200,240,.1);  border:1px solid rgba(76,200,240,.25);  color:var(--blue); }
+.bmi-status-chip.normal    { background:rgba(200,240,76,.1);  border:1px solid rgba(200,240,76,.25);  color:var(--accent); }
+.bmi-status-chip.sobrepeso { background:rgba(240,160,76,.1);  border:1px solid rgba(240,160,76,.25);  color:var(--warn); }
+.bmi-status-chip.obesidad  { background:rgba(240,76,76,.1);   border:1px solid rgba(240,76,76,.25);   color:var(--danger); }
 
-/* ── DATE INPUT ── */
+/* ── WEIGHT HISTORY ── */
+.wh-row {
+  display:flex; align-items:center; gap:12px;
+  padding:9px 10px; border-radius:8px;
+  border-bottom:1px solid var(--border); transition:background .15s;
+}
+.wh-row:last-child { border-bottom:none; }
+.wh-row:hover { background:var(--s2); }
+.wh-date  { font-size:.78rem; color:var(--muted); width:90px; flex-shrink:0; }
+.wh-w     { font-family:'Bebas Neue',sans-serif; font-size:1.15rem; letter-spacing:1px; flex:1; }
+.wh-delta { font-size:.75rem; font-weight:600; width:72px; text-align:right; flex-shrink:0; }
+.wh-delta.neg { color:var(--accent); }
+.wh-delta.pos { color:var(--danger); }
+.wh-delta.neu { color:var(--muted); }
+.wh-mood  { font-size:1rem; width:24px; text-align:center; flex-shrink:0; }
+.wh-note  { font-size:.72rem; color:var(--muted); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:180px; }
+.wh-btns  { display:flex; gap:6px; flex-shrink:0; }
 .date-row   { display:flex; align-items:center; gap:8px; margin-bottom:16px; }
 .date-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
 .date-input {
@@ -581,16 +603,20 @@ header {
           <div class="bmi-unlit"  id="bmi-unlit"></div>
           <div class="bmi-cursor" id="bmi-cursor"></div>
         </div>
-        <div class="bmi-scale">
-          <span>14</span><span>18.5</span><span>25</span><span>30</span><span>40</span>
-        </div>
-        <div class="bmi-zones">
-          <span>🔵 Bajo peso &lt;18.5</span>
-          <span>🟢 Normal 18.5–25</span>
-          <span>🟡 Sobrepeso 25–30</span>
-          <span>🔴 Obesidad &gt;30</span>
-        </div>
+        <div class="bmi-status-chip" id="bmi-chip"></div>
       </div>
+    </div>
+
+    <!-- Historial de pesos -->
+    <div class="card">
+      <div class="ctitle">
+        <div class="ctitle-l"><div class="dot"></div>HISTORIAL DE PESOS</div>
+        <span id="wh-count" style="font-size:.75rem;color:var(--muted)"></span>
+      </div>
+      <div id="wh-empty" style="font-size:.82rem;color:var(--muted);padding:8px 0;display:none">
+        Todavía no hay registros de peso.
+      </div>
+      <div id="wh-list"></div>
     </div>
 
   </div>
@@ -945,6 +971,7 @@ function renderAll() {
   renderStats();
   renderWeekly();
   renderBMI();
+  renderWeightHistory();
   loadSteps();
 }
 
@@ -1029,6 +1056,86 @@ function renderChart() {
       }
     }
   });
+}
+
+// ═══════════════════════════════════════════
+// WEIGHT HISTORY
+// ═══════════════════════════════════════════
+const MOOD_MAP = { 1:'😔', 2:'😕', 3:'😐', 4:'🙂', 5:'😄' };
+
+function renderWeightHistory() {
+  const list    = document.getElementById('wh-list');
+  const empty   = document.getElementById('wh-empty');
+  const countEl = document.getElementById('wh-count');
+  list.innerHTML = '';
+
+  const entries = APP.entries.slice().reverse(); // newest first
+  countEl.textContent = entries.length ? entries.length + ' registros' : '';
+
+  if (!entries.length) {
+    empty.style.display = 'block'; return;
+  }
+  empty.style.display = 'none';
+
+  // All entries sorted newest→oldest, with delta vs previous
+  const sorted = APP.entries.slice().sort((a,b) => a.date.localeCompare(b.date));
+
+  entries.forEach(e => {
+    const origIdx  = APP.entries.indexOf(e);
+    // Find delta vs chronologically previous entry
+    const posInSorted = sorted.indexOf(e);
+    const prev     = posInSorted > 0 ? sorted[posInSorted - 1] : null;
+    const delta    = prev ? (e.weight - prev.weight) : null;
+
+    const row = document.createElement('div');
+    row.className = 'wh-row';
+
+    let deltaHtml = '';
+    if (delta !== null) {
+      const sign = delta < 0 ? '' : '+';
+      const cls  = delta < 0 ? 'neg' : delta > 0 ? 'pos' : 'neu';
+      deltaHtml  = `<span class="wh-delta ${cls}">${sign}${delta.toFixed(1)} kg</span>`;
+    } else {
+      deltaHtml = `<span class="wh-delta neu">—</span>`;
+    }
+
+    const moodHtml = e.mood ? `<span class="wh-mood">${MOOD_MAP[e.mood]||''}</span>` : `<span class="wh-mood"></span>`;
+    const noteHtml = e.note ? `<span class="wh-note" title="${e.note}">📝 ${e.note}</span>` : `<span class="wh-note"></span>`;
+
+    row.innerHTML = `
+      <span class="wh-date">${fmtShort(e.date)}</span>
+      <span class="wh-w">${e.weight} kg</span>
+      ${deltaHtml}
+      ${moodHtml}
+      ${noteHtml}
+      <div class="wh-btns">
+        <button class="btn-ghost" style="font-size:.68rem;padding:4px 9px" onclick="editWeight(${origIdx})">EDITAR</button>
+        <button class="btn-del"   style="font-size:.68rem;padding:4px 9px" onclick="deleteWeight(${origIdx})">✕</button>
+      </div>`;
+    list.appendChild(row);
+  });
+}
+
+function editWeight(idx) {
+  const e = APP.entries[idx];
+  document.getElementById('mw-date').value = e.date;
+  document.getElementById('mw-val').value  = e.weight;
+  document.getElementById('mw-note').value = e.note || '';
+  selMood = e.mood || null;
+  document.querySelectorAll('.mood-btn').forEach(b => {
+    b.classList.toggle('sel', parseInt(b.dataset.mood) === selMood);
+  });
+  // Store which index we're editing via a temp attribute
+  document.getElementById('m-weight').dataset.editIdx = idx;
+  openModal('m-weight');
+  setTimeout(() => document.getElementById('mw-val').select(), 80);
+}
+
+function deleteWeight(idx) {
+  const e = APP.entries[idx];
+  if (!confirm(`¿Eliminar el registro del ${fmtShort(e.date)} (${e.weight} kg)?`)) return;
+  APP.entries.splice(idx, 1);
+  scheduleSave(); renderAll(); toast('✓ REGISTRO ELIMINADO');
 }
 
 // ═══════════════════════════════════════════
@@ -1216,6 +1323,19 @@ function renderBMI() {
   const pct = Math.max(0, Math.min(100, (bmi - 14) / 26 * 100));
   document.getElementById('bmi-unlit').style.width = (100 - pct) + '%';
   document.getElementById('bmi-cursor').style.left = pct + '%';
+
+  // Status chip
+  const chipEl = document.getElementById('bmi-chip');
+  const chipMap = {
+    bajo:      { icon:'🔵', text:'Bajo peso — IMC menor a 18.5' },
+    normal:    { icon:'🟢', text:'Peso normal — IMC entre 18.5 y 25' },
+    sobrepeso: { icon:'🟡', text:'Sobrepeso — IMC entre 25 y 30' },
+    obesidad:  { icon:'🔴', text:'Obesidad — IMC mayor a 30' },
+  };
+  const chip = chipMap[cls];
+  chipEl.innerHTML = `<span>${chip.icon}</span><span>${chip.text}</span>`;
+  chipEl.className = 'bmi-status-chip ' + cls;
+
   card.style.display = 'block';
 }
 
@@ -1233,32 +1353,42 @@ async function loadSteps() {
       method:'POST',
       headers:{ Authorization:`Bearer ${token}`, 'Content-Type':'application/json' },
       body: JSON.stringify({
-        aggregateBy:[{ dataTypeName:'com.google.step_count.delta',
-          dataSourceId:'derived:com.google.step_count.delta:com.google.android.gms:estimated_steps' }],
+        aggregateBy:[{ dataTypeName:'com.google.step_count.delta' }],
         bucketByTime:{ durationMillis:86400000 },
         startTimeMillis: startOfDay.getTime(),
         endTimeMillis:   Date.now()
       })
     });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      const msg = document.getElementById('steps-msg');
+      if (res.status === 403) {
+        msg.innerHTML = '⚠ Sin permiso de Fitness. <u style="cursor:pointer;color:var(--accent)" onclick="signOut()">Cerrá sesión y volvé a entrar</u> para otorgarlo.';
+      } else {
+        msg.textContent = `Error ${res.status}: ${err?.error?.message || 'revisá permisos de Fitness API'}`;
+      }
+      msg.style.color = 'var(--warn)';
+      return;
+    }
+
     const json = await res.json();
     let steps = 0;
     json.bucket?.forEach(b => b.dataset?.forEach(ds => ds.point?.forEach(p => p.value?.forEach(v => { steps += v.intVal||0; }))));
 
     const pct = Math.min(100, Math.round(steps/goal*100));
-    document.getElementById('steps-n').textContent   = steps.toLocaleString('es');
-    document.getElementById('steps-sub').textContent = '/ ' + goal.toLocaleString('es') + ' · ' + pct + '% de la meta';
+    document.getElementById('steps-n').textContent   = steps.toLocaleString('es-AR');
+    document.getElementById('steps-sub').textContent = '/ ' + goal.toLocaleString('es-AR') + ' · ' + pct + '% de la meta';
     document.getElementById('steps-bar').style.width = pct + '%';
     const msg = document.getElementById('steps-msg');
-    msg.textContent = steps >= goal ? '🎯 ¡Meta alcanzada hoy!' : `Faltan ${(goal-steps).toLocaleString('es')} pasos`;
+    msg.textContent = steps >= goal ? '🎯 ¡Meta alcanzada hoy!' : `Faltan ${(goal-steps).toLocaleString('es-AR')} pasos`;
     msg.style.color = steps >= goal ? 'var(--accent)' : 'var(--muted)';
-
-    // Update weekly chip
-    document.getElementById('ws-s').textContent     = steps.toLocaleString('es');
+    document.getElementById('ws-s').textContent     = steps.toLocaleString('es-AR');
     document.getElementById('ws-s-sub').textContent = pct + '% de la meta';
 
   } catch(e) {
     console.warn('Fit:', e);
-    document.getElementById('steps-msg').textContent = 'No se pudo conectar con Google Fit.';
+    document.getElementById('steps-msg').textContent = 'No se pudo conectar. Revisá los permisos de Fitness.';
     document.getElementById('steps-msg').style.color = 'var(--danger)';
   }
 }
@@ -1293,12 +1423,24 @@ function saveWeight() {
   const d    = document.getElementById('mw-date').value || today();
   const note = document.getElementById('mw-note').value.trim() || null;
   if (isNaN(v) || v < 20 || v > 300) { toast('⚠ Peso inválido'); return; }
+
   const entry = { date:d, weight:v };
   if (note)    entry.note = note;
   if (selMood) entry.mood = selMood;
-  const i = APP.entries.findIndex(e => e.date === d);
-  if (i >= 0) APP.entries[i] = entry;
-  else        APP.entries.push(entry);
+
+  // Check if we're editing a specific index (from history)
+  const modal   = document.getElementById('m-weight');
+  const editIdx = modal.dataset.editIdx !== undefined && modal.dataset.editIdx !== '' ? parseInt(modal.dataset.editIdx) : null;
+  delete modal.dataset.editIdx;
+
+  if (editIdx !== null) {
+    APP.entries[editIdx] = entry;
+  } else {
+    const i = APP.entries.findIndex(e => e.date === d);
+    if (i >= 0) APP.entries[i] = entry;
+    else        APP.entries.push(entry);
+  }
+
   APP.entries.sort((a,b) => a.date.localeCompare(b.date));
   scheduleSave(); closeModal('m-weight'); renderAll(); toast('✓ PESO GUARDADO');
 }
