@@ -35,7 +35,7 @@
   .ob-step-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s;}
   .ob-step-dot.active{background:var(--accent);width:24px;border-radius:4px;}
   .ob-icon{font-size:52px;margin-bottom:16px;}
-  .ob-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:10px;}
+  .ob-title{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:700;margin-bottom:10px;}
   .ob-desc{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:32px;}
   .ob-nav{display:flex;gap:10px;justify-content:center;}
   .ob-skip{font-size:12px;color:var(--muted);cursor:pointer;position:absolute;top:16px;right:20px;padding:4px 8px;}
@@ -48,7 +48,7 @@
 
   /* CHANNEL AVATAR */
   .ch-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;}
-  .ch-avatar-fallback{width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:white;flex-shrink:0;}
+  .ch-avatar-fallback{width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:16px;color:white;flex-shrink:0;}
   .ch-subs{font-size:11px;color:var(--muted);margin-top:1px;}
 
   /* REMINDER BADGE en card cliente */
@@ -62,7 +62,7 @@
 
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-  h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+  h1,h2,h3,h4{font-family:'DM Sans',sans-serif;font-weight:700;}
   .screen{display:none;min-height:100vh;}
   .screen.active{display:flex;flex-direction:column;}
 
@@ -99,7 +99,7 @@
   .topbar-logo span{color:var(--accent);}
   .topbar-spacer{flex:1;}
   .topbar-user{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);flex-shrink:0;}
-  .avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:white;flex-shrink:0;}
+  .avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;color:white;flex-shrink:0;}
   .logout-btn{padding:6px 12px;background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;flex-shrink:0;}
   .logout-btn:hover{border-color:var(--accent);color:var(--text);}
   /* Theme switch — solo el track, sin labels de texto */
@@ -128,19 +128,19 @@
 
   /* COMPONENTS */
   .page-header{margin-bottom:28px;}
-  .page-title{font-size:26px;font-weight:800;letter-spacing:-.5px;margin-bottom:4px;}
+  .page-title{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px;}
   .page-sub{color:var(--muted);font-size:13px;}
   .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px;}
   .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;transition:border-color .2s;}
   .stat-card:hover{border-color:var(--accent);}
   .stat-lbl{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600;}
-  .stat-val{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;margin-bottom:4px;}
+  .stat-val{font-family:'DM Sans',sans-serif;font-size:30px;font-weight:700;margin-bottom:4px;letter-spacing:-.5px;}
   .stat-sub{font-size:12px;color:var(--muted);}
   .c-green{color:var(--green);} .c-yellow{color:var(--yellow);} .c-red{color:var(--red);} .c-blue{color:var(--blue);}
   .pbar{width:100%;height:6px;background:var(--surface2);border-radius:3px;margin-top:8px;overflow:hidden;}
   .pbar-fill{height:100%;border-radius:3px;background:var(--accent);transition:width .6s ease;}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;}
-  .card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
+  .card-title{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
   table{width:100%;border-collapse:collapse;}
   th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:10px 16px;border-bottom:1px solid var(--border);font-weight:600;}
   td{padding:14px 16px;font-size:13px;border-bottom:1px solid rgba(34,34,47,.5);vertical-align:middle;}
@@ -168,7 +168,7 @@
   .mo.open{display:flex;}
   .md{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;width:580px;max-width:95vw;max-height:90vh;overflow-y:auto;animation:fadeUp .3s ease;}
   .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
-  .mt{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;}
+  .mt{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:700;}
   .mc{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
   .mc:hover{color:var(--text);border-color:var(--accent);}
   .mf{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);}
@@ -191,12 +191,12 @@
   .cc{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;cursor:pointer;transition:all .2s;}
   .cc:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,77,0,.1);}
   .cch{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-  .cav{width:44px;height:44px;border-radius:12px;background:var(--surface2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;}
-  .cn{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;}
+  .cav{width:44px;height:44px;border-radius:12px;background:var(--surface2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:16px;}
+  .cn{font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;}
   .cp{font-size:12px;color:var(--muted);}
   .cs{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .csv{background:var(--surface2);border-radius:10px;padding:10px;text-align:center;}
-  .csn{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;}
+  .csn{font-family:'DM Sans',sans-serif;font-weight:700;font-size:18px;}
   .csl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;}
 
   /* ════ YOUTUBE SEARCH ════ */
@@ -249,7 +249,7 @@
   .notif-panel{position:absolute;top:48px;right:0;width:340px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.5);z-index:9999;display:none;overflow:hidden;}
   .notif-panel.open{display:block;animation:fadeUp .2s ease;}
   .notif-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-  .notif-head-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+  .notif-head-title{font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;}
   .notif-list{max-height:360px;overflow-y:auto;}
   .notif-item{padding:14px 20px;border-bottom:1px solid rgba(34,34,47,.5);cursor:pointer;transition:background .15s;display:flex;gap:12px;align-items:flex-start;}
   .notif-item:hover{background:var(--surface2);}
@@ -283,7 +283,7 @@
   .tracking-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;overflow:hidden;position:relative;}
   .tracking-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),#ff8c42);border-radius:20px 20px 0 0;}
   .tracking-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px;}
-  .tracking-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;margin-bottom:4px;}
+  .tracking-title{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;}
   .tracking-sub{font-size:12px;color:var(--muted);}
   .tracking-steps{display:flex;align-items:center;margin-bottom:28px;position:relative;padding:0 10px;}
   .tracking-steps::before{content:'';position:absolute;top:20px;left:30px;right:30px;height:2px;background:var(--border);z-index:0;}
@@ -344,14 +344,14 @@
   .tbtn.act{background:var(--accent);border-color:var(--accent);color:white;}
   .cdot{width:14px;height:14px;border-radius:50%;display:inline-block;border:2px solid rgba(255,255,255,.25);}
   .rev-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
-  .btn-ok{background:var(--green);color:white;border:none;padding:13px;border-radius:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .btn-ok{background:var(--green);color:white;border:none;padding:13px;border-radius:12px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
   .btn-ok:hover{background:#24b362;transform:translateY(-1px);}
-  .btn-chg{background:rgba(245,200,66,.1);color:var(--yellow);border:1px solid rgba(245,200,66,.3);padding:13px;border-radius:12px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .btn-chg{background:rgba(245,200,66,.1);color:var(--yellow);border:1px solid rgba(245,200,66,.3);padding:13px;border-radius:12px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
   .btn-chg:hover{background:rgba(245,200,66,.18);}
   .feedback-history{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
   .fb-item{background:var(--surface2);border-radius:10px;padding:12px;font-size:12px;}
   .fb-item .fb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-  .fb-version{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;}
+  .fb-version{font-family:'DM Sans',sans-serif;font-weight:700;font-size:11px;}
 
   /* ════════════════════════════════════
      RESPONSIVE — TABLET (≤900px)
@@ -528,12 +528,12 @@
 <!-- LOGIN -->
 <div id="screen-login" class="screen active">
   <div class="login-card">
-    <div class="logo"><div class="logo-icon">▶</div><div class="logo-text">Thumb<span>Flow</span></div></div>
+    <div class="logo"><div class="logo-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></div><div class="logo-text">Thumb<span>Flow</span></div></div>
     <div class="login-title">Bienvenido</div>
     <div class="login-sub">Sistema de gestión de miniaturas YouTube.<br>Iniciá sesión para continuar.</div>
     <div class="role-select">
-      <button class="role-btn active" onclick="selectRole('admin',this)"><span class="ri">🎨</span>Diseñador<br><small style="color:var(--muted)">Panel completo</small></button>
-      <button class="role-btn" onclick="selectRole('client',this)"><span class="ri">👤</span>Cliente<br><small style="color:var(--muted)">Mis pedidos</small></button>
+      <button class="role-btn active" onclick="selectRole('admin',this)"><span class="ri"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>Diseñador<br><small style="color:var(--muted)">Panel completo</small></button>
+      <button class="role-btn" onclick="selectRole('client',this)"><span class="ri"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>Cliente<br><small style="color:var(--muted)">Mis pedidos</small></button>
     </div>
     <button class="google-btn" onclick="loginWithGoogle()">
       <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
@@ -541,8 +541,8 @@
     </button>
     <div class="divider">o acceso demo rápido</div>
     <div class="demo-btns">
-      <button class="demo-btn" onclick="demoLogin('admin')">🎨 Demo Diseñador</button>
-      <button class="demo-btn" onclick="demoLogin('client')">👤 Demo Cliente</button>
+      <button class="demo-btn" onclick="demoLogin('admin')"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span> Demo Diseñador</button>
+      <button class="demo-btn" onclick="demoLogin('client')"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Demo Cliente</button>
     </div>
   </div>
 </div>
@@ -567,7 +567,7 @@
       </div>
       <div class="topbar-user">
         <div id="admin-workload" style="display:none;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px 5px 8px;font-size:12px;font-weight:600;">
-          <span style="font-size:15px">⚡</span>
+          <span style="display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
           <span id="admin-workload-num" style="color:var(--accent)">0</span>
           <span style="color:var(--muted);font-weight:400">activos</span>
         </div>
@@ -629,7 +629,7 @@
       
       <div class="topbar-user">
         <div id="cl-credits-pill" style="display:none;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px 5px 8px;font-size:12px;font-weight:600;">
-          <span style="font-size:15px">🎬</span>
+          <span style="display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></span>
           <span id="cl-credits-used" style="color:var(--muted)">0</span>
           <span style="color:var(--border)">/</span>
           <span id="cl-credits-total" style="color:var(--text)">8</span>
@@ -653,7 +653,7 @@
     </div>
     <div class="main-content">
       <div class="panel active" id="client-panel-inicio">
-        <div class="page-header"><div class="page-title" id="cl-welcome">Hola 👋</div><div class="page-sub">Tu panel de miniaturas</div></div>
+        <div class="page-header"><div class="page-title" id="cl-welcome">Hola</div><div class="page-sub">Tu panel de miniaturas</div></div>
         <div class="stats-grid" id="cl-stats"></div>
         <div id="cl-tracking-section"></div>
         <div class="card"><div class="card-title">Pedidos recientes</div><div id="cl-recent"></div></div>
@@ -686,7 +686,7 @@
                 <label>Imágenes de referencia propias <span style="color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400">(logos, fotos, capturas — opcional)</span></label>
                 <div class="upload-zone" id="ref-upload-zone" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleRefDrop(event)">
                   <input type="file" accept="image/*" multiple onchange="handleRefFiles(this.files)">
-                  <div class="upload-icon">🖼️</div>
+                  <div class="upload-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
                   <div class="upload-label">Arrastrá imágenes o <strong>hacé clic para seleccionar</strong><br><small>PNG, JPG, GIF · Hasta 5 imágenes</small></div>
                 </div>
                 <div class="img-preview-grid" id="ref-img-previews"></div>
@@ -705,7 +705,7 @@
             <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6">Buscá un tema relacionado a tu video y seleccioná hasta <strong style="color:var(--text)">3 miniaturas</strong> de la competencia que te gusten como referencia de estilo para el diseñador. Este paso es <em>opcional</em>.</p>
 
             <div class="yt-wrap">
-              <div class="yt-header"><span class="yt-badge">▶ YT</span> Búsqueda de YouTube</div>
+              <div class="yt-header"><span class="yt-badge"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> YT</span> Búsqueda de YouTube</div>
               <div class="yt-row">
                 <input id="yt-q" type="text" placeholder="Ej: plugins premiere pro 2025, tutorial excel, recetas italianas..." onkeydown="if(event.key==='Enter')ytSearch()">
                 <button class="yt-btn" id="yt-btn" onclick="ytSearch()">
@@ -715,7 +715,7 @@
               </div>
 
               <div class="yt-grid" id="yt-grid" style="max-height:none">
-                <div class="yt-ph"><div class="phi">🎬</div>Escribí un tema de búsqueda y presioná <strong>Buscar</strong><br>para ver las miniaturas de YouTube</div>
+                <div class="yt-ph"><div class="phi"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></div>Escribí un tema de búsqueda y presioná <strong>Buscar</strong><br>para ver las miniaturas de YouTube</div>
               </div>
 
               <div id="refs-wrap" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
@@ -738,7 +738,7 @@
             <div id="confirm-sum"></div>
             <div style="margin-top:24px;display:flex;justify-content:space-between">
               <button class="btn btn-g" onclick="goStep(2)">← Volver</button>
-              <button class="btn btn-p" onclick="submitReq()">✓ Enviar pedido al diseñador</button>
+              <button class="btn btn-p" onclick="submitReq()"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span> Enviar pedido al diseñador</button>
             </div>
           </div>
         </div>
@@ -755,7 +755,7 @@
 <!-- MODALES -->
 <div class="mo" id="mo-nc">
   <div class="md">
-    <div class="mh"><div class="mt">Nuevo cliente</div><button class="mc" onclick="closeMo('mo-nc')">✕</button></div>
+    <div class="mh"><div class="mt">Nuevo cliente</div><button class="mc" onclick="closeMo('mo-nc')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="fg">
       <div style="display:flex;flex-direction:column;gap:6px" class="fg-f"><label>Nombre completo</label><input id="nc-name" type="text" placeholder="Juan Pérez"></div>
       <div style="display:flex;flex-direction:column;gap:6px"><label>Email</label><input id="nc-email" type="email" placeholder="juan@gmail.com"></div>
@@ -772,16 +772,16 @@
 
 <div class="mo" id="mo-req">
   <div class="md" style="width:620px">
-    <div class="mh"><div class="mt">Detalle del pedido</div><button class="mc" onclick="cancelReqMo()">✕</button></div>
+    <div class="mh"><div class="mt">Detalle del pedido</div><button class="mc" onclick="cancelReqMo()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div id="mo-req-body"></div>
     <div class="mf">
-      <button class="btn btn-g" id="mo-delete-btn" style="color:var(--red);border-color:rgba(255,77,77,.3);display:none" onclick="deleteReq()">🗑 Eliminar</button>
+      <button class="btn btn-g" id="mo-delete-btn" style="color:var(--red);border-color:rgba(255,77,77,.3);display:none" onclick="deleteReq()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M9 6V4h6v2"/></svg> Eliminar</button>
       <div style="flex:1"></div>
       <button class="btn btn-g" id="mo-cancel-btn" onclick="cancelReqMo()">Cancelar</button>
       <div id="mo-save-wrap" style="position:relative;display:inline-block">
         <button class="btn btn-p" id="mo-save-btn">Guardar cambios</button>
         <div id="mo-save-tooltip" style="display:none;position:absolute;bottom:calc(100% + 8px);right:0;background:#1a1a24;border:1px solid var(--red);border-radius:10px;padding:8px 12px;font-size:12px;color:var(--red);white-space:nowrap;pointer-events:none;z-index:10">
-          ⚠️ Primero debés subir la miniatura
+          <span style="display:inline-flex;align-items:center;gap:6px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> Primero debés subir la miniatura
           <div style="position:absolute;bottom:-5px;right:16px;width:8px;height:8px;background:#1a1a24;border-right:1px solid var(--red);border-bottom:1px solid var(--red);transform:rotate(45deg)"></div>
         </div>
       </div>
@@ -791,11 +791,11 @@
 
 <div class="mo" id="mo-cl">
   <div class="md" style="width:640px">
-    <div class="mh"><div class="mt" id="mo-cl-title">Cliente</div><button class="mc" onclick="closeMo('mo-cl')">✕</button></div>
+    <div class="mh"><div class="mt" id="mo-cl-title">Cliente</div><button class="mc" onclick="closeMo('mo-cl')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div id="mo-cl-body"></div>
     <div class="mf">
-      <button class="btn btn-g" id="mo-cl-delete-btn" style="color:var(--red);border-color:rgba(255,77,77,.3)" onclick="deleteClient()">🗑 Eliminar</button>
-      <button class="btn btn-g" id="mo-cl-archive-btn" onclick="archiveClient()">📦 Archivar</button>
+      <button class="btn btn-g" id="mo-cl-delete-btn" style="color:var(--red);border-color:rgba(255,77,77,.3)" onclick="deleteClient()"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M9 6V4h6v2"/></svg></span> Eliminar</button>
+      <button class="btn btn-g" id="mo-cl-archive-btn" onclick="archiveClient()"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></span> Archivar</button>
       <div style="flex:1"></div>
       <button class="btn btn-g" onclick="closeMo('mo-cl')">Cerrar</button>
       <button class="btn btn-p" onclick="saveClientNotes()">Guardar</button>
@@ -803,7 +803,7 @@
   </div>
 </div>
 
-<div id="toast">✓ Guardado</div>
+<div id="toast"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Guardado</div>
 
 
 
@@ -811,8 +811,8 @@
 <div class="mo" id="mo-confirm" style="z-index:300">
   <div class="md" style="width:420px;gap:0">
     <div class="mh" style="border-bottom:none;padding-bottom:8px">
-      <div id="mo-confirm-icon" style="font-size:28px">⚠️</div>
-      <button class="mc" onclick="closeMo('mo-confirm');_confirmReject&&_confirmReject()">✕</button>
+      <div id="mo-confirm-icon" style="color:var(--yellow);display:flex;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <button class="mc" onclick="closeMo('mo-confirm');_confirmReject&&_confirmReject()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div style="padding:0 24px 20px">
       <div id="mo-confirm-title" style="font-size:16px;font-weight:700;margin-bottom:8px"></div>
@@ -830,7 +830,7 @@
   <div class="md" style="width:380px;gap:0">
     <div class="mh" style="border-bottom:none;padding-bottom:8px">
       <div id="mo-alert-icon" style="font-size:28px">ℹ️</div>
-      <button class="mc" onclick="closeMo('mo-alert')">✕</button>
+      <button class="mc" onclick="closeMo('mo-alert')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div style="padding:0 24px 20px">
       <div id="mo-alert-msg" style="font-size:14px;line-height:1.6"></div>
@@ -843,11 +843,11 @@
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-close" onclick="closeLightbox()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   <img id="lightbox-img" src="" alt="">
   <div class="lightbox-title" id="lightbox-title"></div>
   <div class="lightbox-actions" onclick="event.stopPropagation()">
-    <a id="lightbox-dl" href="" download class="btn btn-p btn-sm">⬇ Descargar</a>
+    <a id="lightbox-dl" href="" download class="btn btn-p btn-sm"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span> Descargar</a>
     <a id="lightbox-open" href="" target="_blank" class="btn btn-g btn-sm">↗ Ver en YouTube</a>
   </div>
 </div>
@@ -860,15 +860,15 @@
         <div class="mt" id="rev-title">Revisar miniatura</div>
         <div style="font-size:12px;color:var(--muted);margin-top:2px" id="rev-version-label"></div>
       </div>
-      <button class="mc" onclick="closeMo('mo-review')">✕</button>
+      <button class="mc" onclick="closeMo('mo-review')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
 
     <!-- Canvas de anotación -->
     <div style="margin-bottom:12px">
       <div class="ctoolbar" id="canvas-toolbar">
         <span style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-right:4px">Herramientas:</span>
-        <button class="tbtn act" id="tool-pen" onclick="setTool('pen')">✏️ Marcar</button>
-        <button class="tbtn" id="tool-arrow" onclick="setTool('arrow')">➜ Flecha</button>
+        <button class="tbtn act" id="tool-pen" onclick="setTool('pen')"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span> Marcar</button>
+        <button class="tbtn" id="tool-arrow" onclick="setTool('arrow')"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span> Flecha</button>
         <button class="tbtn" id="tool-rect" onclick="setTool('rect')">▭ Área</button>
         <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
         <button class="tbtn" onclick="setColor('#ff4d4d')" title="Rojo"><span class="cdot" style="background:#ff4d4d"></span></button>
@@ -876,8 +876,8 @@
         <button class="tbtn" onclick="setColor('#4d9fff')" title="Azul"><span class="cdot" style="background:#4d9fff"></span></button>
         <button class="tbtn" onclick="setColor('#2dca73')" title="Verde"><span class="cdot" style="background:#2dca73"></span></button>
         <div style="margin-left:auto;display:flex;gap:6px">
-          <button class="tbtn" onclick="undoStroke()" title="Deshacer">↩ Deshacer</button>
-          <button class="tbtn" onclick="clearCanvas()" title="Limpiar">🗑 Limpiar</button>
+          <button class="tbtn" onclick="undoStroke()" title="Deshacer"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg></span> Deshacer</button>
+          <button class="tbtn" onclick="clearCanvas()" title="Limpiar"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M9 6V4h6v2"/></svg></span> Limpiar</button>
         </div>
       </div>
       <div class="canvas-wrap" id="canvas-wrap">
@@ -890,8 +890,8 @@
     <div id="rev-client-actions">
       <textarea class="review-comment" id="rev-comment" placeholder="Escribí tu feedback: qué te gusta, qué querés cambiar, qué falta..."></textarea>
       <div class="rev-actions">
-        <button class="btn-chg" onclick="submitReview('cambios')">✎ Pedir cambios</button>
-        <button class="btn-ok" onclick="submitReview('aprobado')">✓ Aprobar miniatura</button>
+        <button class="btn-chg" onclick="submitReview('cambios')"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></span> Pedir cambios</button>
+        <button class="btn-ok" onclick="submitReview('aprobado')"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Aprobar miniatura</button>
       </div>
     </div>
 
@@ -906,11 +906,11 @@
 <!-- MODAL SUBIR ENTREGA (diseñador) -->
 <div class="mo" id="mo-deliver">
   <div class="md" style="width:500px">
-    <div class="mh"><div class="mt">Subir miniatura terminada</div><button class="mc" onclick="closeMo('mo-deliver')">✕</button></div>
+    <div class="mh"><div class="mt">Subir miniatura terminada</div><button class="mc" onclick="closeMo('mo-deliver')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Subí la versión lista para que el cliente la revise y apruebe.</p>
     <div class="upload-zone" id="deliver-zone" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDeliverDrop(event)">
       <input type="file" accept="image/*" onchange="handleDeliverFile(this.files[0])">
-      <div class="upload-icon">🎨</div>
+      <div class="upload-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>
       <div class="upload-label">Arrastrá la miniatura o <strong>hacé clic para seleccionar</strong><br><small>PNG o JPG recomendado · 1280×720px ideal</small></div>
     </div>
     <div id="deliver-preview" style="margin-top:12px;display:none">
@@ -935,14 +935,14 @@
 <div class="mo" id="mo-approved">
   <div class="md" style="width:560px;text-align:center">
     <div style="padding:32px 32px 0">
-      <div style="font-size:56px;margin-bottom:8px">🎉</div>
-      <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#2dca73;margin-bottom:6px">¡Miniatura aprobada!</div>
-      <div id="ap-subtitle" style="font-size:14px;color:var(--muted);margin-bottom:24px">Tu diseñador va a estar muy contento 🚀</div>
+      <div style="display:flex;justify-content:center;color:var(--green);margin-bottom:12px"><svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3L2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2z"/></svg></div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:22px;font-weight:700;color:#2dca73;margin-bottom:6px">¡Miniatura aprobada!</div>
+      <div id="ap-subtitle" style="font-size:14px;color:var(--muted);margin-bottom:24px">Tu diseñador ya fue notificado.</div>
       <div id="ap-versions" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;text-align:left"></div>
     </div>
     <div class="mf" style="border-top:1px solid var(--border);padding:16px 24px">
       <button class="btn btn-g" onclick="closeMo('mo-approved')">Cerrar</button>
-      <button id="ap-dl-all" class="btn btn-p" onclick="downloadAllVersions()" style="display:none">⬇ Descargar todas</button>
+      <button id="ap-dl-all" class="btn btn-p" onclick="downloadAllVersions()" style="display:none"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span> Descargar todas</button>
     </div>
   </div>
 </div>
@@ -1050,7 +1050,7 @@ const sb=s=>{
   return`<span class="badge ${m[s]||'bm'}">${s}</span>`;
 };
 const pb=s=>{const m={'Al día':'bg',Pendiente:'by',Vencido:'br'};return`<span class="badge ${m[s]||'bm'}">${s}</span>`;};
-function toast(msg='✓ Guardado'){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function toast(msg='Guardado'){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 
 /* ═══ LIGHTBOX ═══ */
 function openLightbox(imgUrl, title, ytUrl){
@@ -1074,10 +1074,10 @@ function urgencyChip(deadline){
   const today = new Date(); today.setHours(0,0,0,0);
   const dl = new Date(deadline); dl.setHours(0,0,0,0);
   const diff = Math.round((dl-today)/(1000*60*60*24));
-  if(diff < 0) return '<span class="chip-urgente">⚡ Vencido</span>';
-  if(diff === 0) return '<span class="chip-urgente">🔥 Hoy</span>';
-  if(diff === 1) return '<span class="chip-urgente">⚡ Urgente</span>';
-  if(diff <= 3) return '<span class="chip-hoy">⏰ Pronto</span>';
+  if(diff < 0) return '<span class="chip-urgente"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Vencido</span>';
+  if(diff === 0) return '<span class="chip-urgente"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span> Hoy</span>';
+  if(diff === 1) return '<span class="chip-urgente"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Urgente</span>';
+  if(diff <= 3) return '<span class="chip-hoy"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span> Pronto</span>';
   return '';
 }
 
@@ -1086,10 +1086,10 @@ function urgencyLabel(deadline){
   const today = new Date(); today.setHours(0,0,0,0);
   const dl = new Date(deadline); dl.setHours(0,0,0,0);
   const diff = Math.round((dl-today)/(1000*60*60*24));
-  if(diff < 0) return '⚡ Vencido';
-  if(diff === 0) return '🔥 Para hoy';
-  if(diff === 1) return '⚡ Para mañana — Urgente';
-  if(diff <= 3) return '⏰ En '+diff+' días';
+  if(diff < 0) return '<span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Vencido';
+  if(diff === 0) return '<span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span> Para hoy';
+  if(diff === 1) return '<span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Para mañana';
+  if(diff <= 3) return '<span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span> En '+diff+' días';
   return null;
 }
 
@@ -1115,7 +1115,7 @@ function renderNotifPanel(){
   }
   list.innerHTML = notifications.map(n=>`
     <div class="notif-item ${n.read?'':'unread'}" onclick="clickNotif('${n.id}','${n.rid||''}')">
-      <div class="notif-icon">${n.icon}</div>
+      <div class="notif-icon">${{'clipboard':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>`,'check':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,'clock':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,'flag':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>`,'bell':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`}[n.icon]||n.icon}</div>
       <div class="notif-txt">
         <div class="notif-title">${n.title}</div>
         <div class="notif-sub">${n.sub}</div>
@@ -1161,7 +1161,7 @@ function startRealtime(){
         const r = payload.new;
         const c = S.clients.find(x=>x.id===r.client_id);
         const clientName = c?.name || 'Un cliente';
-        addNotification('📋', 'Nuevo pedido', `${clientName} pidió "${r.title||'miniatura'}"`, r.id);
+        addNotification('clipboard', 'Nuevo pedido', `${clientName} pidió "${r.title||'miniatura'}"`, r.id);
         loadAdminData().then(()=>{ renderADash(); renderAClients(); renderAReqs(); renderAPays(); });
       })
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'requests' }, payload=>{
@@ -1192,7 +1192,7 @@ function startRealtime(){
         renderCReqs(user.clientId);
         // Notificar si pasó a "Listo para revisar"
         if(r.status === 'Listo para revisar'){
-          toast('🎉 ¡Tu miniatura está lista para revisar!');
+          toast('¡Tu miniatura está lista para revisar!');
         }
       })
       .subscribe();
@@ -1263,7 +1263,7 @@ async function handleSession(session){
     setTimeout(()=>{
       S.reqs.filter(r=>r.status!=='Entregado'&&r.status!=='Aprobado').forEach(r=>{
         const lbl = urgencyLabel(r.deadline);
-        if(lbl){ const c=gc(r.cid); addNotification('⏰','Pedido urgente',`${c?.name||''}: "${r.title}" — ${lbl}`,r.id); }
+        if(lbl){ const c=gc(r.cid); addNotification('clock', 'Pedido urgente',`${c?.name||''}: "${r.title}" — ${lbl}`,r.id); }
       });
       checkReminders();
     }, 800);
@@ -1291,11 +1291,11 @@ async function loginWithGoogle(){
       queryParams: { prompt: 'select_account' }
     }
   });
-  if(error) toast('❌ Error al iniciar sesión: ' + error.message);
+  if(error) toast('Error al iniciar sesión: ' + error.message);
 }
 
 async function logout(){
-  const ok = await appConfirm('¿Cerrar sesión?','¿Seguro que querés salir de ThumbFlow?','Salir','Cancelar','🚪');
+  const ok = await appConfirm('¿Cerrar sesión?','¿Seguro que querés salir de ThumbFlow?','Salir','Cancelar','logout');
   if(!ok) return;
   stopRealtime();
   if(sb_client) await sb_client.auth.signOut();
@@ -1320,7 +1320,7 @@ function login(name){
     const c=gc('c1');
     document.getElementById('cl-av').textContent=c.name[0];
     document.getElementById('cl-un').textContent=c.name;
-    document.getElementById('cl-welcome').textContent=`Hola, ${c.name.split(' ')[0]} 👋`;
+    document.getElementById('cl-welcome').textContent=`Hola, ${c.name.split(' ')[0]}`;
     renderCDash('c1');
     restoreSidebar('client');
     setTimeout(()=>obShow(), 800);
@@ -1368,7 +1368,7 @@ async function loadAdminData(){
     console.log('[ThumbFlow] Cargado:', realClients.length, 'clientes reales,', realReqs.length, 'pedidos reales');
   }catch(e){
     console.error('[ThumbFlow] Error cargando datos:', e);
-    toast('⚠ Error cargando datos de Supabase');
+    toast('Error cargando datos');
   }
 }
 
@@ -1390,7 +1390,7 @@ async function loadClientData(userId){
           // Vincular el user_id automáticamente
           await sb_client.from('clients').update({user_id:userId}).eq('id',byEmail[0].id);
           clients = byEmail;
-          toast('✓ Cuenta vinculada correctamente');
+          toast('Cuenta vinculada');
         }
       }
     }
@@ -1398,10 +1398,10 @@ async function loadClientData(userId){
     if(!clients||!clients.length){
       // Cliente nuevo — mostrar pantalla de espera
       showScreen('screen-client');
-      document.getElementById('cl-welcome').textContent = `Hola 👋`;
+      document.getElementById('cl-welcome').textContent = `Hola`;
       document.getElementById('cl-stats').innerHTML=`
         <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">
-          <div style="font-size:48px;margin-bottom:16px">⏳</div>
+          <div style="opacity:.35;display:flex;justify-content:center;margin-bottom:16px"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
           <div style="font-size:16px;font-weight:600;margin-bottom:8px">Tu cuenta está siendo configurada</div>
           <div style="font-size:13px">El diseñador va a activar tu acceso en breve.<br>Volvé a intentar en unos minutos.</div>
         </div>`;
@@ -1435,14 +1435,14 @@ async function loadClientData(userId){
 
     document.getElementById('cl-av').textContent=c.name[0].toUpperCase();
     document.getElementById('cl-un').textContent=c.name.split(' ')[0];
-    document.getElementById('cl-welcome').textContent=`Hola, ${c.name.split(' ')[0]} 👋`;
+    document.getElementById('cl-welcome').textContent=`Hola, ${c.name.split(' ')[0]}`;
     if(user) user.clientId = c.id;
     renderCDash(c.id);
     startRealtime();
 
   }catch(e){
     console.error('[ThumbFlow] Error cargando cliente:', e);
-    toast('⚠ Error cargando tus datos');
+    toast('Error cargando tus datos');
   }
 }
 
@@ -1470,7 +1470,7 @@ async function dbAddClient(data){
     pack:data.pack, price:data.price, pay_status:data.pay, 
     notes:data.notes, user_id: userId
   }]).select().single();
-  if(error){toast('❌ Error: '+error.message);return null;}
+  if(error){toast('Error: '+error.message);return null;}
   return res;
 }
 
@@ -1490,7 +1490,7 @@ async function dbAddRequest(data, clientId){
     deadline:data.deadline||null, notes:data.notes,
     yt_refs:data.refs, client_imgs:data.clientImgs
   }]).select().single();
-  if(error){toast('❌ Error al guardar pedido: '+error.message);return null;}
+  if(error){toast('Error al guardar pedido');return null;}
   return res;
 }
 
@@ -1507,7 +1507,7 @@ async function dbAddVersion(requestId, imgUrl){
   const {data:res,error}=await sb_client.from('versions').insert([{
     request_id:requestId, img_url:imgUrl, status:'pendiente'
   }]).select().single();
-  if(error){toast('❌ Error al subir versión: '+error.message);return null;}
+  if(error){toast('Error al subir versión');return null;}
   return res;
 }
 
@@ -1520,7 +1520,7 @@ async function dbUploadImage(file, path){
   if(!sb_client) return null;
   const {data,error}=await sb_client.storage
     .from('thumbflow').upload(path, file, {upsert:true});
-  if(error){toast('❌ Error subiendo imagen: '+error.message);return null;}
+  if(error){toast('Error subiendo imagen');return null;}
   const {data:{publicUrl}}=sb_client.storage.from('thumbflow').getPublicUrl(path);
   return publicUrl;
 }
@@ -1595,7 +1595,7 @@ function renderADash(){
     const cl=gc(r.cid);
     const isDone = r.status==='Completado';
     return`<div class="rc" style="${isDone?'opacity:.5':''}"><div><div class="rt">${r.title}</div><div class="rm"><span>${cl?.name}</span><span>${fd(r.deadline)}</span><span class="chip-pair">${sb(r.status)}${urgencyChip(r.deadline)}</span></div></div><button class="btn btn-g btn-sm" onclick="openReqMo('${r.id}')">Ver</button></div>`;
-  }).join('') : '<div style="color:var(--muted);font-size:13px;padding:12px 0">No hay pedidos pendientes 🎉</div>';
+  }).join('') : '<div style="color:var(--muted);font-size:13px;padding:12px 0">Sin pedidos pendientes</div>';
   document.getElementById('a-cl-sum').innerHTML=S.clients.filter(c=>!c.archived).map(c=>`
     <tr><td data-label="Cliente"><strong>${c.name}</strong><br><small style="color:var(--muted)">${c.ch}</small></td>
     <td data-label="Pack">${c.pack===99?'Ilimitado':c.pack+' mins.'}</td>
@@ -1606,9 +1606,9 @@ function renderADash(){
 }
 /* ════ ONBOARDING ════ */
 const OB_STEPS = [
-  { icon:'👋', title:'¡Bienvenido a ThumbFlow!', desc:'Desde acá podés ver el estado de tus miniaturas en tiempo real, dejar feedback y aprobar el trabajo de tu diseñador.' },
-  { icon:'📋', title:'Cargá tu pedido', desc:'Entrá a "Nuevo pedido", escribí el título de tu video, agregá referencias de YouTube y contale a tu diseñador el estilo que buscás.' },
-  { icon:'✨', title:'Revisá y aprobá', desc:'Cuando tu diseñador termine, vas a ver la miniatura acá. Podés marcar cambios directamente sobre la imagen o aprobarla con un clic.' }
+  { icon:'gift', title:'¡Bienvenido a ThumbFlow!', desc:'Desde acá podés ver el estado de tus miniaturas en tiempo real, dejar feedback y aprobar el trabajo de tu diseñador.' },
+  { icon:'clipboard', title:'Cargá tu pedido', desc:'Entrá a "Nuevo pedido", escribí el título de tu video, agregá referencias de YouTube y contale a tu diseñador el estilo que buscás.' },
+  { icon:'sparkle', title:'Revisá y aprobá', desc:'Cuando tu diseñador termine, vas a ver la miniatura acá. Podés marcar cambios directamente sobre la imagen o aprobarla con un clic.' }
 ];
 
 function obShow(){
@@ -1620,10 +1620,10 @@ function obShow(){
 }
 function obRender(){
   const s = OB_STEPS[_obStep];
-  document.getElementById('ob-content').innerHTML = `<div class="ob-icon">${s.icon}</div><div class="ob-title">${s.title}</div><div class="ob-desc">${s.desc}</div>`;
+  document.getElementById('ob-content').innerHTML = `<div class="ob-icon" style="display:flex;justify-content:center;color:var(--accent)">${{'gift':`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>`,'clipboard':`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>`,'sparkle':`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M5 17l.5 1.5L7 19l-1.5.5L5 21l-.5-1.5L3 19l1.5-.5L5 17z"/></svg>`}[s.icon]||s.icon}</div><div class="ob-title">${s.title}</div><div class="ob-desc">${s.desc}</div>`;
   document.querySelectorAll('.ob-step-dot').forEach((d,i)=>{ d.className='ob-step-dot'+(i===_obStep?' active':''); });
   document.getElementById('ob-back').style.display = _obStep>0?'':'none';
-  document.getElementById('ob-next').textContent = _obStep===OB_STEPS.length-1?'¡Empezar! 🚀':'Siguiente →';
+  document.getElementById('ob-next').textContent = _obStep===OB_STEPS.length-1?'Empezar →':'Siguiente →';
 }
 function obNav(dir){
   _obStep = Math.max(0, Math.min(OB_STEPS.length-1, _obStep+dir));
@@ -1646,7 +1646,7 @@ function checkReminders(){
     const days = Math.floor((now - updated) / 86400000);
     if(days >= REMINDER_DAYS){
       const c = gc(r.cid);
-      addNotification('⏳','Pedido sin mover',`"${r.title}" lleva ${days} días en "${r.status}"${c?' ('+c.name+')':''}`,r.id);
+      addNotification('flag', 'Pedido sin mover',`"${r.title}" lleva ${days} días en "${r.status}"${c?' ('+c.name+')':''}`,r.id);
     }
   });
 }
@@ -1671,9 +1671,9 @@ function renderAClients(){
       ? `<img src="${c.ch_avatar}" class="ch-avatar" alt="${c.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
         + `<div class="ch-avatar-fallback" style="display:none">${ini(c.name)}</div>`
       : `<div class="cav" style="${isArchived?'filter:grayscale(1)':''}">${ini(c.name)}</div>`;
-    const subsHtml = c.ch_subs ? `<div class="ch-subs">📊 ${c.ch_subs}</div>` : '';
+    const subsHtml = c.ch_subs ? `<div class="ch-subs">${c.ch_subs} subs</div>` : '';
     return `<div class="cc" style="${isArchived?'opacity:.55;border-style:dashed':''}position:relative" onclick="openClMo('${c.id}')">
-      ${hasReminder ? '<span class="cc-reminder">⏳ Sin mover</span>' : ''}
+      ${hasReminder ? '<span class="cc-reminder"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/></svg> Sin mover</span>' : ''}
       <div class="cch">
         ${avatarHtml}
         <div>
@@ -1684,7 +1684,7 @@ function renderAClients(){
         <div style="margin-left:auto">${isArchived?'':''+pb(c.pay)}</div>
       </div>
       ${isArchived
-        ? `<div style="padding:8px 0 2px;font-size:12px;color:var(--muted)">📦 Archivado · ${reqs.length} pedidos guardados · <span style="color:var(--accent);cursor:pointer" onclick="event.stopPropagation();unarchiveClient('${c.id}')">Restaurar</span></div>`
+        ? `<div style="padding:8px 0 2px;font-size:12px;color:var(--muted)"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></span> Archivado · ${reqs.length} pedidos guardados · <span style="color:var(--accent);cursor:pointer" onclick="event.stopPropagation();unarchiveClient('${c.id}')">Restaurar</span></div>`
         : `<div class="cs"><div class="csv"><div class="csn ${c.used>=c.pack&&c.pack!==99?'c-red':'c-green'}">${c.pack===99?'∞':c.pack-c.used}</div><div class="csl">Disponibles</div></div><div class="csv"><div class="csn c-yellow">${p}</div><div class="csl">Pendientes</div></div></div>
            ${enRevision>0 ? `<div class="cc-review-badge"><span class="cc-review-dot"></span>${enRevision} listo${enRevision>1?'s':''} para revisar</div>` : ''}`
       }
@@ -1693,11 +1693,11 @@ function renderAClients(){
 
   let html = active.map(c=>renderCard(c,false)).join('');
   if(archived.length){
-    html += `<div style="grid-column:1/-1;margin-top:8px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.08em">📦 ARCHIVADOS (${archived.length})</div>`;
+    html += `<div style="grid-column:1/-1;margin-top:8px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.08em"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg> ARCHIVADOS (${archived.length})</div>`;
     html += archived.map(c=>renderCard(c,true)).join('');
   }
 
-  document.getElementById('a-cl-grid').innerHTML = html || '<div class="es"><div style="font-size:48px;opacity:.4">👤</div><p>No hay clientes aún.</p></div>';
+  document.getElementById('a-cl-grid').innerHTML = html || '<div class="es"><div style="opacity:.25;display:flex;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><p>No hay clientes aún.</p></div>';
   document.getElementById('badge-cl').textContent = active.length;
   // Enrich active clients with channel avatar/subs (async, non-blocking)
   active.forEach(async (cl)=>{
@@ -1724,7 +1724,7 @@ function renderAReqs(){
   const el=document.getElementById('a-reqs');if(!el)return;
   el.innerHTML=list.length?list.map(r=>{
     const c=gc(r.cid),hr=r.refs&&r.refs.length>0;
-    return`<div class="rc"><div><div class="rt">${r.title}${hr?` <span style="font-size:11px;color:var(--accent)">📸 ${r.refs.length} ref.</span>`:''}</div><div class="rm"><span>👤 ${c?.name}</span><span>🎨 ${r.style||'-'}</span><span>📅 ${fd(r.deadline)}</span><span class="chip-pair">${sb(r.status)}${urgencyChip(r.deadline)}</span></div></div>
+    return`<div class="rc"><div><div class="rt">${r.title}${hr?` <span style="font-size:11px;color:var(--accent)"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span> ${r.refs.length} ref.</span>`:''}</div><div class="rm"><span>${c?.name}</span><span><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></span> ${r.style||'-'}</span><span><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span> ${fd(r.deadline)}</span><span class="chip-pair">${sb(r.status)}${urgencyChip(r.deadline)}</span></div></div>
     <div style="display:flex;gap:8px;align-items:center">
 
       </button>
@@ -1735,7 +1735,7 @@ function renderAReqs(){
         <option ${r.status==='Completado'?'selected':''}>Completado</option>
       </select>
       <button class="btn btn-g btn-sm" onclick="openReqMo('${r.id}')">Ver</button>
-    </div></div>`;}).join(''):`<div class="es"><div style="font-size:48px;opacity:.4">📭</div><p>No hay pedidos.</p></div>`;
+    </div></div>`;}).join(''):`<div class="es"><div style="opacity:.25;display:flex;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div><p>No hay pedidos.</p></div>`;
 }
 function renderAPays(){
   document.getElementById('a-pays').innerHTML=S.clients.map(c=>`
@@ -1806,7 +1806,7 @@ function updateSaveBtn(){
     const first = el.querySelector('span:first-child');
     if(first){
       if(isSel){ first.style.cssText=`width:7px;height:7px;border-radius:50%;background:${cfg.hex};flex-shrink:0;animation:liveDot 1.8s ease-in-out infinite`; first.textContent=''; }
-      else { first.style.cssText=''; first.textContent = {'No iniciado':'📋','En progreso':'🎨','Listo para revisar':'✨','Completado':'✅'}[st]||''; }
+      else { first.style.cssText=''; first.textContent = {'No iniciado':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>`,'En progreso':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`,'Listo para revisar':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M5 17l.5 1.5L7 19l-1.5.5L5 21l-.5-1.5L3 19l1.5-.5L5 17z"/></svg>`,'Completado':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`}[st]||''; }
     }
   });
 
@@ -1856,7 +1856,7 @@ function cancelReqMo(){
   }
   closeMo('mo-req');
 }
-function appConfirm({title='¿Estás seguro?', msg='', icon='⚠️', okLabel='Confirmar', okStyle=''}){
+function appConfirm({title='¿Estás seguro?', msg='', icon='alert', okLabel='Confirmar', okStyle=''}){
   return new Promise((resolve,reject)=>{
     _confirmResolve=resolve; _confirmReject=reject;
     document.getElementById('mo-confirm-icon').textContent=icon;
@@ -1877,16 +1877,16 @@ function appAlert({msg='', icon='ℹ️'}){
 
 function getTrackingConfig(status){
   const steps = [
-    { key:'No iniciado', icon:'📋', label:'Recibido' },
-    { key:'En progreso', icon:'🎨', label:'Diseñando' },
-    { key:'Listo para revisar', icon:'✨', label:'Listo' },
-    { key:'Completado', icon:'✅', label:'Completado' },
+    { key:'No iniciado', icon:'clipboard', label:'Recibido' },
+    { key:'En progreso', icon:'paint', label:'Diseñando' },
+    { key:'Listo para revisar', icon:'sparkle', label:'Listo' },
+    { key:'Completado', icon:'check', label:'Completado' },
   ];
   const msgs = {
-    'No iniciado': { icon:'📬', title:'Pedido recibido', sub:'Tu diseñador ya lo vio. En breve empieza a trabajar en tu miniatura.' },
-    'En progreso': { icon:'🎨', title:'¡Tu miniatura está siendo diseñada!', sub:'El diseñador está trabajando en tu pedido ahora mismo. Te avisamos cuando esté lista para revisar.' },
-    'Listo para revisar': { icon:'🎉', title:'¡Tu miniatura está lista!', sub:'Revisá la miniatura y aprobala o pedí cambios desde el detalle del pedido.' },
-    'Completado': { icon:'🏆', title:'¡Miniatura completada!', sub:'Tu diseñador marcó este pedido como finalizado. ¡A publicar!' },
+    'No iniciado': { icon:'inbox', title:'Pedido recibido', sub:'Tu diseñador ya lo vio. En breve empieza a trabajar en tu miniatura.' },
+    'En progreso': { icon:'paint', title:'¡Tu miniatura está siendo diseñada!', sub:'El diseñador está trabajando en tu pedido ahora mismo. Te avisamos cuando esté lista para revisar.' },
+    'Listo para revisar': { icon:'sparkle', title:'¡Tu miniatura está lista!', sub:'Revisá la miniatura y aprobala o pedí cambios desde el detalle del pedido.' },
+    'Completado': { icon:'star', title:'¡Miniatura completada!', sub:'Tu diseñador marcó este pedido como finalizado. ¡A publicar!' },
   };
   const idx = steps.findIndex(s=>s.key===status);
   return { steps, msgs, idx: idx>=0?idx:0 };
@@ -1927,7 +1927,7 @@ function renderTracking(cid){
       ? `background:${sc.dot};border-color:${sc.color};box-shadow:0 0 0 6px ${sc.dot};`
       : '';
     return `<div class="ts ${cls}">
-      <div class="ts-dot ${cls}" style="${dotStyle}">${i<idx?'✓':s.icon}</div>
+      <div class="ts-dot ${cls}" style="${dotStyle}">${{'clipboard':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>`,'paint':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`,'sparkle':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M5 17l.5 1.5L7 19l-1.5.5L5 21l-.5-1.5L3 19l1.5-.5L5 17z"/></svg>`,'check':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`}[i<idx?'check':s.icon]||s.icon}</div>
       <div class="ts-lbl" style="${isCurrent?'color:'+sc.color+';font-weight:800':''}">${s.label}</div>
     </div>`;
   }).join('');
@@ -1938,7 +1938,7 @@ function renderTracking(cid){
         <span style="width:7px;height:7px;border-radius:50%;background:${sc.color};display:inline-block;animation:livePulse_${primary.status.replace(/ /g,'_')} 1.8s ease-in-out infinite"></span>
         ${primary.status}
        </span>`
-    : `<span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--green);background:rgba(45,202,115,.1);border:1px solid rgba(45,202,115,.25);border-radius:20px;padding:3px 10px">✅ Completado</span>`;
+    : `<span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--green);background:rgba(45,202,115,.1);border:1px solid rgba(45,202,115,.25);border-radius:20px;padding:3px 10px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Completado</span>`;
 
   // Widget compacto para pedidos secundarios
   const restHtml = rest.length ? `
@@ -1953,7 +1953,7 @@ function renderTracking(cid){
               <span style="width:8px;height:8px;border-radius:50%;background:${rsc.color};flex-shrink:0;${r.status!=='Completado'?'animation:liveDot 1.8s ease-in-out infinite':''}"></span>
               <div>
                 <div style="font-size:13px;font-weight:600">${r.title}</div>
-                <div style="font-size:11px;color:var(--muted)">${r.status} · 📅 ${r.deadline?fd(r.deadline):'Sin fecha'} ${urgencyChip(r.deadline)}</div>
+                <div style="font-size:11px;color:var(--muted)">${r.status} · <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${r.deadline?fd(r.deadline):'Sin fecha'} ${urgencyChip(r.deadline)}</div>
               </div>
             </div>
             <span class="tracking-mini-arrow">›</span>
@@ -1964,7 +1964,7 @@ function renderTracking(cid){
               ${rs.map((s,i)=>{
                 const cls=i<ri?'done':i===ri?'active':'';
                 const dotStyle2=i===ri?`background:${rsc.dot};border-color:${rsc.color};box-shadow:0 0 0 5px ${rsc.dot}`:'';
-                return `<div class="ts ${cls}"><div class="ts-dot ${cls}" style="width:32px;height:32px;font-size:14px;${dotStyle2}">${i<ri?'✓':s.icon}</div><div class="ts-lbl">${s.label}</div></div>`;
+                return `<div class="ts ${cls}"><div class="ts-dot ${cls}" style="width:32px;height:32px;font-size:14px;${dotStyle2}">${i<ri?`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`:s.icon}</div><div class="ts-lbl">${s.label}</div></div>`;
               }).join('')}
             </div>
             <button class="btn btn-g btn-sm" onclick="event.stopPropagation();openReqMo('${r.id}')">Ver detalle</button>
@@ -1980,7 +1980,7 @@ function renderTracking(cid){
           <div class="tracking-title">${primary.title}</div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap">
             ${liveBadge}
-            <span style="color:var(--muted);font-size:12px">📅 ${primary.deadline?fd(primary.deadline):'Sin fecha'}</span>
+            <span style="color:var(--muted);font-size:12px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${primary.deadline?fd(primary.deadline):'Sin fecha'}</span>
             ${urgencyChip(primary.deadline)}
           </div>
         </div>
@@ -1996,7 +1996,7 @@ function renderTracking(cid){
           <div class="tmsg-title">${msg.title}</div>
           <div class="tmsg-sub">${msg.sub}</div>
         </div>
-        ${primary.status==='Listo para revisar'?`<button class="btn btn-p btn-sm" style="white-space:nowrap;flex-shrink:0;animation:pulse 2s infinite" onclick="openReqMo('${primary.id}')">👁 Ver miniatura</button>`:''}
+        ${primary.status==='Listo para revisar'?`<button class="btn btn-p btn-sm" style="white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:6px;animation:pulse 2s infinite" onclick="openReqMo('${primary.id}')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Ver miniatura</button>`:''}
       </div>
     </div>
     ${restHtml}`;
@@ -2013,19 +2013,19 @@ function renderCDash(cid){
   renderTracking(cid);
   updateCreditsUI(c);
   const rec=[...rqs].reverse().slice(0,3);
-  document.getElementById('cl-recent').innerHTML=rec.length?rec.map(r=>`<div class="rc"><div><div class="rt">${r.title}</div><div class="rm"><span class="chip-pair">${sb(r.status)}${urgencyChip(r.deadline)}</span><span>📅 ${fd(r.deadline)}</span></div></div><button class="btn btn-g btn-sm" onclick="openReqMo('${r.id}')">Ver / Editar</button></div>`).join(''):`<div class="es"><div style="font-size:48px;opacity:.4">📭</div><p>No tenés pedidos aún.</p><button class="btn btn-p" onclick="showPanel('client','nuevo',document.getElementById('nav-nuevo'))">Hacer primer pedido</button></div>`;
+  document.getElementById('cl-recent').innerHTML=rec.length?rec.map(r=>`<div class="rc"><div><div class="rt">${r.title}</div><div class="rm"><span class="chip-pair">${sb(r.status)}${urgencyChip(r.deadline)}</span><span><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span> ${fd(r.deadline)}</span></div></div><button class="btn btn-g btn-sm" onclick="openReqMo('${r.id}')">Ver / Editar</button></div>`).join(''):`<div class="es"><div style="opacity:.25;display:flex;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div><p>No tenés pedidos aún.</p><button class="btn btn-p" onclick="showPanel('client','nuevo',document.getElementById('nav-nuevo'))">Hacer primer pedido</button></div>`;
   renderCReqs(cid);renderCPack(c);
 }
 function renderCReqs(cid){
   const el=document.getElementById('cl-all-reqs');if(!el)return;
   const rqs=gr(cid);
   el.innerHTML=rqs.length?[...rqs].reverse().map(r=>{
-    return`<div class="rc"><div><div class="rt">${r.title}${r.refs&&r.refs.length?` <span style="font-size:11px;color:var(--accent)">📸 ${r.refs.length} ref.</span>`:''}</div><div class="rm"><span class="chip-pair">${sb(r.status)}${urgencyChip(r.deadline)}</span><span>🎨 ${r.style||'-'}</span><span>📅 ${fd(r.deadline)}</span></div></div>
+    return`<div class="rc"><div><div class="rt">${r.title}${r.refs&&r.refs.length?` <span style="font-size:11px;color:var(--accent)"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span> ${r.refs.length} ref.</span>`:''}</div><div class="rm"><span class="chip-pair">${sb(r.status)}${urgencyChip(r.deadline)}</span><span><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></span> ${r.style||'-'}</span><span><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span> ${fd(r.deadline)}</span></div></div>
     <div style="display:flex;gap:8px">
 
       </button>
       <button class="btn btn-g btn-sm" onclick="openReqMo('${r.id}')">Ver / Editar</button>
-    </div></div>`;}).join(''):`<div class="es"><div style="font-size:48px;opacity:.4">📋</div><p>No tenés pedidos aún.</p></div>`;
+    </div></div>`;}).join(''):`<div class="es"><div style="opacity:.25;display:flex;justify-content:center"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></div><p>No tenés pedidos aún.</p></div>`;
 }
 function renderCPack(c){
   const el=document.getElementById('cl-pack');if(!el)return;
@@ -2037,7 +2037,7 @@ function renderCPack(c){
     </div>
     <div class="pbar" style="height:10px"><div class="pbar-fill" style="width:${pct}%;background:${pct>80?'var(--red)':pct>50?'var(--yellow)':'var(--green)'}"></div></div>
     <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:8px"><span style="color:var(--muted)">Usadas: <strong style="color:var(--text)">${c.used}</strong></span><span style="color:var(--muted)">Total: <strong style="color:var(--text)">${c.pack===99?'∞':c.pack}</strong></span></div>
-    <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">${pb(c.pay)}<p style="color:${c.pay==='Al día'?'var(--green)':'var(--red)'};font-size:13px;margin-top:8px">${c.pay==='Al día'?'✓ Tus pagos están al día.':'⚠️ Tenés un pago pendiente. Contactá al diseñador.'}</p></div>
+    <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">${pb(c.pay)}<p style="color:${c.pay==='Al día'?'var(--green)':'var(--red)'};font-size:13px;margin-top:8px">${c.pay==='Al día'?'Pagos al día.':'Pago pendiente.'}</p></div>
   </div>`;
 }
 
@@ -2094,10 +2094,10 @@ function _openReqMoRender(rid){
   if(isA){
     // Config de estado con colores
     const statusCfg = {
-      'No iniciado':        { color:'#8888a0', bg:'rgba(107,107,126,.12)', border:'rgba(107,107,126,.3)',  icon:'📋', hex:'#8888a0' },
-      'En progreso':        { color:'#ff4d00', bg:'rgba(255,77,0,.1)',     border:'rgba(255,77,0,.35)',    icon:'🎨', hex:'#ff4d00' },
-      'Listo para revisar': { color:'#4d9fff', bg:'rgba(77,159,255,.1)',   border:'rgba(77,159,255,.35)', icon:'✨', hex:'#4d9fff' },
-      'Completado':         { color:'#2dca73', bg:'rgba(45,202,115,.1)',   border:'rgba(45,202,115,.35)', icon:'✅', hex:'#2dca73' },
+      'No iniciado':        { color:'#8888a0', bg:'rgba(107,107,126,.12)', border:'rgba(107,107,126,.3)',  icon:'clipboard', hex:'#8888a0' },
+      'En progreso':        { color:'#ff4d00', bg:'rgba(255,77,0,.1)',     border:'rgba(255,77,0,.35)',    icon:'paint', hex:'#ff4d00' },
+      'Listo para revisar': { color:'#4d9fff', bg:'rgba(77,159,255,.1)',   border:'rgba(77,159,255,.35)', icon:'sparkle', hex:'#4d9fff' },
+      'Completado':         { color:'#2dca73', bg:'rgba(45,202,115,.1)',   border:'rgba(45,202,115,.35)', icon:'check', hex:'#2dca73' },
     };
     const sc = statusCfg[r.status] || statusCfg['No iniciado'];
 
@@ -2116,7 +2116,7 @@ function _openReqMoRender(rid){
       <div style="font-size:22px;font-weight:700;line-height:1.35;margin-bottom:10px;color:var(--text)">${r.title}</div>
 
       <!-- Fecha límite — justo bajo el título, en rojo -->
-      ${r.deadline?`<div style="margin-bottom:14px"><div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,77,77,.1);border:1px solid rgba(255,77,77,.35);border-radius:8px;padding:5px 12px"><span style="font-size:13px">📅</span><span style="font-size:13px;font-weight:700;color:var(--red)">${fd(r.deadline)}</span>${urgencyChip(r.deadline)}</div></div>`:''}
+      ${r.deadline?`<div style="margin-bottom:14px"><div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,77,77,.1);border:1px solid rgba(255,77,77,.35);border-radius:8px;padding:5px 12px"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span style="font-size:13px;font-weight:700;color:var(--red)">${fd(r.deadline)}</span>${urgencyChip(r.deadline)}</div></div>`:''}
 
       <!-- Descripción -->
       ${r.desc?`<div style="margin-bottom:16px;font-size:13px;color:var(--muted);line-height:1.7;background:var(--surface2);border-radius:10px;padding:12px 14px">${r.desc}</div>`:''}
@@ -2128,7 +2128,7 @@ function _openReqMoRender(rid){
       ${refsHtml||clientImgsHtml?`<div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)">${refsHtml}${clientImgsHtml}</div>`:''}
 
       <!-- Notas del cliente -->
-      ${r.notes?`<div style="margin-bottom:20px;padding:12px 14px;background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);border-radius:10px;font-size:13px;color:var(--text);line-height:1.6"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--yellow);display:block;margin-bottom:4px">💬 Nota del cliente</span>${r.notes}</div>`:''}
+      ${r.notes?`<div style="margin-bottom:20px;padding:12px 14px;background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);border-radius:10px;font-size:13px;color:var(--text);line-height:1.6"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--yellow);display:block;margin-bottom:4px;display:flex;align-items:center;gap:4px"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span> Nota del cliente</span>${r.notes}</div>`:''}
 
       <!-- Divisor -->
       <div style="height:1px;background:var(--border);margin-bottom:18px"></div>
@@ -2141,7 +2141,7 @@ function _openReqMoRender(rid){
             ? `<div style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:20px;border:2px solid #2dca73;background:rgba(45,202,115,.1);font-size:13px;font-weight:600;color:#2dca73">
                 <span style="width:7px;height:7px;border-radius:50%;background:#2dca73;flex-shrink:0"></span>Completado
                </div>
-               <div style="font-size:12px;color:var(--muted);align-self:center;margin-left:4px">✓ Aprobado por el cliente</div>`
+               <div style="font-size:12px;color:var(--muted);align-self:center;margin-left:4px"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Aprobado por el cliente</div>`
             : Object.entries(statusCfg).filter(([st])=>st!=='Completado').map(([st, cfg])=>`
               <div onclick="document.getElementById('mr-st').value='${st}';updateSaveBtn()"
                 data-st="${st}"
@@ -2150,7 +2150,7 @@ function _openReqMoRender(rid){
                   background:${r.status===st?cfg.bg:'transparent'};
                   font-size:13px;font-weight:600;
                   color:${r.status===st?cfg.color:'var(--muted)'}">
-                ${r.status===st?`<span style="width:7px;height:7px;border-radius:50%;background:${cfg.hex};flex-shrink:0;animation:liveDot 1.8s ease-in-out infinite"></span>`:`<span>${cfg.icon}</span>`}
+                ${r.status===st?`<span style="width:7px;height:7px;border-radius:50%;background:${cfg.hex};flex-shrink:0;animation:liveDot 1.8s ease-in-out infinite"></span>`:`<span style="display:inline-flex;opacity:.7">${{'clipboard':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>`,'paint':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`,'sparkle':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M5 17l.5 1.5L7 19l-1.5.5L5 21l-.5-1.5L3 19l1.5-.5L5 17z"/></svg>`,'check':`<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`}[cfg.icon]||cfg.icon}</span>`}
                 ${st}
               </div>`).join('')
           }
@@ -2188,16 +2188,16 @@ function _openReqMoRender(rid){
       const hasMiniatura = r.versions && r.versions.length > 0;
       const lockMsg = isCompleted
         ? `<div style="background:rgba(45,202,115,.08);border:1px solid rgba(45,202,115,.2);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px;grid-column:1/-1;margin-bottom:4px">
-            <span style="font-size:22px">✅</span>
+            <span style="display:inline-flex;color:var(--green)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <div><div style="font-weight:700;font-size:13px;margin-bottom:2px">Pedido completado</div><div style="font-size:12px;color:var(--muted)">Este pedido ya fue aprobado y no puede modificarse.</div></div>
           </div>`
         : hasMiniatura ? ''
         : `<div style="background:rgba(255,77,0,.08);border:1px solid rgba(255,77,0,.25);border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;grid-column:1/-1;margin-bottom:4px">
             <div style="display:flex;align-items:center;gap:12px">
-              <span style="font-size:22px">🎨</span>
+              <span style="display:inline-flex;color:var(--accent)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></span>
               <div><div style="font-weight:700;font-size:13px;margin-bottom:2px">Tu diseñador ya está trabajando en esto</div><div style="font-size:12px;color:var(--muted)">Si necesitás hacer un cambio, avisale por WhatsApp.</div></div>
             </div>
-            <a href="https://wa.me/?text=Hola!%20Quiero%20hacer%20un%20cambio%20en%20mi%20pedido%3A%20${encodeURIComponent(r.title)}" target="_blank" class="btn btn-p btn-sm" style="white-space:nowrap;flex-shrink:0">💬 WhatsApp</a>
+            <a href="https://wa.me/?text=Hola!%20Quiero%20hacer%20un%20cambio%20en%20mi%20pedido%3A%20${encodeURIComponent(r.title)}" target="_blank" class="btn btn-p btn-sm" style="white-space:nowrap;flex-shrink:0"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span> WhatsApp</a>
           </div>`;
 
       document.getElementById('mo-req-body').innerHTML=`
@@ -2207,7 +2207,7 @@ function _openReqMoRender(rid){
           <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1"><label>Título</label><div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px">${r.title}</div></div>
           <div style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1"><label>Descripción</label><div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--muted);line-height:1.6;min-height:60px">${r.desc||'—'}</div></div>
           <div style="display:flex;flex-direction:column;gap:6px"><label>Estilo / Colores</label><div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px">${r.style||'—'}</div></div>
-          <div style="display:flex;flex-direction:column;gap:6px"><label>Fecha límite</label><div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px">📅 ${r.deadline?fd(r.deadline):'—'}</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><label>Fecha límite</label><div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${r.deadline?fd(r.deadline):'—'}</div></div>
           ${refsHtml}${clientImgsHtml}
         </div>`;
       document.getElementById('mo-save-btn').style.display='none';
@@ -2236,22 +2236,22 @@ function _openReqMoRender(rid){
 }
 async function deleteReq(rid){
   const r = S.reqs.find(x=>x.id===rid); if(!r) return;
-  if(r.status==='Completado'){ toast('❌ No se puede eliminar un pedido completado'); return; }
+  if(r.status==='Completado'){ toast('No se puede eliminar un pedido completado'); return; }
   const ok = await appConfirm({
     title: `Eliminar "${r.title}"`,
     msg: 'Esta acción no se puede deshacer. El pedido se borrará permanentemente.',
-    icon: '🗑️',
+    icon: 'trash',
     okLabel: 'Sí, eliminar',
     okStyle: 'background:var(--red);border-color:var(--red)'
   });
   if(!ok) return;
   if(isSupabaseMode){
     const {error} = await sb_client.from('requests').delete().eq('id',rid);
-    if(error){ toast('❌ Error al eliminar'); return; }
+    if(error){ toast('Error al eliminar'); return; }
   }
   S.reqs = S.reqs.filter(x=>x.id!==rid);
   closeMo('mo-req');
-  toast('🗑 Pedido eliminado');
+  toast('Pedido eliminado');
   if(role==='admin'){ renderADash(); renderAReqs(); renderAClients(); }
   else { const cid=user?.clientId||S.clients[0]?.id; renderCDash(cid); }
 }
@@ -2280,7 +2280,7 @@ async function saveReq(rid){
 
   _reqOriginalStatus = null;
   closeMo('mo-req');
-  toast('✓ Pedido actualizado');
+  toast('Pedido actualizado');
   if(role==='admin'){renderADash();renderAReqs();}
   else{
     const cid = user?.clientId||S.clients.find(c=>!c.name.startsWith('[DEMO]'))?.id||'c1';
@@ -2298,7 +2298,7 @@ function openClMo(cid){
       <div class="stat-card"><div class="stat-lbl">Pago</div><div style="margin-top:6px">${pb(c.pay)}</div><div class="stat-sub">$${c.price}/ciclo</div></div>
     </div>
 
-    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Datos del cliente</div>
+    <div style="font-family:'DM Sans',sans-serif;font-weight:600;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px">Datos del cliente</div>
     <div class="fg" style="margin-bottom:16px">
       <div style="display:flex;flex-direction:column;gap:6px">
         <label>Nombre</label>
@@ -2335,10 +2335,10 @@ function openClMo(cid){
       </div>
     </div>
     <div class="nb" style="margin-bottom:20px">
-      <label>🔒 Notas internas <span style="font-size:11px;color:var(--muted);font-weight:400">(solo vos las ves)</span></label>
+      <label><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span> Notas internas <span style="font-size:11px;color:var(--muted);font-weight:400">(solo vos las ves)</span></label>
       <textarea id="en" placeholder="Preferencias del cliente, acuerdos especiales, recordatorios...">${escHtml(c.notes||'')}</textarea>
     </div>
-    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:12px">Pedidos (${rqs.length})</div>
+    <div style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;margin-bottom:12px">Pedidos (${rqs.length})</div>
     ${rqs.slice(0,4).map(r=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px"><div><strong>${escHtml(r.title)}</strong><span style="color:var(--muted);margin-left:8px;font-size:12px">${fd(r.deadline)}</span></div>${sb(r.status)}</div>`).join('')}
     ${rqs.length>4?`<div style="font-size:12px;color:var(--muted);padding-top:8px">+${rqs.length-4} pedidos más</div>`:''}
   `;
@@ -2346,10 +2346,10 @@ function openClMo(cid){
   // Actualizar botones del footer según estado del cliente
   const archBtn = document.getElementById('mo-cl-archive-btn');
   if(c.archived){
-    archBtn.textContent = '📤 Restaurar';
+    archBtn.innerHTML = '<span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></span> Restaurar';
     archBtn.onclick = ()=>unarchiveClient(cid);
   } else {
-    archBtn.textContent = '📦 Archivar';
+    archBtn.innerHTML = '<span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></span> Archivar';
     archBtn.onclick = ()=>archiveClient();
   }
   openMo('mo-cl');
@@ -2361,7 +2361,7 @@ async function deleteClient(){
     const ok = await appConfirm({
       title: `Eliminar a "${c.name}"`,
       msg: `Este cliente tiene <strong>${activeReqs.length} pedido(s) activo(s)</strong>.<br><br>Si lo eliminás, se borrarán también todos sus pedidos permanentemente.`,
-      icon: '⚠️',
+      icon: 'alert',
       okLabel: 'Eliminar todo',
       okStyle: 'background:var(--red);border-color:var(--red)'
     });
@@ -2370,7 +2370,7 @@ async function deleteClient(){
     const ok = await appConfirm({
       title: `Eliminar a "${c.name}"`,
       msg: 'Se borrarán el cliente y todos sus pedidos. Esta acción no se puede deshacer.',
-      icon: '🗑️',
+      icon: 'trash',
       okLabel: 'Sí, eliminar',
       okStyle: 'background:var(--red);border-color:var(--red)'
     });
@@ -2379,12 +2379,12 @@ async function deleteClient(){
   if(isSupabaseMode && !c.name.startsWith('[DEMO]')){
     await sb_client.from('requests').delete().eq('client_id',viewCid);
     const {error}=await sb_client.from('clients').delete().eq('id',viewCid);
-    if(error){toast('❌ Error al eliminar');return;}
+    if(error){toast('Error al eliminar');return;}
   }
   S.reqs=S.reqs.filter(r=>r.cid!==viewCid);
   S.clients=S.clients.filter(c=>c.id!==viewCid);
   closeMo('mo-cl');
-  toast('🗑 Cliente eliminado');
+  toast('Cliente eliminado');
   renderADash();renderAClients();renderAReqs();renderAPays();
 }
 async function archiveClient(){
@@ -2392,14 +2392,14 @@ async function archiveClient(){
   const ok = await appConfirm({
     title: `Archivar a "${c.name}"`,
     msg: 'El cliente se ocultará del panel principal. Podés restaurarlo cuando vuelva — sus pedidos se conservan.',
-    icon: '📦',
+    icon: 'archive',
     okLabel: 'Archivar'
   });
   if(!ok) return;
   c.archived=true;
   if(isSupabaseMode && !c.name.startsWith('[DEMO]')) await dbUpdateClient(viewCid,{archived:true});
   closeMo('mo-cl');
-  toast('📦 Cliente archivado');
+  toast('Cliente archivado');
   renderADash();renderAClients();renderAPays();
 }
 async function unarchiveClient(cid){
@@ -2407,7 +2407,7 @@ async function unarchiveClient(cid){
   c.archived=false;
   if(isSupabaseMode && !c.name.startsWith('[DEMO]')) await dbUpdateClient(c.id,{archived:false});
   closeMo('mo-cl');
-  toast('✅ Cliente restaurado');
+  toast('Cliente restaurado');
   renderADash();renderAClients();renderAPays();
 }
 async function saveClientNotes(){
@@ -2441,11 +2441,11 @@ async function saveClientNotes(){
     });
   }
   closeMo('mo-cl');
-  toast('✓ Cliente actualizado');
+  toast('Cliente actualizado');
   renderADash();renderAClients();renderAPays();
 }
 async function addClient(){
-  const name=document.getElementById('nc-name').value.trim();if(!name){appAlert({msg:'El nombre del cliente es obligatorio.',icon:'⚠️'});return;}
+  const name=document.getElementById('nc-name').value.trim();if(!name){appAlert({msg:'El nombre del cliente es obligatorio.',icon:'alert'});return;}
   const newC={
     name, email:document.getElementById('nc-email').value,
     ch:document.getElementById('nc-ch').value||'@nuevo',
@@ -2464,7 +2464,7 @@ async function addClient(){
     newC.id='c'+Date.now();
   }
   S.clients.push(newC);
-  closeMo('mo-nc');toast('✓ Cliente creado');
+  closeMo('mo-nc');toast('Cliente creado');
   ['nc-name','nc-email','nc-ch','nc-notes','nc-price','nc-uid'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   renderADash();renderAClients();renderAPays();
 }
@@ -2473,7 +2473,7 @@ async function chStatus(rid,status){
   if(status==='Completado'&&r.status!=='Completado'){const cl=gc(r.cid);if(cl){cl.used++;if(isSupabaseMode)await dbUpdateClient(cl.id,{used:cl.used});}}
   r.status=status;
   if(isSupabaseMode) await dbUpdateRequest(rid,{status});
-  renderADash();renderAReqs();renderAClients();toast('✓ Estado actualizado');
+  renderADash();renderAReqs();renderAClients();toast('Estado actualizado');
 }
 async function regPay(cid){
   const c=gc(cid);if(!c)return;
@@ -2481,12 +2481,12 @@ async function regPay(cid){
   c.payments.push({d:today,a:c.price,s:'Pagado',m:'Registrado'});
   c.pay='Al día';
   if(isSupabaseMode){await dbAddPayment(cid,c.price,'Registrado');await dbUpdateClient(cid,{pay:'Al día'});}
-  toast('✓ Pago registrado');renderAPays();renderADash();renderAClients();
+  toast('Pago registrado');renderAPays();renderADash();renderAClients();
 }
 async function updPay(cid,val){
   const c=gc(cid);if(c)c.pay=val;
   if(isSupabaseMode) await dbUpdateClient(cid,{pay:val});
-  if(!document.getElementById('mo-cl').classList.contains('open')){renderADash();renderAClients();renderAPays();toast('✓ Estado actualizado');}
+  if(!document.getElementById('mo-cl').classList.contains('open')){renderADash();renderAClients();renderAPays();toast('Estado actualizado');}
 }
 
 /* ════════════════════════
@@ -2520,7 +2520,7 @@ async function ytSearch(){
   if(!YT_API_KEY){
     document.getElementById('yt-grid').innerHTML=`
       <div class="yt-ph" style="grid-column:1/-1;padding:24px">
-        <div class="phi">🔑</div>
+        <div class="phi"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
         <div style="margin-bottom:16px">Necesitás configurar tu API key de YouTube para usar la búsqueda.<br>
         <small style="opacity:.6">Abrí el archivo HTML con un editor de texto y buscá la línea:<br><code style="background:var(--surface);padding:2px 8px;border-radius:4px;font-family:monospace">const YT_API_KEY = ''</code><br>y pegá tu key entre las comillas.</small></div>
         <a href="https://console.cloud.google.com/" target="_blank" style="color:var(--accent);font-size:13px;font-weight:600">→ Obtener API key gratis en Google Cloud</a>
@@ -2531,7 +2531,7 @@ async function ytSearch(){
   const btn=document.getElementById('yt-btn'),grid=document.getElementById('yt-grid');
   btn.disabled=true;
   btn.innerHTML='<div class="spinner"></div> Buscando...';
-  grid.innerHTML='<div class="yt-ph"><div class="phi">⏳</div>Buscando en YouTube...</div>';
+  grid.innerHTML='<div class="yt-ph"><div class="phi"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>Buscando en YouTube...</div>';
 
   try{
     // YouTube Data API v3 — search.list
@@ -2559,7 +2559,7 @@ async function ytSearch(){
     const items=data.items||[];
 
     if(!items.length){
-      grid.innerHTML=`<div class="yt-ph" style="grid-column:1/-1"><div class="phi">🔍</div>No se encontraron resultados para "${q}"</div>`;
+      grid.innerHTML=`<div class="yt-ph" style="grid-column:1/-1"><div class="phi"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>No se encontraron resultados para "${q}"</div>`;
       return;
     }
 
@@ -2576,7 +2576,7 @@ async function ytSearch(){
     console.error('[ThumbFlow YT]', e);
     grid.innerHTML=`
       <div class="yt-ph" style="grid-column:1/-1">
-        <div class="phi">⚠️</div>
+        <div class="phi"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
         <div style="margin-bottom:8px"><strong>Error al buscar:</strong> ${e.message}</div>
         <small style="opacity:.6">Revisá que la API key sea correcta y que YouTube Data API v3 esté habilitada en Google Cloud Console.</small>
       </div>`;
@@ -2597,7 +2597,7 @@ function renderYT(results){
         data-title="${title.replace(/"/g,'&quot;')}"
         onclick="toggleRef(${i})">
       <img src="${thumb}" loading="lazy" alt="${title}">
-      <div class="yt-check">✓</div>
+      <div class="yt-check"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="yt-ov">
         <div class="yt-ttl">${title}</div>
       </div>
@@ -2617,7 +2617,7 @@ function toggleRef(i){
   const thumb=el.dataset.thumb, title=el.dataset.title, vid=el.dataset.vid;
   const idx=refs.findIndex(r=>r.id===vid);
   if(idx>=0){refs.splice(idx,1);el.classList.remove('sel');}
-  else{if(refs.length>=3){toast('⚠ Máximo 3 referencias');return;}refs.push({t:thumb,ttl:title,id:vid});el.classList.add('sel');}
+  else{if(refs.length>=3){toast('Máximo 3 referencias');return;}refs.push({t:thumb,ttl:title,id:vid});el.classList.add('sel');}
   updateRefsStrip();
 }
 
@@ -2625,7 +2625,7 @@ function updateRefsStrip(){
   const wrap=document.getElementById('refs-wrap'),row=document.getElementById('refs-row');
   if(!refs.length){wrap.style.display='none';return;}
   wrap.style.display='block';
-  row.innerHTML=refs.map((r,i)=>`<div class="ref-chip"><img src="${r.t}" onerror="this.style.display='none'">Ref. ${i+1}<button class="ref-rm" onclick="removeRef(${i})">✕</button></div>`).join('');
+  row.innerHTML=refs.map((r,i)=>`<div class="ref-chip"><img src="${r.t}" onerror="this.style.display='none'">Ref. ${i+1}<button class="ref-rm" onclick="removeRef(${i})"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`).join('');
 }
 
 function removeRef(i){
@@ -2644,7 +2644,7 @@ function resetForm(){
   goStep(1,true);refs=[];updateRefsStrip();clientRefImgs=[];renderRefPreviews();
   ['req-title','req-desc','req-style','req-deadline','req-notes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   const yq=document.getElementById('yt-q');if(yq)yq.value='';
-  const yg=document.getElementById('yt-grid');if(yg)yg.innerHTML='<div class="yt-ph"><div class="phi">🎬</div>Escribí un tema y presioná <strong>Buscar</strong></div>';
+  const yg=document.getElementById('yt-grid');if(yg)yg.innerHTML='<div class="yt-ph"><div class="phi"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></div>Escribí un tema y presioná <strong>Buscar</strong></div>';
 }
 
 function goStep(n,silent=false){
@@ -2679,21 +2679,21 @@ function renderConfirm(){
 }
 
 async function submitReq(){
-  const title=document.getElementById('req-title').value.trim();if(!title){appAlert({msg:'El título del pedido es obligatorio.',icon:'⚠️'});goStep(1);return;}
+  const title=document.getElementById('req-title').value.trim();if(!title){appAlert({msg:'El título del pedido es obligatorio.',icon:'alert'});goStep(1);return;}
   
   // Obtener el clientId correcto
   const clientId = isSupabaseMode 
     ? (user?.clientId || S.clients.find(c=>!c.name.startsWith('[DEMO]'))?.id)
     : 'c1';
-  if(!clientId){toast('❌ Error: no se encontró tu cuenta');return;}
+  if(!clientId){toast('Error: no se encontró tu cuenta');return;}
   
   const c=gc(clientId);
-  if(c.pack!==99&&c.used>=c.pack){appAlert({msg:'No tenés créditos disponibles en tu pack actual. Contactá al diseñador para renovar.',icon:'🎬'});return;}
+  if(c.pack!==99&&c.used>=c.pack){appAlert({msg:'No tenés créditos disponibles. Contactá al diseñador para renovar.',icon:'alert'});return;}
 
   // Subir imágenes propias a Supabase Storage si aplica
   let uploadedImgs = [...clientRefImgs];
   if(isSupabaseMode && clientRefImgs.length){
-    toast('⏳ Subiendo imágenes...');
+    toast('Subiendo imágenes...');
     uploadedImgs = [];
     for(let i=0;i<clientRefImgs.length;i++){
       const base64=clientRefImgs[i];
@@ -2723,7 +2723,7 @@ async function submitReq(){
   S.reqs.push(newReq);
   clientRefImgs=[];
   refs=[];
-  toast('✓ Pedido enviado al diseñador');
+  toast('Pedido enviado');
   renderCDash(clientId);
   showPanel('client','inicio',document.querySelector('#screen-client .nav-item'));
 }
@@ -2737,7 +2737,7 @@ let currentDeliverRid = null;
 
 function handleRefFiles(files){
   [...files].forEach(f=>{
-    if(clientRefImgs.length>=5){toast('⚠ Máximo 5 imágenes');return;}
+    if(clientRefImgs.length>=5){toast('Máximo 5 imágenes');return;}
     const reader=new FileReader();
     reader.onload=e=>{clientRefImgs.push(e.target.result);renderRefPreviews();};
     reader.readAsDataURL(f);
@@ -2757,7 +2757,7 @@ function renderRefPreviews(){
   grid.innerHTML=clientRefImgs.map((src,i)=>`
     <div class="img-preview">
       <img src="${src}">
-      <button class="img-preview-rm" onclick="removeRefImg(${i})">✕</button>
+      <button class="img-preview-rm" style="display:inline-flex;align-items:center" onclick="removeRefImg(${i})"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>`).join('');
 }
 
@@ -2795,7 +2795,7 @@ function buildVersionsHtml(r, isAdmin){
   let html = `<div class="delivery-section" style="margin-bottom:20px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:${versions.length?'14px':'0'}">
       <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px">🎨 Miniaturas entregadas</span>
+        <span style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px"> Miniaturas entregadas</span>
         ${versions.length?`<span style="background:rgba(45,202,115,.15);color:var(--green);font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px">${versions.length} versión${versions.length>1?'es':''}</span>`:''}
       </div>
       ${isAdmin?`<button class="btn btn-p btn-sm" id="upload-ver-btn" onclick="openDeliverMo('${r.id}')" style="opacity:.4;cursor:not-allowed;pointer-events:none" title="Cambiá el estado a 'Listo para revisar' para subir la miniatura">+ Subir versión</button>`:''}
@@ -2810,10 +2810,10 @@ function buildVersionsHtml(r, isAdmin){
       ${[...versions].reverse().map((v,ri)=>{
         const vnum=versions.length-ri;
         const statusHtml = v.status==='aprobado'
-          ?`<span class="badge bg">✓ Aprobado</span>`
+          ?`<span class="badge bg"><span style=\"display:inline-flex;align-items:center;vertical-align:middle\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"20 6 9 17 4 12\"/></svg></span> Aprobado</span>`
           :v.status==='cambios'
           ?`<span class="badge by">Cambios pedidos</span>`
-          :`<span class="badge bb">⏳ Esperando revisión</span>`;
+          :`<span class="badge bb"><span style=\"display:inline-flex;align-items:center;vertical-align:middle\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/></svg></span> Revisión pendiente</span>`;
         return`<div class="version-item">
           <div class="version-thumb" onclick="openReview('${r.id}',${versions.length-1-ri})">
             <img src="${v.img}" alt="v${vnum}">
@@ -2825,9 +2825,9 @@ function buildVersionsHtml(r, isAdmin){
             ${v.comment?`<div style="font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4">"${v.comment.substring(0,80)}${v.comment.length>80?'...':''}"</div>`:''}
           </div>
           <div style="display:flex;gap:6px;align-items:center">
-            ${isAdmin?`<button class="btn btn-g btn-sm" onclick="deleteVersion('${r.id}',${versions.length-1-ri})" style="color:var(--red);border-color:rgba(255,77,77,.3);padding:6px 8px" title="Eliminar versión">🗑</button>`:''}
+            ${isAdmin?`<button class="btn btn-g btn-sm" onclick="deleteVersion('${r.id}',${versions.length-1-ri})" style="color:var(--red);border-color:rgba(255,77,77,.3);padding:6px 8px" title="Eliminar versión"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M9 6V4h6v2"/></svg></button>`:''}
             <button class="btn btn-g btn-sm" onclick="openReview('${r.id}',${versions.length-1-ri})">
-              ${!isAdmin&&v.status==='pendiente'?'✎ Revisar':'Ver'}
+              ${!isAdmin&&v.status==='pendiente'?'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Revisar':'Ver'}
             </button>
           </div>
         </div>`;
@@ -2837,7 +2837,7 @@ function buildVersionsHtml(r, isAdmin){
     // Si hay versión pendiente de revisión y es el cliente
     if(!isAdmin && pendingReview){
       html+=`<div style="background:rgba(77,159,255,.08);border:1px solid rgba(77,159,255,.25);border-radius:10px;padding:14px;font-size:13px;display:flex;align-items:center;gap:10px">
-        <span style="font-size:20px">👆</span>
+        <span style="display:inline-flex"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9V4.5a1.5 1.5 0 0 1 3 0v3a1.5 1.5 0 0 1 3 0V12a1.5 1.5 0 0 1 3 0v.5a6 6 0 0 1-6 6H9a6 6 0 0 1-6-6V9a1.5 1.5 0 0 1 3 0"/></svg></span>
         <div>Tu diseñador subió una nueva versión. <strong style="color:var(--blue)">Revisala y dejá tu feedback.</strong></div>
         <button class="btn btn-p btn-sm" onclick="openReview('${r.id}',${versions.length-1})" style="margin-left:auto;white-space:nowrap">Revisar ahora</button>
       </div>`;
@@ -2957,7 +2957,7 @@ async function submitDelivery(){
   progressBar.style.width='0%'; progressPct.textContent='0%';
   if(btn){ btn.disabled=false; btn.style.opacity='1'; }
   if(cancelBtn){ cancelBtn.disabled=false; cancelBtn.style.opacity='1'; }
-  toast('✓ Miniatura subida');
+  toast('Miniatura subida');
   renderADash();renderAReqs();
   // Reabrir el modal manteniendo el status actual
   setTimeout(()=>{
@@ -2978,7 +2978,7 @@ async function deleteVersion(rid, vidx){
   r.versions.splice(vidx, 1);
   renderADash(); renderAReqs();
   openReqMo(rid);
-  toast('🗑 Versión eliminada');
+  toast('Versión eliminada');
 }
 
 async function submitReview(decision){
@@ -2993,7 +2993,7 @@ async function submitReview(decision){
     const _cl = gc(r.cid);
     if(_cl){ _cl.used++; if(isSupabaseMode) await dbUpdateClient(_cl.id,{used:_cl.used}); }
     // Notificación al admin
-    addNotification('🎉','¡Miniatura aprobada!',`"${r.title}" fue aprobada por el cliente. ¡Excelente trabajo! 🚀`,r.id);
+    addNotification('check', '¡Miniatura aprobada!',`"${r.title}" fue aprobada por el cliente.`,r.id);
     if(isSupabaseMode){
       if(v.id) await dbUpdateVersion(v.id,{status:decision,comment:v.comment,annotation:v.annotation});
       await dbUpdateRequest(reviewingRid,{status:'Completado'});
@@ -3007,7 +3007,7 @@ async function submitReview(decision){
       if(v.id) await dbUpdateVersion(v.id,{status:decision,comment:v.comment,annotation:v.annotation});
     }
     closeMo('mo-review');
-    toast('✎ Feedback enviado al diseñador');
+    toast('Feedback enviado');
   }
   const cid=isSupabaseMode?S.clients[0]?.id:'c1';
   renderCDash(cid);
@@ -3015,7 +3015,7 @@ async function submitReview(decision){
 }
 
 function showApprovalModal(r){
-  document.getElementById('ap-subtitle').textContent = `"${r.title}" — tu diseñador va a estar muy contento 🚀`;
+  document.getElementById('ap-subtitle').textContent = `"${r.title}" aprobada.`;
   const vers = (r.versions||[]).filter(v=>v.img);
   const dlAll = document.getElementById('ap-dl-all');
   dlAll.style.display = vers.length > 1 ? 'inline-flex' : 'none';
@@ -3027,7 +3027,7 @@ function showApprovalModal(r){
         <div style="font-size:13px;font-weight:600">Versión ${i+1}</div>
         <div style="font-size:11px;color:var(--muted)">${v.date||''}</div>
       </div>
-      <a class="btn btn-g btn-sm ap-ver-dl" href="${v.img}" download="miniatura-v${i+1}.jpg" target="_blank">⬇ Descargar</a>
+      <a class="btn btn-g btn-sm ap-ver-dl" href="${v.img}" download="miniatura-v${i+1}.jpg" target="_blank"><span style="display:inline-flex;align-items:center;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span> Descargar</a>
     </div>`).join('');
   openMo('mo-approved');
 }
@@ -3065,7 +3065,7 @@ function openReview(rid, vidx){
   const isA=role==='admin';
 
   document.getElementById('rev-title').textContent=`${r.title} — Versión ${vnum}`;
-  document.getElementById('rev-version-label').textContent=`Subida el ${v.date} · ${v.status==='aprobado'?'✓ Aprobada':v.status==='cambios'?'✎ Cambios solicitados':'⏳ Esperando revisión'}`;
+  document.getElementById('rev-version-label').textContent=`Subida el ${v.date} · ${v.status==='aprobado'?'Aprobada':v.status==='cambios'?'Cambios pedidos solicitados':'En revisión'}`;
 
   const img=document.getElementById('review-img');
   img.src=v.img;
